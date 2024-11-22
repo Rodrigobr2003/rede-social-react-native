@@ -56,7 +56,7 @@ export default function Index() {
 
         <View style={styles.secCadastro}>
           <Text style={[styles.subtitulo, styles.subTitSecCad]}>
-            Inscreva-se hoje
+            Já tem uma conta?
           </Text>
 
           <TouchableHighlight style={[styles.button, styles.buttonEntrar]}>
@@ -113,7 +113,9 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    fontSize: 25,
+    paddingTop: 5,
+    paddingBottom: 5,
+    fontSize: 20,
   },
 
   politicas: {
@@ -139,5 +141,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#1D1D1D",
     borderWidth: 1,
     borderColor: "#4998C8",
+    width: 150,
   },
 });
