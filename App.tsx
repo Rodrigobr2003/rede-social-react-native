@@ -2,6 +2,7 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import Index from "./src/views";
 import Header from "./src/views/includes/header";
 import Home from "./src/views/home";
+import Amigos from "./src/views/amigos";
 
 export default function App() {
   // return <Index />;
@@ -9,7 +10,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <Header></Header>
-      <Home></Home>
+      <Amigos></Amigos>
     </SafeAreaView>
   );
 }
