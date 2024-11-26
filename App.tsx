@@ -3,6 +3,7 @@ import Index from "./src/views";
 import Header from "./src/views/includes/header";
 import Home from "./src/views/home";
 import Amigos from "./src/views/amigos";
+import Notificacoes from "./src/views/notificacoes";
 
 export default function App() {
   // return <Index />;
@@ -10,7 +11,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <Header></Header>
-      <Amigos></Amigos>
+      <Notificacoes></Notificacoes>
     </SafeAreaView>
   );
 }
