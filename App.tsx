@@ -4,6 +4,7 @@ import Header from "./src/views/includes/header";
 import Home from "./src/views/home";
 import Amigos from "./src/views/amigos";
 import Notificacoes from "./src/views/notificacoes";
+import ChatProfile from "./src/views/chatProfile";
 
 export default function App() {
   // return <Index />;
@@ -11,7 +12,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <Header></Header>
-      <Notificacoes></Notificacoes>
+      <ChatProfile></ChatProfile>
     </SafeAreaView>
   );
 }
