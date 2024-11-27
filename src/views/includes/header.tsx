@@ -10,7 +10,10 @@ import { Ionicons } from "@expo/vector-icons";
 export default function Header() {
   return (
     <View style={styles.container}>
-      <TextInput placeholder="Testando" style={styles.input}></TextInput>
+      <TextInput
+        placeholder="Pesquise no Orbee..."
+        style={styles.input}
+      ></TextInput>
 
       <TouchableHighlight style={styles.burguerButton}>
         <Text>

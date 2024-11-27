@@ -8,7 +8,7 @@ export default function Notificacoes() {
         <View style={styles.topFeedPerfil}>
           <Ionicons name="chevron-back" size={32} />
 
-          <Text style={styles.subtitulo}>Todos suas notificações</Text>
+          <Text style={styles.subtitulo}>Todas suas notificações</Text>
         </View>
 
         <ScrollView
