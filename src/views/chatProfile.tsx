@@ -12,7 +12,15 @@ export default function ChatProfile() {
         <Text style={{ fontSize: 20 }}>Nome do usuário</Text>
       </View>
 
-      <ScrollView></ScrollView>
+      <ScrollView style={{ width: "100%" }}>
+        {/* <View style={[styles.msgDefault, styles.msgUser]}>
+          <Text style={styles.textoMsg}>Mensagem de teste!</Text>
+        </View>
+
+        <View style={[styles.msgDefault, styles.msgAmigo]}>
+          <Text style={styles.textoMsg}>Mensagem de teste!</Text>
+        </View> */}
+      </ScrollView>
 
       <View
         style={[
@@ -60,6 +68,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 5,
     borderRadius: 180,
+  },
+
+  msgDefault: {
+    width: "75%",
+    marginTop: 8,
+    padding: 7,
+    borderRadius: 6,
+  },
+
+  msgUser: {
+    marginLeft: "auto",
+    backgroundColor: "#51ADE5",
+    marginRight: 5,
+  },
+
+  msgAmigo: {
+    marginRight: "auto",
+    backgroundColor: "#2C3892",
+    marginLeft: 5,
+  },
+
+  textoMsg: {
+    color: "#fff",
+    fontSize: 15,
   },
 
   feedBottom: {
