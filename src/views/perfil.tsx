@@ -5,20 +5,30 @@ export default function Perfil() {
   return (
     <View style={styles.feedDefault}>
       <View style={styles.topFeedPerfil}>
-        <Image
-          style={styles.bgTopImage}
-          source={require("../../assets/images/default-image.png")}
-        ></Image>
+        <View style={{ borderWidth: 1, height: "60%" }}>
+          <Image
+            style={styles.bgTopImage}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
 
-        <Pressable style={styles.editBtn}>
-          <Text style={{ textAlign: "center", color: "#fff", fontSize: 17 }}>
-            Editar Foto
-          </Text>
-        </Pressable>
+          <Pressable style={styles.editBtn}>
+            <Text style={{ textAlign: "center", color: "#fff", fontSize: 17 }}>
+              Editar Foto
+            </Text>
+          </Pressable>
 
-        <Ionicons name="person" size={60} style={styles.profilePic}></Ionicons>
+          <Ionicons
+            name="person"
+            size={60}
+            style={styles.profilePic}
+          ></Ionicons>
 
-        <Ionicons name="camera" size={25} style={styles.changePic}></Ionicons>
+          <Ionicons name="camera" size={25} style={styles.changePic}></Ionicons>
+
+          <View>
+            <Text>Nome do usuário</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -41,7 +51,7 @@ const styles = StyleSheet.create({
 
   bgTopImage: {
     width: "100%",
-    height: "40%",
+    height: "70%",
     borderRadius: 10,
   },
 
