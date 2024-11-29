@@ -72,6 +72,8 @@ export default function Perfil() {
           </View>
         </View>
       </View>
+
+      <View style={styles.bottomFeedPerfil}></View>
     </View>
   );
 }
@@ -89,12 +91,13 @@ const styles = StyleSheet.create({
   topFeedPerfil: {
     paddingBottom: 15,
     width: "100%",
+    height: "40%",
     position: "relative",
   },
 
   bgTopImage: {
     width: "100%",
-    height: "70%",
+    height: "100%",
     borderRadius: 10,
   },
 
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 180,
     textAlign: "center",
-    bottom: 40,
+    bottom: -30,
     left: 40,
   },
 
@@ -127,8 +130,8 @@ const styles = StyleSheet.create({
     padding: 5,
     textAlign: "center",
     borderRadius: 180,
-    bottom: 30,
-    left: 25,
+    bottom: -35,
+    left: 20,
     borderWidth: 8,
     borderColor: "#fff",
   },
@@ -152,5 +155,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: "auto",
     alignItems: "center",
+  },
+
+  bottomFeedPerfil: {
+    width: "100%",
+    height: "60%",
   },
 });
