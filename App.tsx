@@ -6,6 +6,7 @@ import Amigos from "./src/views/amigos";
 import Notificacoes from "./src/views/notificacoes";
 import ChatProfile from "./src/views/chatProfile";
 import Perfil from "./src/views/perfil";
+import PerfilProcurado from "./src/views/perfilProcurado";
 
 export default function App() {
   // return <Index />;
@@ -13,7 +14,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <Header></Header>
-      <Perfil></Perfil>
+      <PerfilProcurado></PerfilProcurado>
     </SafeAreaView>
   );
 }
