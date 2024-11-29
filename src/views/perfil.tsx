@@ -67,11 +67,13 @@ const styles = StyleSheet.create({
 
   changePic: {
     backgroundColor: "#51ADE5",
-    width: "10%",
+    width: "14%",
     padding: 5,
     textAlign: "center",
     borderRadius: 180,
     bottom: 125,
     left: 25,
+    borderWidth: 8,
+    borderColor: "#fff",
   },
 });
