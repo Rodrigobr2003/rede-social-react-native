@@ -6,6 +6,7 @@ import {
   Pressable,
   Text,
   TextInput,
+  ScrollView,
 } from "react-native";
 
 export default function Perfil() {
@@ -73,7 +74,58 @@ export default function Perfil() {
         </View>
       </View>
 
-      <View style={styles.bottomFeedPerfil}></View>
+      <ScrollView contentContainerStyle={styles.bottomFeedPerfil}>
+        <View style={styles.row}>
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+        </View>
+
+        <View style={styles.row}>
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+        </View>
+
+        <View style={styles.row}>
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+
+          <Image
+            style={styles.imgPosted}
+            source={require("../../assets/images/default-image.png")}
+          ></Image>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -159,6 +211,19 @@ const styles = StyleSheet.create({
 
   bottomFeedPerfil: {
     width: "100%",
-    height: "60%",
+    height: "100%",
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 2,
+    height: "30%",
+  },
+
+  imgPosted: {
+    marginHorizontal: 2,
+    width: "31%",
+    height: "100%",
   },
 });
