@@ -1,11 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, View, Image, Pressable, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  Pressable,
+  Text,
+  TextInput,
+} from "react-native";
 
 export default function Perfil() {
   return (
     <View style={styles.feedDefault}>
       <View style={styles.topFeedPerfil}>
-        <View style={{ borderWidth: 1, height: "60%" }}>
+        <View style={{ height: "60%" }}>
           <Image
             style={styles.bgTopImage}
             source={require("../../assets/images/default-image.png")}
@@ -26,7 +33,42 @@ export default function Perfil() {
           <Ionicons name="camera" size={25} style={styles.changePic}></Ionicons>
 
           <View>
-            <Text>Nome do usuário</Text>
+            <View style={styles.userInfo}>
+              <Text
+                style={[
+                  {
+                    fontSize: 18,
+                    textAlign: "justify",
+                  },
+                  styles.userText,
+                ]}
+              >
+                Nome do usuário
+              </Text>
+
+              <Text
+                style={[
+                  {
+                    fontSize: 14,
+                  },
+                  styles.userText,
+                ]}
+              >
+                0 amigos
+              </Text>
+
+              <View style={styles.desc}>
+                <Ionicons name="pencil" size={20}></Ionicons>
+
+                <TextInput
+                  placeholder="Adicionar descrição"
+                  placeholderTextColor={"#000"}
+                  style={{ fontSize: 15 }}
+                >
+                  <Text></Text>
+                </TextInput>
+              </View>
+            </View>
           </View>
         </View>
       </View>
@@ -47,6 +89,7 @@ const styles = StyleSheet.create({
   topFeedPerfil: {
     paddingBottom: 15,
     width: "100%",
+    position: "relative",
   },
 
   bgTopImage: {
@@ -56,34 +99,58 @@ const styles = StyleSheet.create({
   },
 
   editBtn: {
+    position: "relative",
     bottom: 40,
     backgroundColor: "#5D5F60",
     width: "35%",
     marginLeft: "auto",
-    marginRight: 20,
+    marginRight: 10,
     paddingVertical: 5,
     borderRadius: 10,
   },
 
   profilePic: {
+    position: "absolute",
     backgroundColor: "#fff",
     width: "25%",
     padding: 15,
     borderRadius: 180,
     textAlign: "center",
-    bottom: 85,
+    bottom: 40,
     left: 40,
   },
 
   changePic: {
+    position: "absolute",
     backgroundColor: "#51ADE5",
     width: "14%",
     padding: 5,
     textAlign: "center",
     borderRadius: 180,
-    bottom: 125,
+    bottom: 30,
     left: 25,
     borderWidth: 8,
     borderColor: "#fff",
+  },
+
+  userInfo: {
+    bottom: 30,
+    width: "100%",
+    marginLeft: "auto",
+    paddingHorizontal: 5,
+  },
+
+  userText: {
+    width: "60%",
+    marginLeft: "auto",
+  },
+
+  desc: {
+    borderBottomWidth: 1,
+    width: "95%",
+    marginHorizontal: "auto",
+    flexDirection: "row",
+    paddingLeft: "auto",
+    alignItems: "center",
   },
 });
