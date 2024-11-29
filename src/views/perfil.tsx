@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, Pressable, Text } from "react-native";
 
 export default function Perfil() {
   return (
@@ -9,6 +9,12 @@ export default function Perfil() {
           style={styles.bgTopImage}
           source={require("../../assets/images/default-image.png")}
         ></Image>
+
+        <Pressable style={styles.editBtn}>
+          <Text style={{ textAlign: "center", color: "#fff", fontSize: 17 }}>
+            Editar Foto
+          </Text>
+        </Pressable>
 
         <Ionicons name="person" size={60} style={styles.profilePic}></Ionicons>
 
@@ -35,7 +41,17 @@ const styles = StyleSheet.create({
 
   bgTopImage: {
     width: "100%",
-    height: "45%",
+    height: "40%",
+    borderRadius: 10,
+  },
+
+  editBtn: {
+    bottom: 40,
+    backgroundColor: "#5D5F60",
+    width: "35%",
+    marginLeft: "auto",
+    marginRight: 20,
+    paddingVertical: 5,
     borderRadius: 10,
   },
 
@@ -45,7 +61,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 180,
     textAlign: "center",
-    bottom: 50,
+    bottom: 85,
     left: 40,
   },
 
@@ -55,7 +71,7 @@ const styles = StyleSheet.create({
     padding: 5,
     textAlign: "center",
     borderRadius: 180,
-    bottom: 90,
+    bottom: 125,
     left: 25,
   },
 });
