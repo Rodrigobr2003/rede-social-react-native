@@ -7,8 +7,13 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
+import { router } from "expo-router";
 
 export default function ModalLogin({ visibleModLog, setVisibleModLog }) {
+  function login() {
+    router.navigate("/home");
+  }
+
   return (
     <View>
       <Modal animationType="fade" transparent={true} visible={visibleModLog}>
@@ -43,11 +48,11 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }) {
             onPress={() => {
               setVisibleModLog(false);
 
-              return;
+              return login();
             }}
           >
             <Text style={{ textAlign: "center", fontSize: 18 }}>
-              Cadastre-se
+              Faça Login
             </Text>
           </Pressable>
         </View>

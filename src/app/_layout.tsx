@@ -13,6 +13,11 @@ export default function Layout() {
           name="index"
           options={{ headerShown: false }}
         ></Stack.Screen>
+
+        <Stack.Screen
+          name="home"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
       </Stack>
     </>
   );
