@@ -10,8 +10,14 @@ import {
   useFonts,
   PressStart2P_400Regular,
 } from "@expo-google-fonts/press-start-2p";
+import { useState } from "react";
+
+import ModalCadastro from "./includes/ModalCadastro";
+import ModalLogin from "./includes/ModalLogin";
 
 export default function Index() {
+  const [visible, setVisible] = useState(false);
+
   const [fonteCarregada] = useFonts({
     PressStart2P_400Regular,
   });
@@ -22,6 +28,8 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ModalCadastro></ModalCadastro>
+
       <View>
         <Text style={styles.titulo}>Conectando</Text>
         <Text style={styles.titulo}>o mundo em</Text>
