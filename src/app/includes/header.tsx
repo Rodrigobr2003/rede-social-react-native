@@ -7,9 +7,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Header() {
+export default function Header({}) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <TextInput
         placeholder="Pesquise no Orbee..."
         style={styles.input}
