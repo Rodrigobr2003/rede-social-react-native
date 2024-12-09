@@ -15,13 +15,6 @@ export default function Layout() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1D1D1D" /* DADBDC*/,
-    alignItems: "center",
-    paddingTop: 30,
-  },
-
   header: {
     display: "none",
   },
