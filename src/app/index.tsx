@@ -17,6 +17,7 @@ import ModalLogin from "./includes/ModalLogin";
 
 export default function Index() {
   const [visibleModCad, setVisibleModCad] = useState(false);
+  const [visibleModLog, setVisibleModLog] = useState(false);
 
   const [fonteCarregada] = useFonts({
     PressStart2P_400Regular,
@@ -32,6 +33,11 @@ export default function Index() {
         visibleModCad={visibleModCad}
         setVisibleModCad={setVisibleModCad}
       ></ModalCadastro>
+
+      <ModalLogin
+        visibleModLog={visibleModLog}
+        setVisibleModLog={setVisibleModLog}
+      ></ModalLogin>
 
       <View>
         <Text style={styles.titulo}>Conectando</Text>
@@ -71,7 +77,10 @@ export default function Index() {
             Já tem uma conta?
           </Text>
 
-          <TouchableHighlight style={[styles.button, styles.buttonEntrar]}>
+          <TouchableHighlight
+            style={[styles.button, styles.buttonEntrar]}
+            onPress={() => setVisibleModLog(true)}
+          >
             <Text style={[styles.buttonText, { color: "#2c3892" }]}>
               Entrar
             </Text>
