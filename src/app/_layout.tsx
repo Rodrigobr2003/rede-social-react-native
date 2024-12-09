@@ -5,12 +5,16 @@ import Header from "./includes/header";
 
 export default function Layout() {
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{ headerShown: false }}
-      ></Stack.Screen>
-    </Stack>
+    <>
+      <Header display={styles.header}></Header>
+
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      </Stack>
+    </>
   );
 }
 
