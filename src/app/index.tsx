@@ -28,7 +28,7 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ModalCadastro></ModalCadastro>
+      <ModalCadastro visiBool={visible} setVisible={setVisible}></ModalCadastro>
 
       <View>
         <Text style={styles.titulo}>Conectando</Text>
@@ -49,6 +49,7 @@ export default function Index() {
 
         <TouchableHighlight
           style={[styles.button, { backgroundColor: "#2c3892" }]}
+          onPress={() => setVisible(true)}
         >
           <Text style={[styles.buttonText, { color: "#fff" }]}>
             Criar conta!

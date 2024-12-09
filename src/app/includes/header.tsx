@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Header({ display }) {
+export default function Header({ display }: { display: any }) {
   return (
     <View style={[styles.container, display]}>
       <TextInput
