@@ -9,16 +9,16 @@ import {
   TextInput,
 } from "react-native";
 
-export default function ModalCadastro({ visiBool, setVisible }) {
+export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
   return (
     <View>
-      <Modal animationType="fade" transparent={true} visible={visiBool}>
+      <Modal animationType="fade" transparent={true} visible={visibleModCad}>
         <View style={styles.modal}>
           <Pressable style={{ marginVertical: 5 }}>
             <Ionicons
               name="chevron-back"
               size={30}
-              onPress={() => setVisible(false)}
+              onPress={() => setVisibleModCad(false)}
             ></Ionicons>
           </Pressable>
 
@@ -61,7 +61,7 @@ export default function ModalCadastro({ visiBool, setVisible }) {
             onPress={() => {
               alert("User cadastrado!");
 
-              return setVisible(false);
+              return setVisibleModCad(false);
             }}
           >
             <Text style={{ textAlign: "center", fontSize: 18 }}>

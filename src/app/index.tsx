@@ -16,7 +16,7 @@ import ModalCadastro from "./includes/ModalCadastro";
 import ModalLogin from "./includes/ModalLogin";
 
 export default function Index() {
-  const [visible, setVisible] = useState(false);
+  const [visibleModCad, setVisibleModCad] = useState(false);
 
   const [fonteCarregada] = useFonts({
     PressStart2P_400Regular,
@@ -28,7 +28,10 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ModalCadastro visiBool={visible} setVisible={setVisible}></ModalCadastro>
+      <ModalCadastro
+        visibleModCad={visibleModCad}
+        setVisibleModCad={setVisibleModCad}
+      ></ModalCadastro>
 
       <View>
         <Text style={styles.titulo}>Conectando</Text>
@@ -49,7 +52,7 @@ export default function Index() {
 
         <TouchableHighlight
           style={[styles.button, { backgroundColor: "#2c3892" }]}
-          onPress={() => setVisible(true)}
+          onPress={() => setVisibleModCad(true)}
         >
           <Text style={[styles.buttonText, { color: "#fff" }]}>
             Criar conta!
