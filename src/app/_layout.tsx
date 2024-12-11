@@ -1,12 +1,29 @@
-import { SafeAreaView, StyleSheet, View, Text } from "react-native";
-import { Slot, Stack } from "expo-router";
+import { StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+
+import { Stack, useSegments } from "expo-router";
 
 import Header from "./includes/header";
 
 export default function Layout() {
+  const segments = useSegments();
+  const [headerVisible, setHeaderStyle] = useState(false);
+
+  useEffect(() => {
+    const currentPath = segments.join("/");
+
+    if (currentPath === "home") {
+      setHeaderStyle(true);
+    } else {
+      setHeaderStyle(false);
+    }
+  }, [segments]);
+
   return (
     <>
-      <Header display={styles.header}></Header>
+      <Header
+        display={headerVisible ? styles.visibleHeader : styles.hiddenHeader}
+      ></Header>
 
       <Stack>
         <Stack.Screen
@@ -24,7 +41,10 @@ export default function Layout() {
 }
 
 const styles = StyleSheet.create({
-  header: {
+  hiddenHeader: {
     display: "none",
+  },
+  visibleHeader: {
+    display: "flex",
   },
 });
