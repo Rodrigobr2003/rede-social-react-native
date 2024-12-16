@@ -12,7 +12,7 @@ export default function Layout() {
   useEffect(() => {
     const currentPath = segments.join("/");
 
-    if (currentPath === "home") {
+    if (currentPath !== "") {
       setHeaderStyle(true);
     } else {
       setHeaderStyle(false);
@@ -33,6 +33,11 @@ export default function Layout() {
 
         <Stack.Screen
           name="home"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        <Stack.Screen
+          name="telaPesquisa"
           options={{ headerShown: false }}
         ></Stack.Screen>
       </Stack>
