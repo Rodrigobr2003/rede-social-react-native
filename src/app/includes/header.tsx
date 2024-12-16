@@ -1,10 +1,4 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  TouchableHighlight,
-} from "react-native";
+import { Text, View, StyleSheet, TextInput, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useSegments } from "expo-router";
 
@@ -18,7 +12,7 @@ export default function Header({ display }: { display: any }) {
 
   return (
     <View style={[styles.container, display]}>
-      <TouchableHighlight
+      <Pressable
         style={[
           styles.backButton,
           currentPath == "home" ? { display: "none" } : { display: "flex" },
@@ -30,7 +24,7 @@ export default function Header({ display }: { display: any }) {
         <Text>
           <Ionicons name="chevron-back" size={40} color={"#2B378F"} />
         </Text>
-      </TouchableHighlight>
+      </Pressable>
 
       <TextInput
         placeholder="Pesquise no Orbee..."
@@ -45,7 +39,7 @@ export default function Header({ display }: { display: any }) {
         }}
       ></TextInput>
 
-      <TouchableHighlight
+      <Pressable
         style={[
           styles.burguerButton,
           currentPath == "home" ? { display: "flex" } : { display: "none" },
@@ -54,7 +48,7 @@ export default function Header({ display }: { display: any }) {
         <Text>
           <Ionicons name="menu-outline" size={40} color={"#2B378F"} />
         </Text>
-      </TouchableHighlight>
+      </Pressable>
     </View>
   );
 }
