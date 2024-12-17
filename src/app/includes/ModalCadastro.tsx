@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -8,8 +7,26 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import User from "../../models/UserModel";
 
 export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
+  const cadastrarUsuario = async () => {
+    const user = new User("user", "3", "email3", "5678", "ind");
+
+    return user.registrar(user);
+  };
+
+  const getData = async () => {
+    try {
+      const data = await AsyncStorage.getItem("3");
+      alert(data);
+    } catch (error) {
+      console.log("Erro ao dar get: " + error);
+    }
+  };
+
   return (
     <View>
       <Modal animationType="fade" transparent={true} visible={visibleModCad}>
@@ -28,6 +45,7 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
             <TextInput
               style={[styles.txtInput, { width: "45%" }]}
               placeholder="Nome"
+              id="nome"
             ></TextInput>
             <TextInput
               style={[styles.txtInput, { width: "45%" }]}
@@ -59,13 +77,23 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
           <Pressable
             style={styles.cadBtn}
             onPress={() => {
-              alert("User cadastrado!");
-
               return setVisibleModCad(false);
             }}
           >
-            <Text style={{ textAlign: "center", fontSize: 18 }}>
+            <Text
+              style={{ textAlign: "center", fontSize: 18 }}
+              onPress={cadastrarUsuario}
+            >
               Cadastre-se
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={[styles.cadBtn, { backgroundColor: "red" }]}
+            onPress={getData}
+          >
+            <Text style={{ textAlign: "center", fontSize: 18, color: "#fff" }}>
+              DEBUG
             </Text>
           </Pressable>
         </View>

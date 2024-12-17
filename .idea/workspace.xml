@@ -6,20 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a4289bee-5c07-49c5-ba4b-6bac712d82fd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/amigos.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/chatProfile.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/home.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/includes/header.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/notificacoes.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/perfil.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/perfilProcurado.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/includes/ModalCadastro.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/includes/ModalCadastro.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +39,7 @@
     &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/aluno/Desktop/rede-social-react-native&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Rodrigo/Desktop/EXERCÍCIOS/rede-social-react-native&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;AndroidSdkUpdater&quot;
   }
 }</component>
