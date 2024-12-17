@@ -8,24 +8,30 @@ import {
   TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useForm, Controller } from "react-hook-form";
 
 import User from "../../models/UserModel";
+import { useState } from "react";
 
 export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
-  const cadastrarUsuario = async () => {
-    const user = new User("user", "3", "email3", "5678", "ind");
-
+  const cadastrarUsuario = async (formData: any) => {
+    const user = new User(
+      formData.nome,
+      formData.sobrenome,
+      formData.email,
+      formData.senha,
+      formData.data,
+      formData.genero
+    );
     return user.registrar(user);
   };
 
-  const getData = async () => {
-    try {
-      const data = await AsyncStorage.getItem("3");
-      alert(data);
-    } catch (error) {
-      console.log("Erro ao dar get: " + error);
-    }
-  };
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({});
 
   return (
     <View>
@@ -42,36 +48,105 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-            <TextInput
-              style={[styles.txtInput, { width: "45%" }]}
-              placeholder="Nome"
-              id="nome"
-            ></TextInput>
-            <TextInput
-              style={[styles.txtInput, { width: "45%" }]}
-              placeholder="Sobrenome"
-            ></TextInput>
+            <Controller
+              control={control}
+              name="nome"
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={[styles.txtInput, { width: "45%" }]}
+                  placeholder="Nome"
+                  onChangeText={onChange}
+                  value={value}
+                ></TextInput>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="sobrenome"
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={[styles.txtInput, { width: "45%" }]}
+                  placeholder="Sobrenome"
+                  onChangeText={onChange}
+                  value={value}
+                ></TextInput>
+              )}
+            />
           </View>
 
-          <TextInput style={styles.txtInput} placeholder="E-mail"></TextInput>
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Senha"
-            secureTextEntry={true}
-          ></TextInput>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.txtInput}
+                placeholder="E-mail"
+                onChangeText={onChange}
+                value={value}
+              ></TextInput>
+            )}
+          />
 
-          <TextInput style={styles.txtInput} placeholder="Data"></TextInput>
+          <Controller
+            control={control}
+            name="senha"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.txtInput}
+                placeholder="Senha"
+                secureTextEntry={true}
+                onChangeText={onChange}
+                value={value}
+              ></TextInput>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="data"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.txtInput}
+                placeholder="Data"
+                onChangeText={onChange}
+                value={value}
+              ></TextInput>
+            )}
+          />
 
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-            <Pressable style={[styles.txtInput, { width: "45%" }]}>
-              <Text>Masculino</Text>
-            </Pressable>
+            <Controller
+              control={control}
+              name="genero"
+              render={() => (
+                <Pressable
+                  style={[styles.txtInput, { width: "45%" }]}
+                  onPress={() => {
+                    setValue("genero", "Masculino");
+                  }}
+                >
+                  <Text>Masculino</Text>
+                </Pressable>
+              )}
+            />
 
-            <Pressable style={[styles.txtInput, { width: "45%" }]}>
-              <Text>Feminino</Text>
-            </Pressable>
+            <Controller
+              control={control}
+              name="genero"
+              render={() => (
+                <Pressable
+                  style={[styles.txtInput, { width: "45%" }]}
+                  onPress={() => {
+                    setValue("genero", "Feminino");
+                  }}
+                >
+                  <Text>Feminino</Text>
+                </Pressable>
+              )}
+            />
           </View>
 
           <Pressable
@@ -82,18 +157,9 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
           >
             <Text
               style={{ textAlign: "center", fontSize: 18 }}
-              onPress={cadastrarUsuario}
+              onPress={handleSubmit(cadastrarUsuario)}
             >
               Cadastre-se
-            </Text>
-          </Pressable>
-
-          <Pressable
-            style={[styles.cadBtn, { backgroundColor: "red" }]}
-            onPress={getData}
-          >
-            <Text style={{ textAlign: "center", fontSize: 18, color: "#fff" }}>
-              DEBUG
             </Text>
           </Pressable>
         </View>

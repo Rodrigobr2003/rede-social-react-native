@@ -5,7 +5,7 @@ export default class User {
   private sobrenome: String;
   private email: String;
   private senha: String;
-  // private data: Date;
+  private data: String;
   private genero: String;
   // private descricao: String;
   //   private amigos: Array[];
@@ -16,14 +16,14 @@ export default class User {
     sobrenome: String,
     email: String,
     senha: String,
-    // data: Date
+    data: String,
     genero: String
   ) {
     this.nome = nome;
     this.sobrenome = sobrenome;
     this.email = email;
     this.senha = senha;
-    // this.data = data;
+    this.data = data;
     this.genero = genero;
   }
 
