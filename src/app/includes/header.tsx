@@ -45,7 +45,8 @@ export default function Header({ display }: { display: any }) {
               ? { width: 300 }
               : { width: 350, marginLeft: "auto" },
           ]}
-          onPress={() => {
+          onFocus={() => {
+            setVisibleNav(false);
             navigate();
           }}
         ></TextInput>
@@ -55,11 +56,14 @@ export default function Header({ display }: { display: any }) {
           style={[
             styles.burguerButton,
             currentPath == "telaPesquisa"
-              ? { display: "flex" }
-              : { display: "none" },
+              ? { display: "none" }
+              : { display: "flex" },
             visibleNav ? { display: "none" } : { display: "flex" },
           ]}
           onPress={() => {
+            closeNav();
+          }}
+          onPressOut={() => {
             setVisibleNav(true);
           }}
         >
