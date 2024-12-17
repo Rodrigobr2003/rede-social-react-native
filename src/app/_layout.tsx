@@ -40,6 +40,11 @@ export default function Layout() {
           name="telaPesquisa"
           options={{ headerShown: false }}
         ></Stack.Screen>
+
+        <Stack.Screen
+          name="amigos"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
       </Stack>
     </>
   );

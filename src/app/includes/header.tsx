@@ -8,6 +8,10 @@ export default function Header({ display }: { display: any }) {
     router.navigate("/telaPesquisa");
   }
 
+  function closeNav() {
+    setVisibleNav(false);
+  }
+
   const [visibleNav, setVisibleNav] = useState(false);
 
   const segments = useSegments();
@@ -16,10 +20,13 @@ export default function Header({ display }: { display: any }) {
   return (
     <>
       <View style={[styles.container, display]}>
+        {/*Back BTN*/}
         <Pressable
           style={[
             styles.backButton,
-            currentPath == "home" ? { display: "none" } : { display: "flex" },
+            currentPath == "telaPesquisa"
+              ? { display: "flex" }
+              : { display: "none" },
           ]}
           onPress={() => {
             router.back();
@@ -43,10 +50,13 @@ export default function Header({ display }: { display: any }) {
           }}
         ></TextInput>
 
+        {/*Nav BTN*/}
         <Pressable
           style={[
             styles.burguerButton,
-            currentPath == "home" ? { display: "flex" } : { display: "none" },
+            currentPath == "telaPesquisa"
+              ? { display: "flex" }
+              : { display: "none" },
             visibleNav ? { display: "none" } : { display: "flex" },
           ]}
           onPress={() => {
@@ -58,10 +68,13 @@ export default function Header({ display }: { display: any }) {
           </Text>
         </Pressable>
 
+        {/*Close BTN*/}
         <Pressable
           style={[
             styles.burguerButton,
-            currentPath == "home" ? { display: "flex" } : { display: "none" },
+            currentPath == "telaPesquisa"
+              ? { display: "flex" }
+              : { display: "none" },
             visibleNav ? { display: "flex" } : { display: "none" },
           ]}
           onPress={() => {
@@ -80,19 +93,39 @@ export default function Header({ display }: { display: any }) {
           styles.nav,
         ]}
       >
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            router.navigate("/home");
+            closeNav();
+          }}
+        >
           <Text style={styles.navItem}>Home</Text>
         </Pressable>
 
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            router.navigate("/amigos");
+            closeNav();
+          }}
+        >
           <Text style={styles.navItem}>Amigos</Text>
         </Pressable>
 
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            router.navigate("/notificacoes");
+            closeNav();
+          }}
+        >
           <Text style={styles.navItem}>Notificações</Text>
         </Pressable>
 
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            router.navigate("/perfil");
+            closeNav();
+          }}
+        >
           <Text style={styles.navItem}>Perfil</Text>
         </Pressable>
       </View>
