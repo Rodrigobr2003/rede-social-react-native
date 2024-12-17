@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 import { User, UserSchema } from "../../models/UserModel";
 
@@ -23,13 +22,19 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
       formData.data,
       formData.genero
     );
-    // return user.registrar(user);
+
+    reset();
+
+    user.registrar(user);
+
+    return setVisibleModCad(false);
   };
 
   const {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(UserSchema),
