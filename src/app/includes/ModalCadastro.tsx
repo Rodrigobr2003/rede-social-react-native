@@ -7,11 +7,11 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-import User from "../../models/UserModel";
-import { useState } from "react";
+import { User, UserSchema } from "../../models/UserModel";
 
 export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
   const cadastrarUsuario = async (formData: any) => {
@@ -23,7 +23,7 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
       formData.data,
       formData.genero
     );
-    return user.registrar(user);
+    // return user.registrar(user);
   };
 
   const {
@@ -31,7 +31,9 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({});
+  } = useForm({
+    resolver: yupResolver(UserSchema),
+  });
 
   return (
     <View>
@@ -48,31 +50,41 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-            <Controller
-              control={control}
-              name="nome"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={[styles.txtInput, { width: "45%" }]}
-                  placeholder="Nome"
-                  onChangeText={onChange}
-                  value={value}
-                ></TextInput>
+            <View style={{ width: "45%" }}>
+              <Controller
+                control={control}
+                name="nome"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={[styles.txtInput, { width: "100%" }]}
+                    placeholder="Nome"
+                    onChangeText={onChange}
+                    value={value}
+                  ></TextInput>
+                )}
+              />
+              {errors.nome && (
+                <Text style={styles.errorMsg}>{errors.nome?.message}</Text>
               )}
-            />
+            </View>
 
-            <Controller
-              control={control}
-              name="sobrenome"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={[styles.txtInput, { width: "45%" }]}
-                  placeholder="Sobrenome"
-                  onChangeText={onChange}
-                  value={value}
-                ></TextInput>
+            <View style={{ width: "45%" }}>
+              <Controller
+                control={control}
+                name="sobrenome"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={[styles.txtInput, { width: "100%" }]}
+                    placeholder="Sobrenome"
+                    onChangeText={onChange}
+                    value={value}
+                  ></TextInput>
+                )}
+              />
+              {errors.sobrenome && (
+                <Text style={styles.errorMsg}>{errors.sobrenome?.message}</Text>
               )}
-            />
+            </View>
           </View>
 
           <Controller
@@ -88,6 +100,10 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
             )}
           />
 
+          {errors.email && (
+            <Text style={styles.errorMsg}>{errors.email?.message}</Text>
+          )}
+
           <Controller
             control={control}
             name="senha"
@@ -101,6 +117,9 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
               ></TextInput>
             )}
           />
+          {errors.senha && (
+            <Text style={styles.errorMsg}>{errors.senha?.message}</Text>
+          )}
 
           <Controller
             control={control}
@@ -114,39 +133,47 @@ export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
               ></TextInput>
             )}
           />
+          {errors.data && (
+            <Text style={styles.errorMsg}>{errors.data?.message}</Text>
+          )}
 
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
-            <Controller
-              control={control}
-              name="genero"
-              render={() => (
-                <Pressable
-                  style={[styles.txtInput, { width: "45%" }]}
-                  onPress={() => {
-                    setValue("genero", "Masculino");
-                  }}
-                >
-                  <Text>Masculino</Text>
-                </Pressable>
-              )}
-            />
+          <View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-around" }}
+            >
+              <Controller
+                control={control}
+                name="genero"
+                render={() => (
+                  <Pressable
+                    style={[styles.txtInput, { width: "45%" }]}
+                    onPress={() => {
+                      setValue("genero", "Masculino");
+                    }}
+                  >
+                    <Text>Masculino</Text>
+                  </Pressable>
+                )}
+              />
 
-            <Controller
-              control={control}
-              name="genero"
-              render={() => (
-                <Pressable
-                  style={[styles.txtInput, { width: "45%" }]}
-                  onPress={() => {
-                    setValue("genero", "Feminino");
-                  }}
-                >
-                  <Text>Feminino</Text>
-                </Pressable>
-              )}
-            />
+              <Controller
+                control={control}
+                name="genero"
+                render={() => (
+                  <Pressable
+                    style={[styles.txtInput, { width: "45%" }]}
+                    onPress={() => {
+                      setValue("genero", "Feminino");
+                    }}
+                  >
+                    <Text>Feminino</Text>
+                  </Pressable>
+                )}
+              />
+            </View>
+            {errors.genero && (
+              <Text style={styles.errorMsg}>{errors.genero?.message}</Text>
+            )}
           </View>
 
           <Pressable
@@ -197,5 +224,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginTop: 15,
     borderRadius: 12,
+  },
+
+  errorMsg: {
+    color: "red",
+    textAlign: "center",
   },
 });
