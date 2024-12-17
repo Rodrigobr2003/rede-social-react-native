@@ -45,6 +45,16 @@ export default function Layout() {
           name="amigos"
           options={{ headerShown: false }}
         ></Stack.Screen>
+
+        <Stack.Screen
+          name="notificacoes"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        <Stack.Screen
+          name="perfil"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
       </Stack>
     </>
   );
