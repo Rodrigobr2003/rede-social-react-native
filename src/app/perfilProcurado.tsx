@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import {
   StyleSheet,
   View,
@@ -71,7 +72,12 @@ export default function PerfilProcurado() {
                   ></Ionicons>
                 </Pressable>
 
-                <Pressable style={styles.btnInteract}>
+                <Pressable
+                  style={styles.btnInteract}
+                  onPress={() => {
+                    router.navigate("/chatProfile");
+                  }}
+                >
                   <Ionicons
                     style={{ textAlign: "center", color: "#fff" }}
                     name="chatbubble-ellipses"
@@ -147,7 +153,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
     width: "90%",
-    height: "80%",
+    height: "85%",
+    marginHorizontal: "auto",
   },
 
   topFeedPerfil: {

@@ -55,6 +55,16 @@ export default function Layout() {
           name="perfil"
           options={{ headerShown: false }}
         ></Stack.Screen>
+
+        <Stack.Screen
+          name="perfilProcurado"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+
+        <Stack.Screen
+          name="chatProfile"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
       </Stack>
     </>
   );

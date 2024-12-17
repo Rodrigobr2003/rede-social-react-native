@@ -1,11 +1,19 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { StyleSheet, View, Text, ScrollView, TextInput } from "react-native";
 
 export default function ChatProfile() {
   return (
     <View style={styles.feedDefault}>
       <View style={[styles.feedTop, styles.feedDetails]}>
-        <Ionicons name="chevron-back" size={26} style={{ paddingLeft: 10 }} />
+        <Ionicons
+          name="chevron-back"
+          size={26}
+          style={{ paddingLeft: 10 }}
+          onPress={() => {
+            router.back();
+          }}
+        />
 
         <Ionicons name="person" size={32} style={styles.profilePic}></Ionicons>
 
@@ -46,7 +54,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
     width: "90%",
-    height: "80%",
+    height: "85%",
+    marginHorizontal: "auto",
   },
 
   feedDetails: {

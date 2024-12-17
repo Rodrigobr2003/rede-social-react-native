@@ -41,9 +41,9 @@ export default function Header({ display }: { display: any }) {
           placeholder="Pesquise no Orbee..."
           style={[
             styles.input,
-            currentPath == "home"
-              ? { width: 300 }
-              : { width: 350, marginLeft: "auto" },
+            currentPath == "telaPesquisa"
+              ? { width: 350, marginLeft: "auto" }
+              : { width: 300 },
           ]}
           onFocus={() => {
             setVisibleNav(false);

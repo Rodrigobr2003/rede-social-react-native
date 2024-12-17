@@ -1,10 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 
 export default function TelaPesquisa() {
   return (
     <ScrollView style={{ backgroundColor: "#fff", borderTopWidth: 1 }}>
-      {/* <View style={styles.profileSec}>
+      <View
+        style={styles.profileSec}
+        onTouchStart={() => {
+          router.navigate("/perfilProcurado");
+        }}
+      >
         <Ionicons
           name="person"
           size={45}
@@ -18,7 +24,7 @@ export default function TelaPesquisa() {
           size={30}
           style={{ width: "20%", paddingHorizontal: 20 }}
         ></Ionicons>
-      </View> */}
+      </View>
     </ScrollView>
   );
 }

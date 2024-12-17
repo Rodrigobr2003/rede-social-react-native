@@ -137,7 +137,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
     width: "90%",
-    height: "80%",
+    height: "85%",
+    marginHorizontal: "auto",
   },
 
   topFeedPerfil: {
