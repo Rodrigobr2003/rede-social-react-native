@@ -9,10 +9,29 @@ import {
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-import { User, UserSchema } from "../../models/UserModel";
+import { User } from "../../models/UserModel";
 
 export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
+  const UserSchema = yup.object({
+    nome: yup
+      .string()
+      .required("Informe seu nome")
+      .min(2, "Seu nome deve ter no mínimo 2 caracteres"),
+    sobrenome: yup
+      .string()
+      .required("Informe seu sobrenome")
+      .min(2, "Seu sobrenome deve ter no mínimo 2 caracteres"),
+    email: yup.string().email("Email inválido").required("Informe seu email"),
+    senha: yup
+      .string()
+      .min(4, "A senha deve ter no mínimo 4 caracteres")
+      .required("Informe sua senha"),
+    data: yup.string().required("Informe sua data de nascimento"),
+    genero: yup.string().required("Informe seu gênero"),
+  });
+
   const cadastrarUsuario = async (formData: any) => {
     const user = new User(
       formData.nome,

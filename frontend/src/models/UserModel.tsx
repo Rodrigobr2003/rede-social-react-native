@@ -1,23 +1,3 @@
-import * as yup from "yup";
-
-export const UserSchema = yup.object({
-  nome: yup
-    .string()
-    .required("Informe seu nome")
-    .min(2, "Seu nome deve ter no mínimo 2 caracteres"),
-  sobrenome: yup
-    .string()
-    .required("Informe seu sobrenome")
-    .min(2, "Seu sobrenome deve ter no mínimo 2 caracteres"),
-  email: yup.string().email("Email inválido").required("Informe seu email"),
-  senha: yup
-    .string()
-    .min(4, "A senha deve ter no mínimo 4 caracteres")
-    .required("Informe sua senha"),
-  data: yup.string().required("Informe sua data de nascimento"),
-  genero: yup.string().required("Informe seu gênero"),
-});
-
 export class User {
   private nome: String;
   private sobrenome: String;
