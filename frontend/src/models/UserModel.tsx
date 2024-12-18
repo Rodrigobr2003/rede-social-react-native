@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as yup from "yup";
 
 export const UserSchema = yup.object({
@@ -48,24 +47,8 @@ export class User {
 
   public async registrar(user: User) {
     try {
-      let newId = user.gerarID();
-
-      return await AsyncStorage.setItem(
-        (await newId).toString(),
-        JSON.stringify(user)
-      );
     } catch (error) {
       console.log("Erro ao registrar usuário: " + error);
-    }
-  }
-
-  public async gerarID() {
-    const keys = await AsyncStorage.getAllKeys();
-
-    if (keys.length === 0) {
-      return 1;
-    } else {
-      return keys.length + 1;
     }
   }
 }
