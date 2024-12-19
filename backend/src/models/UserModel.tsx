@@ -1,4 +1,17 @@
-export class User {
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema({
+  nome: { type: String, required: true },
+  sobrenome: { type: String, required: true },
+  email: { type: String, required: true },
+  senha: { type: String, required: true },
+  data: { type: String, required: true },
+  genero: { type: String, required: true },
+});
+
+const UserModel = mongoose.model("Usuario", userSchema);
+
+export default class User {
   private nome: String;
   private sobrenome: String;
   private email: String;
@@ -27,6 +40,7 @@ export class User {
 
   public async registrar(user: User) {
     try {
+      return await UserModel.create(user);
     } catch (error) {
       console.log("Erro ao registrar usuário: " + error);
     }

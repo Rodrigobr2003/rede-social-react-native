@@ -11,9 +11,10 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { User } from "../../models/UserModel";
-
-export default function ModalCadastro({ visibleModCad, setVisibleModCad }) {
+export default function ModalCadastro({
+  visibleModCad,
+  setVisibleModCad,
+}: any) {
   const UserSchema = yup.object({
     nome: yup
       .string()
