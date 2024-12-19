@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   nome: { type: String, required: true },
@@ -11,25 +11,18 @@ const userSchema = new mongoose.Schema({
 
 const UserModel = mongoose.model("Usuario", userSchema);
 
-export default class User {
-  private nome: String;
-  private sobrenome: String;
-  private email: String;
-  private senha: String;
-  private data: String;
-  private genero: String;
-  // private descricao: String;
-  //   private amigos: Array[];
-  //   private notificacoes: Array[];
+class User {
+  nome;
+  sobrenome;
+  email;
+  senha;
+  data;
+  genero;
+  //  descricao
+  //    amigos
+  //    notificacoes
 
-  constructor(
-    nome: String,
-    sobrenome: String,
-    email: String,
-    senha: String,
-    data: String,
-    genero: String
-  ) {
+  constructor(nome, sobrenome, email, senha, data, genero) {
     this.nome = nome;
     this.sobrenome = sobrenome;
     this.email = email;
@@ -38,7 +31,7 @@ export default class User {
     this.genero = genero;
   }
 
-  public async registrar(user: User) {
+  async registrar(user) {
     try {
       return await UserModel.create(user);
     } catch (error) {
@@ -46,3 +39,5 @@ export default class User {
     }
   }
 }
+
+module.exports = User;
