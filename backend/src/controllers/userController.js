@@ -1,22 +1,11 @@
 const User = require("../models/UserModel");
 
-exports.cadastrarUsuario = (req, res) => {
+exports.cadastrarUsuario = async (req, res) => {
   try {
-    const user = new User(
-      req.body.nome,
-      req.body.sobrenome,
-      req.body.email,
-      req.body.senha,
-      req.body.data,
-      req.body.genero
-    );
+    const user = new User(req.body);
 
-    return user.registrar(user);
+    return await user.registrar();
   } catch (error) {
     console.log("Erro ao cadastrar usuário");
   }
-};
-
-exports.teste = (req, res) => {
-  console.log("aaaaa");
 };

@@ -16,33 +16,41 @@ const userSchema = new mongoose.Schema({
 const UserModel = mongoose.model("Usuario", userSchema);
 
 class User {
-  nome;
-  sobrenome;
-  email;
-  senha;
-  data;
-  genero;
-  descricao;
-  amigos;
-  notificacoes;
-
-  constructor(nome, sobrenome, email, senha, data, genero) {
-    this.nome = nome;
-    this.sobrenome = sobrenome;
-    this.email = email;
-    this.data = data;
-    this.genero = genero;
-
-    const salt = bcrypt.genSaltSync();
-    this.senha = bcrypt.hashSync(senha, salt);
+  constructor(body) {
+    this.body = body;
   }
 
-  async registrar(user) {
+  async registrar() {
     try {
-      return await UserModel.create(user);
+      this.validacao();
+
+      const salt = bcrypt.genSaltSync();
+      this.body.senha = bcrypt.hashSync(this.body.senha, salt);
+
+      return await UserModel.create(this.body);
     } catch (error) {
       console.log("Erro ao registrar usuário: " + error);
     }
+  }
+
+  validacao() {
+    for (let key in this.body) {
+      if (typeof this.body[key] !== "string") {
+        this.body[key] = "";
+      }
+    }
+
+    this.body = {
+      nome: this.body.nome,
+      sobrenome: this.body.sobrenome,
+      email: this.body.email,
+      senha: this.body.senha,
+      data: this.body.data,
+      genero: this.body.genero,
+      descricao: this.body.descricao,
+      amigos: this.body.amigos,
+      notificacoes: this.body.notificacoes,
+    };
   }
 }
 
