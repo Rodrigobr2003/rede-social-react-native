@@ -8,10 +8,31 @@ import {
   TextInput,
 } from "react-native";
 import { router } from "expo-router";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
 
-export default function ModalLogin({ visibleModLog, setVisibleModLog }) {
+export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
+  const loginSchema = yup.object({
+    email: yup.string().email("Email inválido").required("Informe seu email"),
+    senha: yup
+      .string()
+      .min(4, "A senha deve ter no mínimo 4 caracteres")
+      .required("Informe sua senha"),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
+
   function login() {
-    router.navigate("/home");
+    setVisibleModLog(false);
+
+    return router.navigate("/home");
   }
 
   return (
@@ -36,21 +57,40 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }) {
             <Text style={{ fontSize: 30 }}>Entrar no Orbee</Text>
           </View>
 
-          <TextInput style={styles.txtInput} placeholder="E-mail"></TextInput>
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Senha"
-            secureTextEntry={true}
-          ></TextInput>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.txtInput}
+                placeholder="E-mail"
+                onChangeText={onChange}
+                value={value}
+              ></TextInput>
+            )}
+          />
+          {errors.email && (
+            <Text style={styles.errorMsg}>{errors.email?.message}</Text>
+          )}
 
-          <Pressable
-            style={styles.logBtn}
-            onPress={() => {
-              setVisibleModLog(false);
+          <Controller
+            control={control}
+            name="senha"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.txtInput}
+                placeholder="Senha"
+                secureTextEntry={true}
+                onChangeText={onChange}
+                value={value}
+              ></TextInput>
+            )}
+          />
+          {errors.senha && (
+            <Text style={styles.errorMsg}>{errors.senha?.message}</Text>
+          )}
 
-              return login();
-            }}
-          >
+          <Pressable style={styles.logBtn} onPress={handleSubmit(login)}>
             <Text style={{ textAlign: "center", fontSize: 18 }}>
               Faça Login
             </Text>
@@ -90,5 +130,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginTop: 15,
     borderRadius: 12,
+  },
+  errorMsg: {
+    color: "red",
+    textAlign: "center",
   },
 });
