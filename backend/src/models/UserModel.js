@@ -41,11 +41,13 @@ class User {
       const user = await UserModel.findOne({ email: this.body.email });
 
       if (user == null) {
-        return this.errors.push("Usuário não existe");
+        this.errors.push("Usuário não existe");
+        return;
       }
 
       if (!bcrypt.compareSync(this.body.senha, user.senha)) {
-        return this.errors.push("Senha incorreta");
+        this.errors.push("Senha incorreta");
+        return;
       }
     } catch (error) {
       console.log("Erro ao logar usuário: " + error);

@@ -20,7 +20,7 @@ mongoose
 
 app.use(
   cors({
-    origin: "exp://192.168.15.10:8081", // Defina a origem do frontend
+    origin: "http://10.0.2.2:3008", // Defina a origem do frontend
     methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
     allowedHeaders: ["Content-Type", "Authorization"], // Cabeçalhos permitidos
   })

@@ -30,20 +30,28 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
   });
 
   const login = async (formData: any) => {
-    const response = await fetch("http://10.0.2.2:3008/login", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch("http://10.0.2.2:3008/login", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    await response.json();
+      const data = await response.json();
+      console.log("Resposta do servidor:", data);
 
-    setVisibleModLog(false);
-
-    return router.navigate("/home");
+      if (response.ok) {
+        setVisibleModLog(false);
+        router.navigate("/home");
+      } else {
+        console.log("Erro no login: ", data.message);
+      }
+    } catch (error) {
+      console.log("Erro ao enviar dados para login: " + error);
+    }
   };
 
   return (

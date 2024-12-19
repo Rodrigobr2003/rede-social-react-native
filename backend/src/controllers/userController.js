@@ -17,8 +17,9 @@ exports.login = async (req, res) => {
     await user.login();
 
     if (user.errors.length > 0) {
-      return console.log(user.errors); //Importar erros ao front
+      return res.status(400).json({ message: user.errors });
     }
+    return res.status(200).json({ message: "Login realizado com sucesso" });
   } catch (error) {
     console.log("Erro ao logar usuário", error);
   }
