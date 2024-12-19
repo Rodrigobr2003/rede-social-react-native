@@ -34,20 +34,20 @@ export default function ModalCadastro({
   });
 
   const cadastrarUsuario = async (formData: any) => {
-    const user = new User(
-      formData.nome,
-      formData.sobrenome,
-      formData.email,
-      formData.senha,
-      formData.data,
-      formData.genero
-    );
+    try {
+      const request = await fetch("http://10.0.2.2:3008/registrar", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    reset();
-
-    user.registrar(user);
-
-    return setVisibleModCad(false);
+      await request.json();
+    } catch (error) {
+      console.log("Erro ao enviar dados para cadastro: ", error);
+    }
   };
 
   const {
