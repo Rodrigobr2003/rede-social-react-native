@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
   nome: { type: String, required: true },
@@ -26,9 +27,11 @@ class User {
     this.nome = nome;
     this.sobrenome = sobrenome;
     this.email = email;
-    this.senha = senha;
     this.data = data;
     this.genero = genero;
+
+    const salt = bcrypt.genSaltSync();
+    this.senha = bcrypt.hashSync(senha, salt);
   }
 
   async registrar(user) {
