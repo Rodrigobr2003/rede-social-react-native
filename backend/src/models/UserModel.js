@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema({
   senha: { type: String, required: true },
   data: { type: String, required: true },
   genero: { type: String, required: true },
+  descricao: { type: String, required: false, default: "" },
+  amigos: { type: Array, required: false, default: [] },
+  notificacoes: { type: Array, required: false, default: [] },
 });
 
 const UserModel = mongoose.model("Usuario", userSchema);
@@ -19,9 +22,9 @@ class User {
   senha;
   data;
   genero;
-  //  descricao
-  //    amigos
-  //    notificacoes
+  descricao;
+  amigos;
+  notificacoes;
 
   constructor(nome, sobrenome, email, senha, data, genero) {
     this.nome = nome;
