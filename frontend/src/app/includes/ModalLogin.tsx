@@ -29,11 +29,22 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
     resolver: yupResolver(loginSchema),
   });
 
-  function login() {
+  const login = async (formData: any) => {
+    const response = await fetch("http://10.0.2.2:3008/login", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    await response.json();
+
     setVisibleModLog(false);
 
     return router.navigate("/home");
-  }
+  };
 
   return (
     <View>

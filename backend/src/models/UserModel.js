@@ -18,6 +18,7 @@ const UserModel = mongoose.model("Usuario", userSchema);
 class User {
   constructor(body) {
     this.body = body;
+    this.errors = [];
   }
 
   async registrar() {
@@ -30,6 +31,24 @@ class User {
       return await UserModel.create(this.body);
     } catch (error) {
       console.log("Erro ao registrar usuário: " + error);
+    }
+  }
+
+  async login() {
+    try {
+      this.validacao();
+
+      const user = await UserModel.findOne({ email: this.body.email });
+
+      if (user == null) {
+        return this.errors.push("Usuário não existe");
+      }
+
+      if (!bcrypt.compareSync(this.body.senha, user.senha)) {
+        return this.errors.push("Senha incorreta");
+      }
+    } catch (error) {
+      console.log("Erro ao logar usuário: " + error);
     }
   }
 
