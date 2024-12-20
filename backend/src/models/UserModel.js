@@ -34,11 +34,23 @@ class User {
     }
   }
 
-  async login() {
+  async login(req) {
     try {
       this.validacao();
 
       const user = await UserModel.findOne({ email: this.body.email });
+
+      const userSec = {
+        nome: user.nome,
+        sobrenome: user.sobrenome,
+        email: user.email,
+        genero: user.genero,
+        descricao: user.descricao,
+        amigos: user.amigos,
+        notificacoes: user.notificacoes,
+      };
+
+      req.session.user = userSec;
 
       if (user == null) {
         this.errors.push("Usuário não existe");
