@@ -1,7 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { UserContext } from "./includes/UserProvider";
 
 export default function Amigos() {
+  const data = useContext(UserContext);
+
+  let amigos = null;
+
+  if ((data?.user?.amigos || "").length <= 0) {
+    amigos = (
+      <Text style={{ fontSize: 17, marginTop: 10 }}>
+        Você ainda não tem amigos...
+      </Text>
+    );
+  } else {
+    //UTILIZAR FOR
+  }
+
   return (
     <View style={{ alignItems: "center", height: "90%" }}>
       <View style={styles.feedDefault}>
@@ -14,9 +30,7 @@ export default function Amigos() {
         <ScrollView
           contentContainerStyle={{ alignItems: "center", width: 320 }}
         >
-          <Text style={{ fontSize: 17, marginTop: 10 }}>
-            Você ainda não tem amigos...
-          </Text>
+          {amigos}
 
           {/* <Pressable style={styles.btnAmigo}>
             <Ionicons

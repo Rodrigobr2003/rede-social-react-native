@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -8,8 +9,31 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
+import { UserContext } from "./includes/UserProvider";
 
 export default function Perfil() {
+  const data = useContext(UserContext); //DADOS DO USER
+
+  let descricao = null;
+
+  if ((data?.user?.descicao || "").length <= 0) {
+    descricao = (
+      <TextInput
+        placeholder="Adicionar descrição"
+        placeholderTextColor={"#000"}
+        style={{ fontSize: 15 }}
+      ></TextInput>
+    );
+  } else {
+    descricao = (
+      <TextInput
+        placeholder={data?.user?.descicao}
+        placeholderTextColor={"#000"}
+        style={{ fontSize: 15 }}
+      ></TextInput>
+    );
+  }
+
   return (
     <View style={styles.feedDefault}>
       <View style={styles.topFeedPerfil}>
@@ -44,7 +68,7 @@ export default function Perfil() {
                   styles.userText,
                 ]}
               >
-                Nome do usuário
+                {data?.user?.nome} {data?.user?.sobrenome}
               </Text>
 
               <Text
@@ -55,19 +79,13 @@ export default function Perfil() {
                   styles.userText,
                 ]}
               >
-                0 amigos
+                {data?.user?.amigos.length} amigos
               </Text>
 
               <View style={styles.desc}>
                 <Ionicons name="pencil" size={20}></Ionicons>
 
-                <TextInput
-                  placeholder="Adicionar descrição"
-                  placeholderTextColor={"#000"}
-                  style={{ fontSize: 15 }}
-                >
-                  <Text></Text>
-                </TextInput>
+                {descricao}
               </View>
             </View>
           </View>

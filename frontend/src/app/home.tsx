@@ -7,9 +7,12 @@ import {
   Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "expo-router";
+import { useContext } from "react";
+import { UserContext } from "./includes/UserProvider";
 
 export default function Home() {
+  const data = useContext(UserContext); //DADOS DO USER
+
   return (
     <ScrollView contentContainerStyle={{ alignItems: "center" }}>
       <View style={[styles.feedDefault, styles.feedPerfil]}>

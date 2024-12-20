@@ -1,7 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
 import { View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
+import { UserContext } from "./includes/UserProvider";
 
 export default function Notificacoes() {
+  const data = useContext(UserContext);
+
+  let notificacoes = null;
+
+  if ((data?.user?.notificacoes || "")?.length <= 0) {
+    notificacoes = (
+      <Text style={{ fontSize: 17, marginTop: 10 }}>
+        Você não tem nenhuma notificação...
+      </Text>
+    );
+  } else {
+    //UTILIZAR FOR
+  }
+
   return (
     <View style={{ alignItems: "center", height: "90%" }}>
       <View style={styles.feedDefault}>
@@ -14,9 +30,7 @@ export default function Notificacoes() {
         <ScrollView
           contentContainerStyle={{ alignItems: "center", width: 320 }}
         >
-          <Text style={{ fontSize: 17, marginTop: 10 }}>
-            Você não tem nenhuma notificação...
-          </Text>
+          {notificacoes}
 
           {/* <Pressable style={styles.btnNotificacao}>
             <Ionicons
