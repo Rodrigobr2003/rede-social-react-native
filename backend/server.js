@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const routes = require("./routes");
 const MongoStore = require("connect-mongo");
-
 const express = require("express");
+const session = require("express-session");
 
 const app = express();
 const server = http.createServer(app);
@@ -21,7 +21,7 @@ mongoose
 
 const sessionOptions = session({
   secret: process.env.SECRETKEY,
-  store: MongoStore.create({ mongoUrl: process.env.CONNECTIONSTRING }),
+  store: MongoStore.create({ mongoUrl: process.env.CONNECTION }),
   resave: false,
   saveUninitialized: false,
   cookie: {
