@@ -5,6 +5,7 @@ import { UserProvider } from "./includes/UserProvider";
 import { Stack, useSegments } from "expo-router";
 
 import Header from "./includes/header";
+import React from "react";
 
 export default function Layout() {
   const segments = useSegments();

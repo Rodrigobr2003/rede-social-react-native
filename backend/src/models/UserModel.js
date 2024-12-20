@@ -85,6 +85,11 @@ class User {
       notificacoes: this.body.notificacoes,
     };
   }
+
+  async pesquisarPerfil(txtInput) {
+    const user = UserModel.find({ nome: txtInput }, { senha: 0 });
+    return user;
+  }
 }
 
 module.exports = User;

@@ -2,6 +2,8 @@ import { Text, View, StyleSheet, TextInput, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useSegments } from "expo-router";
 import { useState } from "react";
+import TelaPesquisa from "@/telaPesquisa";
+import React from "react";
 
 export default function Header({ display }: { display: any }) {
   function navigate() {
@@ -10,6 +12,26 @@ export default function Header({ display }: { display: any }) {
 
   function closeNav() {
     setVisibleNav(false);
+  }
+
+  const [resultado, setResultado] = useState(null);
+
+  async function pesquisarPerfil(perfilPesq: string) {
+    try {
+      const response = await fetch(
+        `http://10.0.2.2:3008/pesquisarPerfil/${perfilPesq}`,
+        {
+          method: "GET",
+          mode: "cors",
+        }
+      );
+
+      const data = await response.json();
+
+      setResultado(data);
+    } catch (error) {
+      console.log("Erro ao enviar dados para buscar perfil : " + error);
+    }
   }
 
   const [visibleNav, setVisibleNav] = useState(false);
@@ -48,6 +70,9 @@ export default function Header({ display }: { display: any }) {
           onFocus={() => {
             setVisibleNav(false);
             navigate();
+          }}
+          onChangeText={(txt) => {
+            pesquisarPerfil(txt);
           }}
         ></TextInput>
 

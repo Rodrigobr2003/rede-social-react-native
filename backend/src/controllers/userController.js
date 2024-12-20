@@ -43,3 +43,19 @@ exports.getUserData = (req, res) => {
     console.log("Erro ao buscar dados do usuário", error);
   }
 };
+
+exports.pesquisarPerfil = async (req, res) => {
+  try {
+    const txtInput = req.params.nomepesquisado;
+
+    //ALTERAR TRATAMENTO TXT NA PESQUISA!!!!
+
+    const user = new User(req.body);
+
+    const pesquisa = await user.pesquisarPerfil(txtInput);
+
+    res.send(pesquisa);
+  } catch (error) {
+    console.log("Erro ao pesquisar perfil: ", error);
+  }
+};
