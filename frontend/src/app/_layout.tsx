@@ -6,6 +6,7 @@ import { Stack, useSegments } from "expo-router";
 
 import Header from "./includes/header";
 import React from "react";
+import { SearchProvider } from "./includes/SearchProvider";
 
 export default function Layout() {
   const segments = useSegments();
@@ -23,53 +24,55 @@ export default function Layout() {
 
   return (
     <>
-      <Header
-        display={headerVisible ? styles.visibleHeader : styles.hiddenHeader}
-      ></Header>
+      <SearchProvider>
+        <Header
+          display={headerVisible ? styles.visibleHeader : styles.hiddenHeader}
+        ></Header>
 
-      <UserProvider>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+        <UserProvider>
+          <Stack>
+            <Stack.Screen
+              name="index"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
 
-          <Stack.Screen
-            name="home"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+            <Stack.Screen
+              name="home"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
 
-          <Stack.Screen
-            name="telaPesquisa"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+            <Stack.Screen
+              name="telaPesquisa"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
 
-          <Stack.Screen
-            name="amigos"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+            <Stack.Screen
+              name="amigos"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
 
-          <Stack.Screen
-            name="notificacoes"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+            <Stack.Screen
+              name="notificacoes"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
 
-          <Stack.Screen
-            name="perfil"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+            <Stack.Screen
+              name="perfil"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
 
-          <Stack.Screen
-            name="perfilProcurado"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
+            <Stack.Screen
+              name="perfilProcurado"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
 
-          <Stack.Screen
-            name="chatProfile"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
-        </Stack>
-      </UserProvider>
+            <Stack.Screen
+              name="chatProfile"
+              options={{ headerShown: false }}
+            ></Stack.Screen>
+          </Stack>
+        </UserProvider>
+      </SearchProvider>
     </>
   );
 }

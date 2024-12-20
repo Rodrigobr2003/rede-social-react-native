@@ -1,11 +1,18 @@
 import { Text, View, StyleSheet, TextInput, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useSegments } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TelaPesquisa from "@/telaPesquisa";
 import React from "react";
+import { SearchContext } from "./SearchProvider";
 
 export default function Header({ display }: { display: any }) {
+  const searchContext = useContext(SearchContext);
+  if (!searchContext) {
+    throw new Error("SearchContext = null");
+  }
+  const { setSearchResults } = searchContext;
+
   function navigate() {
     router.navigate("/telaPesquisa");
   }
@@ -28,7 +35,7 @@ export default function Header({ display }: { display: any }) {
 
       const data = await response.json();
 
-      setResultado(data);
+      setSearchResults(data);
     } catch (error) {
       console.log("Erro ao enviar dados para buscar perfil : " + error);
     }
