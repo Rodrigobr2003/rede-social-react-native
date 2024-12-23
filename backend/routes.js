@@ -14,5 +14,6 @@ routes.get(
   UserController.pesquisarUsuario
 );
 routes.post("/enviarNotificacao", UserController.enviarNotificacao);
+routes.put("/negarNotificacao", UserController.negarNotificacao);
 
 module.exports = routes;

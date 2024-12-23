@@ -85,3 +85,9 @@ exports.enviarNotificacao = async (req, res) => {
     console.log("Erro ao enviar notificação: ", error);
   }
 };
+
+exports.negarNotificacao = async (req, res) => {
+  const user = new User(req.body);
+
+  user.negarNotificacao();
+};

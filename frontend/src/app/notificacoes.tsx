@@ -33,12 +33,16 @@ export default function Notificacoes() {
             >
               <Pressable
                 style={[styles.btnInteracao, { backgroundColor: "#51ADE5" }]}
+                onPress={aceitarPedido}
               >
                 <Text style={styles.texto}>Aceitar</Text>
               </Pressable>
 
               <Pressable
                 style={[styles.btnInteracao, { backgroundColor: "#B5B5B5" }]}
+                onPress={() => {
+                  negarPedido(notificacao?.id);
+                }}
               >
                 <Text style={styles.texto}>Negar</Text>
               </Pressable>
@@ -46,6 +50,24 @@ export default function Notificacoes() {
           </View>
         </Pressable>
       );
+    });
+  }
+
+  function aceitarPedido() {
+    alert("Pedido aceito!");
+  }
+
+  async function negarPedido(idNotf: string) {
+    await fetch("http://10.0.2.2:3008/negarNotificacao", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        user: { id: data?.user?.id },
+        perfil: { idNotf },
+      }),
     });
   }
 

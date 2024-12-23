@@ -108,6 +108,16 @@ class User {
       { notificacoes: [this.body.user] }
     );
   }
+
+  async negarNotificacao() {
+    return await UserModel.findOneAndUpdate(
+      {
+        _id: this.body.user.id,
+        notificacoes: [{ id: this.body.perfil.idNotf }],
+      },
+      { notificacoes: [] }
+    );
+  }
 }
 
 module.exports = User;
