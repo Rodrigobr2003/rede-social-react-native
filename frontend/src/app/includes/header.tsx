@@ -53,7 +53,7 @@ export default function Header({ display }: { display: any }) {
         <Pressable
           style={[
             styles.backButton,
-            currentPath == "telaPesquisa"
+            currentPath == "telaPesquisa" || currentPath == "perfilProcurado"
               ? { display: "flex" }
               : { display: "none" },
           ]}
@@ -73,6 +73,7 @@ export default function Header({ display }: { display: any }) {
             currentPath == "telaPesquisa"
               ? { width: 350, marginLeft: "auto" }
               : { width: 300 },
+            currentPath == "perfilProcurado" ? { width: 240 } : {},
           ]}
           onFocus={() => {
             setVisibleNav(false);
