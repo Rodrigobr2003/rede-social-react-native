@@ -8,6 +8,7 @@ import { UserContext } from "./includes/UserProvider";
 export default function TelaPesquisa() {
   const searchContext = useContext(SearchContext);
   const searchResults = searchContext ? searchContext.searchResults : [];
+  const dataUser = useContext(UserContext);
 
   async function navegarPerfilProcurado(nome: string, sobrenome: string) {
     try {
@@ -21,10 +22,14 @@ export default function TelaPesquisa() {
 
       const data = await response.json();
 
-      router.push({
-        pathname: "/perfilProcurado",
-        params: { data: JSON.stringify(data) },
-      });
+      if (dataUser?.user?.id === data._id) {
+        router.navigate("/perfil");
+      } else {
+        router.push({
+          pathname: "/perfilProcurado",
+          params: { data: JSON.stringify(data) },
+        });
+      }
     } catch (error) {
       console.log("Erro ao enviar dados para buscar perfil : " + error);
     }

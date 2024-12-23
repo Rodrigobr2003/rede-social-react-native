@@ -29,6 +29,7 @@ exports.login = async (req, res) => {
 exports.getUserData = (req, res) => {
   try {
     const user = {
+      id: req.session.user.id,
       nome: req.session.user.nome,
       sobrenome: req.session.user.sobrenome,
       email: req.session.user.email,

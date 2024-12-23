@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface User {
+  id: string;
   nome: string;
   sobrenome: string;
   email: string;
@@ -40,6 +41,7 @@ export function UserProvider({ children }: UserProviderProps) {
         }
 
         const data = await response.json();
+
         setUser(data);
       } catch (error) {
         console.log("Erro ao buscar dados no fetch: ", error);

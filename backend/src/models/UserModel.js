@@ -41,6 +41,7 @@ class User {
       const user = await UserModel.findOne({ email: this.body.email });
 
       const userSec = {
+        id: user._id,
         nome: user.nome,
         sobrenome: user.sobrenome,
         email: user.email,
