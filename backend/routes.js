@@ -9,5 +9,9 @@ routes.post("/registrar", UserController.cadastrarUsuario);
 routes.post("/login", UserController.login);
 routes.get("/getUserData", UserController.getUserData);
 routes.get("/pesquisarPerfil/:nomepesquisado", UserController.pesquisarPerfil);
+routes.get(
+  "/pesquisarPerfil/:nome/:sobrenome",
+  UserController.pesquisarUsuario
+);
 
 module.exports = routes;

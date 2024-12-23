@@ -59,3 +59,18 @@ exports.pesquisarPerfil = async (req, res) => {
     console.log("Erro ao pesquisar perfil: ", error);
   }
 };
+
+exports.pesquisarUsuario = async (req, res) => {
+  try {
+    const user = new User(req.body);
+
+    const pesquisa = await user.pesquisarUsuario(
+      req.params.nome,
+      req.params.sobrenome
+    );
+
+    res.send(pesquisa);
+  } catch (error) {
+    console.log("Erro ao pesquisar usuário: ", error);
+  }
+};

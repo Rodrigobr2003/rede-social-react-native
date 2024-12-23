@@ -90,6 +90,14 @@ class User {
     const user = UserModel.find({ nome: txtInput }, { senha: 0 });
     return user;
   }
+
+  async pesquisarUsuario(reqNome, reqSobrenome) {
+    const user = UserModel.findOne(
+      { nome: reqNome, sobrenome: reqSobrenome },
+      { senha: 0 }
+    );
+    return user;
+  }
 }
 
 module.exports = User;
