@@ -75,3 +75,13 @@ exports.pesquisarUsuario = async (req, res) => {
     console.log("Erro ao pesquisar usuário: ", error);
   }
 };
+
+exports.enviarNotificacao = async (req, res) => {
+  try {
+    const user = new User(req.body);
+
+    user.enviarPedidoAmizade();
+  } catch (error) {
+    console.log("Erro ao enviar notificação: ", error);
+  }
+};

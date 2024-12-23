@@ -99,6 +99,15 @@ class User {
     );
     return user;
   }
+
+  async enviarPedidoAmizade() {
+    return await UserModel.findOneAndUpdate(
+      {
+        _id: this.body.perfil.id,
+      },
+      { notificacoes: [this.body.user] }
+    );
+  }
 }
 
 module.exports = User;

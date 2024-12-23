@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -11,14 +11,17 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
+import { UserContext } from "./includes/UserProvider";
 
 export default function PerfilProcurado() {
   const route = useRoute();
   const [data, setData] = useState(null);
+  const dataUser = useContext(UserContext);
 
   useEffect(() => {
     if (route.params) {
       const dataRoute = JSON.parse(route.params.data);
+
       setData(dataRoute);
     }
   }, [route.params]);
@@ -33,6 +36,24 @@ export default function PerfilProcurado() {
       return `${data.amigos.length} amigos`;
     }
   };
+
+  async function adicionarAmigo() {
+    await fetch("http://10.0.2.2:3008/enviarNotificacao", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        perfil: { id: data._id },
+        user: {
+          id: dataUser?.user?.id,
+          nome: dataUser?.user?.nome,
+          sobrenome: dataUser?.user?.sobrenome,
+        },
+      }),
+    });
+  }
 
   return (
     <View style={styles.feedDefault}>
@@ -87,7 +108,7 @@ export default function PerfilProcurado() {
               </View>
 
               <View style={styles.interact}>
-                <Pressable style={styles.btnInteract}>
+                <Pressable style={styles.btnInteract} onPress={adicionarAmigo}>
                   <Ionicons
                     style={{ textAlign: "center", color: "#fff" }}
                     name="person-add"

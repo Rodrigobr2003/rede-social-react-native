@@ -13,5 +13,6 @@ routes.get(
   "/pesquisarPerfil/:nome/:sobrenome",
   UserController.pesquisarUsuario
 );
+routes.post("/enviarNotificacao", UserController.enviarNotificacao);
 
 module.exports = routes;
