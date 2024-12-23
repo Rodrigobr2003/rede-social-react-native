@@ -15,7 +15,38 @@ export default function Notificacoes() {
       </Text>
     );
   } else {
-    //UTILIZAR FOR
+    data?.user?.notificacoes.forEach((notificacao) => {
+      notificacoes = (
+        <Pressable style={styles.btnNotificacao}>
+          <Ionicons
+            name="person"
+            size={40}
+            style={{ marginVertical: 5, marginHorizontal: 10 }}
+          ></Ionicons>
+          <View style={{ flexDirection: "column", width: "80%" }}>
+            <Text style={{ fontSize: 17 }}>
+              {notificacao.nome} fez um pedido de amizade
+            </Text>
+
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-around" }}
+            >
+              <Pressable
+                style={[styles.btnInteracao, { backgroundColor: "#51ADE5" }]}
+              >
+                <Text style={styles.texto}>Aceitar</Text>
+              </Pressable>
+
+              <Pressable
+                style={[styles.btnInteracao, { backgroundColor: "#B5B5B5" }]}
+              >
+                <Text style={styles.texto}>Negar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Pressable>
+      );
+    });
   }
 
   return (
@@ -31,35 +62,6 @@ export default function Notificacoes() {
           contentContainerStyle={{ alignItems: "center", width: 320 }}
         >
           {notificacoes}
-
-          {/* <Pressable style={styles.btnNotificacao}>
-            <Ionicons
-              name="person"
-              size={40}
-              style={{ marginVertical: 5, marginHorizontal: 10 }}
-            ></Ionicons>
-            <View style={{ flexDirection: "column", width: "80%" }}>
-              <Text style={{ fontSize: 17 }}>
-                Nome fez um pedido de amizade
-              </Text>
-
-              <View
-                style={{ flexDirection: "row", justifyContent: "space-around" }}
-              >
-                <Pressable
-                  style={[styles.btnInteracao, { backgroundColor: "#51ADE5" }]}
-                >
-                  <Text style={styles.texto}>Aceitar</Text>
-                </Pressable>
-
-                <Pressable
-                  style={[styles.btnInteracao, { backgroundColor: "#B5B5B5" }]}
-                >
-                  <Text style={styles.texto}>Negar</Text>
-                </Pressable>
-              </View>
-            </View>
-          </Pressable> */}
 
           {/* <Pressable style={styles.btnNotificacao}>
             <Ionicons
