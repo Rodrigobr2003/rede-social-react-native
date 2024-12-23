@@ -1,5 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -11,6 +13,27 @@ import {
 } from "react-native";
 
 export default function PerfilProcurado() {
+  const route = useRoute();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    if (route.params) {
+      const dataRoute = JSON.parse(route.params.data);
+      setData(dataRoute);
+    }
+  }, [route.params]);
+
+  const numAmigos = () => {
+    if (!data || !data.amigos) {
+      return "0 amigos";
+    }
+    if (data.amigos.length == 1) {
+      return "1 amigo";
+    } else {
+      return `${data.amigos.length} amigos`;
+    }
+  };
+
   return (
     <View style={styles.feedDefault}>
       <View style={styles.topFeedPerfil}>
@@ -37,7 +60,7 @@ export default function PerfilProcurado() {
                   styles.userText,
                 ]}
               >
-                Nome do usuário
+                {data?.nome} {data?.sobrenome}
               </Text>
 
               <Text
@@ -48,7 +71,7 @@ export default function PerfilProcurado() {
                   styles.userText,
                 ]}
               >
-                0 amigos
+                {numAmigos()}
               </Text>
 
               <View style={styles.desc}>
