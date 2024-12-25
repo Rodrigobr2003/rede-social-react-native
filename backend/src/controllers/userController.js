@@ -26,6 +26,14 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.logout = async (req, res) => {
+  try {
+    res.send(req.session.destroy());
+  } catch (error) {
+    console.log("Erro ao deslogar usuário", error);
+  }
+};
+
 exports.getUserData = (req, res) => {
   try {
     const user = {

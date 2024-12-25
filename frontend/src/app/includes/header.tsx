@@ -46,6 +46,22 @@ export default function Header({ display }: { display: any }) {
   const segments = useSegments();
   const currentPath = segments.join("/");
 
+  async function logout() {
+    try {
+      const response = await fetch("http://10.0.2.2:3008/logout", {
+        method: "POST",
+        mode: "cors",
+      });
+
+      if (response.ok) {
+        router.navigate("/");
+        closeNav();
+      }
+    } catch (error) {
+      console.log("Erro ao fazer logout : " + error);
+    }
+  }
+
   return (
     <>
       <View style={[styles.container, display]}>
@@ -164,6 +180,14 @@ export default function Header({ display }: { display: any }) {
           }}
         >
           <Text style={styles.navItem}>Perfil</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => {
+            logout();
+          }}
+        >
+          <Text style={[styles.navItem, { color: "red" }]}>Sair</Text>
         </Pressable>
       </View>
     </>
