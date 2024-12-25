@@ -16,5 +16,6 @@ routes.get(
 );
 routes.post("/enviarNotificacao", UserController.enviarNotificacao);
 routes.put("/negarNotificacao", UserController.negarNotificacao);
+routes.put("/aceitarNotificacao", UserController.aceitarNotificacao);
 
 module.exports = routes;

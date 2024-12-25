@@ -33,7 +33,9 @@ export default function Notificacoes() {
             >
               <Pressable
                 style={[styles.btnInteracao, { backgroundColor: "#51ADE5" }]}
-                onPress={aceitarPedido}
+                onPress={() => {
+                  aceitarPedido(notificacao);
+                }}
               >
                 <Text style={styles.texto}>Aceitar</Text>
               </Pressable>
@@ -53,11 +55,21 @@ export default function Notificacoes() {
     });
   }
 
-  function aceitarPedido() {
-    alert("Pedido aceito!");
+  async function aceitarPedido(notificacao: Object) {
+    await fetch("http://10.0.2.2:3008/aceitarNotificacao", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        user: { id: data?.user?.id },
+        perfil: notificacao,
+      }),
+    });
   }
 
-  async function negarPedido(idNotf: string) {
+  async function negarPedido(id: string) {
     await fetch("http://10.0.2.2:3008/negarNotificacao", {
       method: "PUT",
       mode: "cors",
@@ -66,7 +78,7 @@ export default function Notificacoes() {
       },
       body: JSON.stringify({
         user: { id: data?.user?.id },
-        perfil: { idNotf },
+        perfil: { id },
       }),
     });
   }

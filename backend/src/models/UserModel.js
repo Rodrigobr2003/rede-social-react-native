@@ -110,12 +110,29 @@ class User {
   }
 
   async negarNotificacao() {
+    try {
+      await UserModel.findOneAndUpdate(
+        {
+          _id: this.body.user.id,
+        },
+        {
+          $pull: { notificacoes: { id: this.body.perfil.id } },
+        },
+        { new: true }
+      );
+    } catch (error) {
+      console.log("Erro ao negar notificação: " + error);
+    }
+  }
+
+  async aceitarNotificacao() {
+    await this.negarNotificacao();
+
     return await UserModel.findOneAndUpdate(
       {
         _id: this.body.user.id,
-        notificacoes: [{ id: this.body.perfil.idNotf }],
       },
-      { notificacoes: [] }
+      { amigos: [this.body.perfil] }
     );
   }
 }

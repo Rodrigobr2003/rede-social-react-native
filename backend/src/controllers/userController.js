@@ -99,3 +99,9 @@ exports.negarNotificacao = async (req, res) => {
 
   user.negarNotificacao();
 };
+
+exports.aceitarNotificacao = async (req, res) => {
+  const user = new User(req.body);
+
+  user.aceitarNotificacao();
+};
