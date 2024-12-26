@@ -15,7 +15,20 @@ export default function Amigos() {
       </Text>
     );
   } else {
-    //UTILIZAR FOR
+    data?.user?.amigos.forEach((amigo) => {
+      amigos = (
+        <Pressable style={styles.btnAmigo}>
+          <Ionicons
+            name="person"
+            size={40}
+            style={{ marginVertical: 5, marginHorizontal: 15 }}
+          ></Ionicons>
+          <Text style={{ fontSize: 17 }}>
+            {amigo.nome} {amigo.sobrenome}
+          </Text>
+        </Pressable>
+      );
+    });
   }
 
   return (
@@ -31,15 +44,6 @@ export default function Amigos() {
           contentContainerStyle={{ alignItems: "center", width: 320 }}
         >
           {amigos}
-
-          {/* <Pressable style={styles.btnAmigo}>
-            <Ionicons
-              name="person"
-              size={40}
-              style={{ marginVertical: 5, marginHorizontal: 15 }}
-            ></Ionicons>
-            <Text style={{ fontSize: 17 }}>Nome do usuário</Text>
-          </Pressable> */}
         </ScrollView>
       </View>
     </View>
