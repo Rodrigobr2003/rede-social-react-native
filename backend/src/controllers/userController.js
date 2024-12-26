@@ -101,7 +101,11 @@ exports.enviarNotificacao = async (req, res) => {
 exports.negarNotificacao = async (req, res) => {
   const user = new User(req.body);
 
-  user.negarNotificacao();
+  const newSess = await user.negarNotificacao(req);
+
+  req.session.user = newSess;
+
+  res.send(req.session.user);
 };
 
 exports.aceitarNotificacao = async (req, res) => {

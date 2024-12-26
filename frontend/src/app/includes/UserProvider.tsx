@@ -43,9 +43,9 @@ export function UserProvider({ children }: UserProviderProps) {
       const data = await response.json();
 
       if (data) {
-        setUser(data);
+        return setUser(data);
       } else {
-        fetchUserData();
+        return fetchUserData();
       }
     } catch (error) {
       console.log("Erro ao buscar dados no fetch: ", error);

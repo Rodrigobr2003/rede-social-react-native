@@ -109,9 +109,9 @@ class User {
     );
   }
 
-  async negarNotificacao() {
+  async negarNotificacao(req) {
     try {
-      await UserModel.findOneAndUpdate(
+      const user = await UserModel.findOneAndUpdate(
         {
           _id: this.body.user.id,
         },
@@ -120,6 +120,8 @@ class User {
         },
         { new: true }
       );
+
+      return user;
     } catch (error) {
       console.log("Erro ao negar notificação: " + error);
     }
