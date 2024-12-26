@@ -36,16 +36,20 @@ exports.logout = async (req, res) => {
 
 exports.getUserData = (req, res) => {
   try {
-    const user = {
-      id: req.session.user.id,
-      nome: req.session.user.nome,
-      sobrenome: req.session.user.sobrenome,
-      email: req.session.user.email,
-      genero: req.session.user.genero,
-      descricao: req.session.user.descricao,
-      amigos: req.session.user.amigos,
-      notificacoes: req.session.user.notificacoes,
-    };
+    let user = null;
+
+    if (req.session.user) {
+      user = {
+        id: req.session.user.id,
+        nome: req.session.user.nome,
+        sobrenome: req.session.user.sobrenome,
+        email: req.session.user.email,
+        genero: req.session.user.genero,
+        descricao: req.session.user.descricao,
+        amigos: req.session.user.amigos,
+        notificacoes: req.session.user.notificacoes,
+      };
+    }
 
     return res.send(user);
   } catch (error) {

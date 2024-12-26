@@ -11,8 +11,13 @@ import { router } from "expo-router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
+import { useContext } from "react";
+import { UserContext } from "./UserProvider";
 
 export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
+  const userContext = useContext(UserContext);
+  const fetchUserData = userContext?.fetchUserData;
+
   const loginSchema = yup.object({
     email: yup.string().email("Email inválido").required("Informe seu email"),
     senha: yup
@@ -44,6 +49,9 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
       console.log("Resposta do servidor:", data);
 
       if (response.ok) {
+        if (fetchUserData) {
+          await fetchUserData();
+        }
         setVisibleModLog(false);
         router.navigate("/home");
       } else {
