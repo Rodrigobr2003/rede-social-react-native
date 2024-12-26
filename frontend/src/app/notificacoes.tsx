@@ -63,7 +63,11 @@ export default function Notificacoes() {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        user: { id: data?.user?.id },
+        user: {
+          id: data?.user?.id,
+          nome: data?.user?.nome,
+          sobrenome: data?.user?.sobrenome,
+        },
         perfil: notificacao,
       }),
     });

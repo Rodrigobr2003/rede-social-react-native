@@ -128,11 +128,20 @@ class User {
   async aceitarNotificacao() {
     await this.negarNotificacao();
 
-    return await UserModel.findOneAndUpdate(
+    await UserModel.findOneAndUpdate(
       {
         _id: this.body.user.id,
       },
       { amigos: [this.body.perfil] }
+    );
+
+    return await UserModel.findOneAndUpdate(
+      {
+        _id: this.body.perfil.id,
+      },
+      {
+        amigos: [this.body.user],
+      }
     );
   }
 }
