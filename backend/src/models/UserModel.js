@@ -156,7 +156,8 @@ class User {
       },
       {
         $pull: { amigos: { id: this.body.amigoId } },
-      }
+      },
+      { new: true }
     );
 
     await UserModel.findOneAndUpdate(
@@ -165,7 +166,8 @@ class User {
       },
       {
         $pull: { amigos: { id: this.body.id } },
-      }
+      },
+      { new: true }
     );
 
     return user;
