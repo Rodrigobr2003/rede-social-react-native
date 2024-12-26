@@ -143,5 +143,20 @@ exports.aceitarNotificacao = async (req, res) => {
 exports.removerAmigo = async (req, res) => {
   const user = new User(req.body);
 
-  user.removerAmigo();
+  const newSess = user.removerAmigo();
+
+  req.session.user = newSess;
+
+  const newUser = {
+    id: req.session.user.id,
+    nome: req.session.user.nome,
+    sobrenome: req.session.user.sobrenome,
+    email: req.session.user.email,
+    genero: req.session.user.genero,
+    descricao: req.session.user.descricao,
+    amigos: req.session.user.amigos,
+    notificacoes: req.session.user.notificacoes,
+  };
+
+  res.send(newUser);
 };

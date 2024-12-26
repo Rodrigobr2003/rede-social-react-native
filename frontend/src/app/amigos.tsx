@@ -1,15 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 
 export default function Amigos() {
-  const data = useContext(UserContext);
+  const user = useContext(UserContext);
+
+  let [data, setData] = useState(user);
 
   let amigos = null;
 
   async function removerAmigo(amigoId: any) {
-    await fetch("http://10.0.2.2:3008/removerAmigo", {
+    const response = await fetch("http://10.0.2.2:3008/removerAmigo", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -20,6 +22,9 @@ export default function Amigos() {
         amigoId: amigoId,
       }),
     });
+
+    const dados = await response.json();
+    setData(dados);
   }
 
   if ((data?.user?.amigos || "").length <= 0) {

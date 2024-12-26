@@ -150,7 +150,7 @@ class User {
   }
 
   async removerAmigo() {
-    await UserModel.findOneAndUpdate(
+    const user = await UserModel.findOneAndUpdate(
       {
         _id: this.body.id,
       },
@@ -159,7 +159,7 @@ class User {
       }
     );
 
-    return await UserModel.findOneAndUpdate(
+    await UserModel.findOneAndUpdate(
       {
         _id: this.body.amigoId,
       },
@@ -167,6 +167,8 @@ class User {
         $pull: { amigos: { id: this.body.id } },
       }
     );
+
+    return user;
   }
 }
 
