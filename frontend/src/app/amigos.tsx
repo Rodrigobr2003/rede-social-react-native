@@ -8,6 +8,20 @@ export default function Amigos() {
 
   let amigos = null;
 
+  async function removerAmigo(amigoId: any) {
+    await fetch("http://10.0.2.2:3008/removerAmigo", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: data?.user?.id,
+        amigoId: amigoId,
+      }),
+    });
+  }
+
   if ((data?.user?.amigos || "").length <= 0) {
     amigos = (
       <Text style={{ fontSize: 17, marginTop: 10 }}>
@@ -26,6 +40,15 @@ export default function Amigos() {
           <Text style={{ fontSize: 17 }}>
             {amigo.nome} {amigo.sobrenome}
           </Text>
+
+          <Ionicons
+            name="trash-outline"
+            size={30}
+            style={{ marginLeft: "auto", marginRight: 10 }}
+            onPress={() => {
+              removerAmigo(amigo.id);
+            }}
+          ></Ionicons>
         </Pressable>
       );
     });

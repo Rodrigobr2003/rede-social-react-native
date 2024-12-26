@@ -17,5 +17,6 @@ routes.get(
 routes.post("/enviarNotificacao", UserController.enviarNotificacao);
 routes.put("/negarNotificacao", UserController.negarNotificacao);
 routes.put("/aceitarNotificacao", UserController.aceitarNotificacao);
+routes.put("/removerAmigo", UserController.removerAmigo);
 
 module.exports = routes;

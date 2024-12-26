@@ -146,6 +146,26 @@ class User {
       }
     );
   }
+
+  async removerAmigo() {
+    await UserModel.findOneAndUpdate(
+      {
+        _id: this.body.id,
+      },
+      {
+        $pull: { amigos: { id: this.body.amigoId } },
+      }
+    );
+
+    return await UserModel.findOneAndUpdate(
+      {
+        _id: this.body.amigoId,
+      },
+      {
+        $pull: { amigos: { id: this.body.id } },
+      }
+    );
+  }
 }
 
 module.exports = User;

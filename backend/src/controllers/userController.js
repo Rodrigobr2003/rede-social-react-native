@@ -113,3 +113,9 @@ exports.aceitarNotificacao = async (req, res) => {
 
   user.aceitarNotificacao();
 };
+
+exports.removerAmigo = async (req, res) => {
+  const user = new User(req.body);
+
+  user.removerAmigo();
+};
