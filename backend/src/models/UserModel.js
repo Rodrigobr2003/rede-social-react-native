@@ -109,7 +109,7 @@ class User {
     );
   }
 
-  async negarNotificacao(req) {
+  async negarNotificacao() {
     try {
       const user = await UserModel.findOneAndUpdate(
         {
@@ -130,14 +130,14 @@ class User {
   async aceitarNotificacao() {
     await this.negarNotificacao();
 
-    await UserModel.findOneAndUpdate(
+    const user = await UserModel.findOneAndUpdate(
       {
         _id: this.body.user.id,
       },
       { amigos: [this.body.perfil] }
     );
 
-    return await UserModel.findOneAndUpdate(
+    await UserModel.findOneAndUpdate(
       {
         _id: this.body.perfil.id,
       },
@@ -145,6 +145,8 @@ class User {
         amigos: [this.body.user],
       }
     );
+
+    return user;
   }
 
   async removerAmigo() {

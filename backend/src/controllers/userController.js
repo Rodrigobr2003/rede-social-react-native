@@ -105,13 +105,39 @@ exports.negarNotificacao = async (req, res) => {
 
   req.session.user = newSess;
 
-  res.send(req.session.user);
+  const newUser = {
+    id: req.session.user.id,
+    nome: req.session.user.nome,
+    sobrenome: req.session.user.sobrenome,
+    email: req.session.user.email,
+    genero: req.session.user.genero,
+    descricao: req.session.user.descricao,
+    amigos: req.session.user.amigos,
+    notificacoes: req.session.user.notificacoes,
+  };
+
+  res.send(newUser);
 };
 
 exports.aceitarNotificacao = async (req, res) => {
   const user = new User(req.body);
 
-  user.aceitarNotificacao();
+  const newSess = await user.aceitarNotificacao(req);
+
+  req.session.user = newSess;
+
+  const newUser = {
+    id: req.session.user.id,
+    nome: req.session.user.nome,
+    sobrenome: req.session.user.sobrenome,
+    email: req.session.user.email,
+    genero: req.session.user.genero,
+    descricao: req.session.user.descricao,
+    amigos: req.session.user.amigos,
+    notificacoes: req.session.user.notificacoes,
+  };
+
+  res.send(newUser);
 };
 
 exports.removerAmigo = async (req, res) => {

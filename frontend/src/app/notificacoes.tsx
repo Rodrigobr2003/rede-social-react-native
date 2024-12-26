@@ -1,10 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 
 export default function Notificacoes() {
-  const data = useContext(UserContext);
+  const user = useContext(UserContext);
+
+  let [data, setData] = useState(user);
 
   let notificacoes = null;
 
@@ -56,7 +58,7 @@ export default function Notificacoes() {
   }
 
   async function aceitarPedido(notificacao: Object) {
-    await fetch("http://10.0.2.2:3008/aceitarNotificacao", {
+    const response = await fetch("http://10.0.2.2:3008/aceitarNotificacao", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -71,10 +73,13 @@ export default function Notificacoes() {
         perfil: notificacao,
       }),
     });
+
+    const dado = await response.json();
+    setData(dado);
   }
 
   async function negarPedido(id: string) {
-    await fetch("http://10.0.2.2:3008/negarNotificacao", {
+    const response = await fetch("http://10.0.2.2:3008/negarNotificacao", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -85,6 +90,9 @@ export default function Notificacoes() {
         perfil: { id },
       }),
     });
+
+    const dado = await response.json();
+    setData(dado);
   }
 
   return (
