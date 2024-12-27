@@ -7,16 +7,30 @@ import { UserContext } from "./includes/UserProvider";
 
 export default function ChatProfile() {
   const route = useRoute();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(JSON.parse(route.params?.data));
   const dataUser = useContext(UserContext);
+  const [room, setRoom] = useState(criarRoom(data?._id, dataUser?.user?.id));
 
-  useEffect(() => {
-    if (route.params) {
-      const dataRoute = JSON.parse(route.params.data);
+  const [txtMsg, setTxtMsg] = useState("");
 
-      setData(dataRoute);
-    }
-  }, [route.params]);
+  const [mensagens, setMensagens] = useState(null);
+
+  useEffect(() => {}, []);
+
+  //Função de criar room
+  function criarRoom(userId1: any, userId2: any) {
+    // Ordena os IDs dos usuários
+    const ordenarIds = [userId1, userId2].sort();
+
+    // Cria a room com IDs ordenados
+    const room = `${ordenarIds[0]}${ordenarIds[1]}`;
+
+    return room;
+  }
+
+  async function enviarMensagem() {
+    console.log(room);
+  }
 
   return (
     <View style={styles.feedDefault}>
@@ -56,9 +70,21 @@ export default function ChatProfile() {
       >
         <Ionicons name="happy" size={34} style={{ paddingLeft: 10 }}></Ionicons>
 
-        <TextInput style={styles.input}></TextInput>
+        <TextInput
+          style={styles.input}
+          onChangeText={(txt) => {
+            setTxtMsg(txt);
+          }}
+        ></TextInput>
 
-        <Ionicons name="send" size={34} style={{ paddingRight: 10 }}></Ionicons>
+        <Ionicons
+          name="send"
+          size={34}
+          style={{ paddingRight: 10 }}
+          onPress={() => {
+            enviarMensagem();
+          }}
+        ></Ionicons>
       </View>
     </View>
   );
