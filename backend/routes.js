@@ -3,7 +3,9 @@ const routes = express.Router();
 
 //Requires
 const UserController = require("./src/controllers/userController");
+const MessagesController = require("./src/controllers/messagesController");
 
+//Rotas Usuário
 routes.get("/");
 routes.post("/registrar", UserController.cadastrarUsuario);
 routes.post("/login", UserController.login);
@@ -18,5 +20,8 @@ routes.post("/enviarNotificacao", UserController.enviarNotificacao);
 routes.put("/negarNotificacao", UserController.negarNotificacao);
 routes.put("/aceitarNotificacao", UserController.aceitarNotificacao);
 routes.put("/removerAmigo", UserController.removerAmigo);
+
+//Rotas mensagens
+routes.post("/salvaMensagens", MessagesController.salvaMensagens);
 
 module.exports = routes;

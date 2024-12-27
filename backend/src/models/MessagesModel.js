@@ -31,6 +31,42 @@ class Mensagem {
   constructor(body) {
     this.body = body;
   }
+
+  async registrarMensagem(room, idUser) {
+    let searchRoom = await MensagemModel.findOne({ chatRoom: room }).exec();
+    let mensagem = null;
+
+    if (searchRoom) {
+      mensagem = await MensagemModel.findOneAndUpdate(
+        { chatRoom: room },
+        {
+          $addToSet: {
+            mensagem: [
+              {
+                texto: this.body.texto,
+                idUser: idUser,
+                tempo: this.body.tempo,
+              },
+            ],
+          },
+        },
+        { new: true }
+      );
+    } else {
+      mensagem = await MensagemModel.create({
+        chatRoom: room,
+        mensagem: [
+          {
+            texto: this.body.texto,
+            idUser: idUser,
+            tempo: this.body.tempo,
+          },
+        ],
+      });
+    }
+
+    return mensagem;
+  }
 }
 
 module.exports = Mensagem;

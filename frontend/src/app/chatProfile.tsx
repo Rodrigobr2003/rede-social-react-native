@@ -29,7 +29,24 @@ export default function ChatProfile() {
   }
 
   async function enviarMensagem() {
-    console.log(room);
+    try {
+      let msgObj = {
+        chatRoom: room,
+        message: { texto: txtMsg },
+        idUserMsg: dataUser?.user?.id,
+      };
+
+      await fetch("http://10.0.2.2:3008/salvaMensagens", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(msgObj),
+      });
+    } catch (error) {
+      console.log("Erro ao enviar dados msg: ", error);
+    }
   }
 
   return (
