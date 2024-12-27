@@ -119,7 +119,10 @@ export default function PerfilProcurado() {
                 <Pressable
                   style={styles.btnInteract}
                   onPress={() => {
-                    router.navigate("/chatProfile");
+                    router.push({
+                      pathname: "/chatProfile",
+                      params: { data: JSON.stringify(data) },
+                    });
                   }}
                 >
                   <Ionicons

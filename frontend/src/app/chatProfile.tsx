@@ -1,8 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Text, ScrollView, TextInput } from "react-native";
+import { UserContext } from "./includes/UserProvider";
 
 export default function ChatProfile() {
+  const route = useRoute();
+  const [data, setData] = useState(null);
+  const dataUser = useContext(UserContext);
+
+  useEffect(() => {
+    if (route.params) {
+      const dataRoute = JSON.parse(route.params.data);
+
+      setData(dataRoute);
+    }
+  }, [route.params]);
+
   return (
     <View style={styles.feedDefault}>
       <View style={[styles.feedTop, styles.feedDetails]}>
@@ -17,7 +32,9 @@ export default function ChatProfile() {
 
         <Ionicons name="person" size={32} style={styles.profilePic}></Ionicons>
 
-        <Text style={{ fontSize: 20 }}>Nome do usuário</Text>
+        <Text style={{ fontSize: 20 }}>
+          {data?.nome} {data?.sobrenome}
+        </Text>
       </View>
 
       <ScrollView style={{ width: "100%" }}>
