@@ -1,11 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Text, ScrollView, TextInput } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 
 export default function ChatProfile() {
+  const [chat, setChat] = useState<
+    { id: number; type: string; content: any }[]
+  >([]);
+  const chatRef = useRef(null);
+
   const route = useRoute();
   const [data, setData] = useState(JSON.parse(route.params?.data));
   const dataUser = useContext(UserContext);
@@ -13,7 +18,13 @@ export default function ChatProfile() {
 
   const [txtMsg, setTxtMsg] = useState("");
 
-  const [mensagens, setMensagens] = useState(null);
+  const [mensagens, setMensagens] = useState<
+    {
+      chatRoom: string;
+      message: { texto: string };
+      idUserMsg: string | undefined;
+    }[]
+  >([]);
 
   useEffect(() => {}, []);
 
@@ -35,6 +46,8 @@ export default function ChatProfile() {
         message: { texto: txtMsg },
         idUserMsg: dataUser?.user?.id,
       };
+
+      setMensagens((prevMensagens) => [...prevMensagens, msgObj]);
 
       await fetch("http://10.0.2.2:3008/salvaMensagens", {
         method: "POST",
@@ -68,14 +81,20 @@ export default function ChatProfile() {
         </Text>
       </View>
 
-      <ScrollView style={{ width: "100%" }}>
-        {/* <View style={[styles.msgDefault, styles.msgUser]}>
-          <Text style={styles.textoMsg}>Mensagem de teste!</Text>
-        </View>
-
-        <View style={[styles.msgDefault, styles.msgAmigo]}>
-          <Text style={styles.textoMsg}>Mensagem de teste!</Text>
-        </View> */}
+      <ScrollView style={{ width: "100%" }} ref={chatRef}>
+        {mensagens.map((msg, idx) => (
+          <View
+            key={idx}
+            style={[
+              styles.msgDefault,
+              msg.idUserMsg == dataUser?.user?.id
+                ? styles.msgUser
+                : styles.msgAmigo,
+            ]}
+          >
+            <Text style={styles.textoMsg}>{msg.message.texto}</Text>
+          </View>
+        ))}
       </ScrollView>
 
       <View
