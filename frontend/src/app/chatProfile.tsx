@@ -127,10 +127,9 @@ export default function ChatProfile() {
           { flexDirection: "row" },
         ]}
       >
-        <Ionicons name="happy" size={34} style={{ paddingLeft: 10 }}></Ionicons>
-
         <TextInput
           style={styles.input}
+          value={txtMsg}
           onChangeText={(txt) => {
             setTxtMsg(txt);
           }}
@@ -142,6 +141,7 @@ export default function ChatProfile() {
           style={{ paddingRight: 10 }}
           onPress={() => {
             enviarMensagem();
+            setTxtMsg("");
           }}
         ></Ionicons>
       </View>
@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
 
   msgDefault: {
     width: "75%",
-    marginTop: 8,
+    marginTop: 2,
+    marginBottom: 8,
     padding: 7,
     borderRadius: 6,
   },
@@ -212,8 +213,9 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    width: "70%",
+    width: "80%",
     backgroundColor: "#fff",
     borderRadius: 10,
+    marginHorizontal: "auto",
   },
 });

@@ -209,7 +209,10 @@ export default function ModalCadastro({
           >
             <Text
               style={{ textAlign: "center", fontSize: 18 }}
-              onPress={handleSubmit(cadastrarUsuario)}
+              onPress={() => {
+                handleSubmit(cadastrarUsuario);
+                setVisibleModCad(false);
+              }}
             >
               Cadastre-se
             </Text>

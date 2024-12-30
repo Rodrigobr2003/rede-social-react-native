@@ -12,6 +12,8 @@ export default function Header({ display }: { display: any }) {
     throw new Error("SearchContext = null");
   }
   const { setSearchResults } = searchContext;
+  const { searchBar } = searchContext;
+  const { setSearchBar } = searchContext;
 
   function navigate() {
     router.navigate("/telaPesquisa");
@@ -47,6 +49,8 @@ export default function Header({ display }: { display: any }) {
   const currentPath = segments.join("/");
 
   async function logout() {
+    setSearchBar("");
+
     try {
       const response = await fetch("http://10.0.2.2:3008/logout", {
         method: "POST",
@@ -84,6 +88,7 @@ export default function Header({ display }: { display: any }) {
 
         <TextInput
           placeholder="Pesquise no Orbee..."
+          value={searchBar}
           style={[
             styles.input,
             currentPath == "telaPesquisa"
@@ -97,6 +102,7 @@ export default function Header({ display }: { display: any }) {
           }}
           onChangeText={(txt) => {
             pesquisarPerfil(txt);
+            setSearchBar(txt);
           }}
         ></TextInput>
 
