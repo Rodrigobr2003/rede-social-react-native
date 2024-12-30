@@ -17,3 +17,13 @@ exports.salvaMensagens = async (req, res) => {
 
   //   enviarNotf(req.body.chatRoom, req, 2, req.body.idUserMsg);
 };
+
+exports.carregaMensagens = async (req, res) => {
+  const mensagem = new Mensagem(req.params.room);
+
+  const response = await mensagem.carregaMensagens();
+
+  console.log(response);
+
+  res.send(response);
+};

@@ -26,7 +26,9 @@ export default function ChatProfile() {
     }[]
   >([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    carregaMensagem();
+  }, []);
 
   //Função de criar room
   function criarRoom(userId1: any, userId2: any) {
@@ -37,6 +39,27 @@ export default function ChatProfile() {
     const room = `${ordenarIds[0]}${ordenarIds[1]}`;
 
     return room;
+  }
+
+  async function carregaMensagem() {
+    const response = await fetch(
+      `http://10.0.2.2:3008/carregaMensagens/${room}`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: { "content-type": "application/json" },
+      }
+    );
+
+    const mensagensCarregadas = await response.json();
+
+    const mensagensFormatadas = mensagensCarregadas.map((mensagem: any) => ({
+      chatRoom: room, // Adicionando o chatRoom manualmente
+      message: { texto: mensagem.texto },
+      idUserMsg: mensagem.idUser,
+    }));
+
+    setMensagens(mensagensFormatadas);
   }
 
   async function enviarMensagem() {

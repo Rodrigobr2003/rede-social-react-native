@@ -67,6 +67,16 @@ class Mensagem {
 
     return mensagem;
   }
+
+  async carregaMensagens() {
+    let searchRoom = await MensagemModel.findOne({
+      chatRoom: this.body,
+    }).exec();
+
+    const mensagens = searchRoom.mensagem;
+
+    return mensagens;
+  }
 }
 
 module.exports = Mensagem;
