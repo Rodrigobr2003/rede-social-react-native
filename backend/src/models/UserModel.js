@@ -134,7 +134,8 @@ class User {
       {
         _id: this.body.user.id,
       },
-      { amigos: [this.body.perfil] }
+      { amigos: [this.body.perfil] },
+      { new: true }
     );
 
     await UserModel.findOneAndUpdate(
@@ -143,7 +144,8 @@ class User {
       },
       {
         amigos: [this.body.user],
-      }
+      },
+      { new: true }
     );
 
     return user;

@@ -25,6 +25,7 @@ export default function Amigos() {
 
     const dados = await response.json();
     setData(dados);
+    user?.fetchUserData();
   }
 
   if ((data?.user?.amigos || "").length <= 0) {
@@ -34,7 +35,7 @@ export default function Amigos() {
       </Text>
     );
   } else {
-    data?.user?.amigos.forEach((amigo) => {
+    data?.user?.amigos.forEach((amigo: any) => {
       amigos = (
         <Pressable style={styles.btnAmigo}>
           <Ionicons
@@ -63,8 +64,6 @@ export default function Amigos() {
     <View style={{ alignItems: "center", height: "90%" }}>
       <View style={styles.feedDefault}>
         <View style={styles.topFeedPerfil}>
-          <Ionicons name="chevron-back" size={32} />
-
           <Text style={styles.subtitulo}>Todos seus amigos</Text>
         </View>
 

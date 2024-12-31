@@ -1,23 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 
 export default function Notificacoes() {
   const user = useContext(UserContext);
 
-  let [data, setData] = useState(user);
+  let [data, setData] = useState(user?.user);
 
   let notificacoes = null;
 
-  if ((data?.user?.notificacoes || "")?.length <= 0) {
+  if ((data?.notificacoes || "")?.length <= 0) {
     notificacoes = (
       <Text style={{ fontSize: 17, marginTop: 10 }}>
         Você não tem nenhuma notificação...
       </Text>
     );
   } else {
-    data?.user?.notificacoes.forEach((notificacao) => {
+    data?.notificacoes.forEach((notificacao: any) => {
       notificacoes = (
         <Pressable style={styles.btnNotificacao}>
           <Ionicons
@@ -27,7 +27,8 @@ export default function Notificacoes() {
           ></Ionicons>
           <View style={{ flexDirection: "column", width: "80%" }}>
             <Text style={{ fontSize: 17 }}>
-              {notificacao.nome} fez um pedido de amizade
+              {notificacao.nome} {notificacao.sobrenome} fez um pedido de
+              amizade
             </Text>
 
             <View
@@ -66,9 +67,9 @@ export default function Notificacoes() {
       },
       body: JSON.stringify({
         user: {
-          id: data?.user?.id,
-          nome: data?.user?.nome,
-          sobrenome: data?.user?.sobrenome,
+          id: data?.id,
+          nome: data?.nome,
+          sobrenome: data?.sobrenome,
         },
         perfil: notificacao,
       }),
@@ -76,6 +77,7 @@ export default function Notificacoes() {
 
     const dado = await response.json();
     setData(dado);
+    user?.fetchUserData();
   }
 
   async function negarPedido(id: string) {
@@ -86,21 +88,21 @@ export default function Notificacoes() {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        user: { id: data?.user?.id },
+        user: { id: data?.id },
         perfil: { id },
       }),
     });
 
     const dado = await response.json();
+
     setData(dado);
+    user?.fetchUserData();
   }
 
   return (
     <View style={{ alignItems: "center", height: "90%" }}>
       <View style={styles.feedDefault}>
         <View style={styles.topFeedPerfil}>
-          <Ionicons name="chevron-back" size={32} />
-
           <Text style={styles.subtitulo}>Todas suas notificações</Text>
         </View>
 
