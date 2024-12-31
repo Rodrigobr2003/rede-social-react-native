@@ -3,6 +3,7 @@ import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Text, ScrollView, TextInput } from "react-native";
+import { io } from "socket.io-client";
 import { UserContext } from "./includes/UserProvider";
 
 export default function ChatProfile() {
@@ -15,6 +16,9 @@ export default function ChatProfile() {
   const [data, setData] = useState(JSON.parse(route.params?.data));
   const dataUser = useContext(UserContext);
   const [room, setRoom] = useState(criarRoom(data?._id, dataUser?.user?.id));
+  const idMsg = dataUser?.user?.id;
+  //Chat
+  const socket = io();
 
   const [txtMsg, setTxtMsg] = useState("");
 
@@ -28,6 +32,22 @@ export default function ChatProfile() {
 
   useEffect(() => {
     carregaMensagem();
+
+    //Entrar no chat
+    const username = dataUser?.user?.nome;
+    socket.emit("joinChat", { username, room }); //AQ PD DAR ERRO
+
+    socket.on("enviaId", () => {
+      socket.on("message", (msg: any, idMsg: any) => {
+        const msgObj = {
+          chatRoom: room,
+          message: { texto: msg },
+          idUserMsg: idMsg,
+        };
+
+        setMensagens((prevMensagens) => [...prevMensagens, msgObj]);
+      });
+    });
   }, []);
 
   //Função de criar room
@@ -80,6 +100,8 @@ export default function ChatProfile() {
         },
         body: JSON.stringify(msgObj),
       });
+
+      socket.emit("chatMessage", txtMsg, idMsg);
     } catch (error) {
       console.log("Erro ao enviar dados msg: ", error);
     }

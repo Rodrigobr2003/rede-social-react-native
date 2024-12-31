@@ -6,9 +6,12 @@ const routes = require("./routes");
 const MongoStore = require("connect-mongo");
 const express = require("express");
 const session = require("express-session");
+const socketio = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
+
+const io = socketio(server);
 
 mongoose
   .connect(process.env.CONNECTION)
@@ -28,6 +31,33 @@ const sessionOptions = session({
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
   },
+});
+
+io.on("connection", (socket) => {
+  const idSocket = socket.id;
+
+  socket.emit("enviaId", idSocket);
+
+  //Join chat
+  socket.on("joinChat", ({ username, room }) => {
+    socket.join(room);
+
+    //Listener de mensagens
+    socket.on("chatMessage", (msg, idMsg) => {
+      io.to(room).emit("message", { msg, idMsg });
+    });
+
+    socket.on("feedChat", (msg, id, name, tempo) => {
+      io.to(room).emit("feedMessage", msg, id, name, tempo);
+    });
+
+    //Disconnect chat
+    if (!room.includes("feed:")) {
+      socket.on("disconnect", () => {
+        io.to(room);
+      });
+    }
+  });
 });
 
 app.use(
