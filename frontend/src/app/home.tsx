@@ -7,7 +7,7 @@ import {
   Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./includes/UserProvider";
 
 export default function Home() {
@@ -16,6 +16,14 @@ export default function Home() {
   const [txtMsg, setTxtMsg] = useState("");
   const room = "feed:1729232020";
 
+  const [mensagens, setMensagens] = useState<
+    {
+      chatRoom: string;
+      message: { texto: string };
+      idUserMsg: string | undefined;
+    }[]
+  >([]);
+
   async function publicarMensagem(txtMsg: string) {
     try {
       let msgObj = {
@@ -23,8 +31,6 @@ export default function Home() {
         message: { texto: txtMsg },
         idUserMsg: dataUser?.user?.id,
       };
-
-      console.log(msgObj);
 
       await fetch("http://10.0.2.2:3008/salvaMensagens", {
         method: "POST",
@@ -39,8 +45,33 @@ export default function Home() {
     }
   }
 
+  async function carregaMensagem() {
+    const response = await fetch(
+      `http://10.0.2.2:3008/carregaMensagens/${room}`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: { "content-type": "application/json" },
+      }
+    );
+
+    const mensagensCarregadas = await response.json();
+
+    const mensagensFormatadas = mensagensCarregadas.map((mensagem: any) => ({
+      chatRoom: room, // Adicionando o chatRoom manualmente
+      message: { texto: mensagem.texto },
+      idUserMsg: mensagem.idUser,
+    }));
+
+    setMensagens(mensagensFormatadas);
+  }
+
+  useEffect(() => {
+    carregaMensagem();
+  });
+
   return (
-    <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+    <View style={{ alignItems: "center" }}>
       <View style={[styles.feedDefault, styles.feedPerfil]}>
         <View style={styles.topFeedPerfil}>
           <Ionicons name="person" size={40}></Ionicons>
@@ -96,59 +127,69 @@ export default function Home() {
         </View>
       </View>
 
-      <View style={[styles.feedDefault, styles.feedPubli]}>
-        <View style={styles.topFeedPerfil}>
-          <Ionicons
-            name="person"
-            size={40}
-            style={{ marginVertical: 5 }}
-          ></Ionicons>
+      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+        {mensagens.map((msg, idx) => (
+          <View style={[styles.feedDefault, styles.feedPubli]} key={idx}>
+            <View style={styles.topFeedPerfil}>
+              <Ionicons
+                name="person"
+                size={40}
+                style={{ marginVertical: 5 }}
+              ></Ionicons>
 
-          <View style={{ width: "80%" }}>
-            <Text style={{ fontSize: 22, fontWeight: "600" }}>
-              Nome do usuário
-            </Text>
+              <View style={{ width: "80%" }}>
+                <Text style={{ fontSize: 22, fontWeight: "600" }}>
+                  Nome do usuário
+                </Text>
 
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.textoPequeno}>dd/mm</Text>
-              <Text style={styles.textoPequeno}>hh:hh</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={styles.textoPequeno}>dd/mm</Text>
+                  <Text style={styles.textoPequeno}>hh:hh</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.bottomFeedPerfil}>
+              <Text
+                style={[
+                  styles.textoPequeno,
+                  { marginRight: "auto", marginLeft: 20 },
+                ]}
+              >
+                x curtidas
+              </Text>
+
+              <View style={{ flexDirection: "row", width: "90%" }}>
+                <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                  <Ionicons
+                    name="thumbs-up"
+                    size={25}
+                    color={"#000"}
+                  ></Ionicons>
+                  <Text style={{ fontSize: 12, paddingLeft: 4 }}>Curtir</Text>
+                </Pressable>
+
+                <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                  <Ionicons
+                    name="chatbubble-ellipses"
+                    size={25}
+                    color={"#000"}
+                  ></Ionicons>
+                  <Text style={{ fontSize: 12, paddingLeft: 4 }}>Comentar</Text>
+                </Pressable>
+
+                <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                  <Ionicons name="share" size={25} color={"#000"}></Ionicons>
+                  <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                    Compartilhar
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           </View>
-        </View>
-
-        <View style={styles.bottomFeedPerfil}>
-          <Text
-            style={[
-              styles.textoPequeno,
-              { marginRight: "auto", marginLeft: 20 },
-            ]}
-          >
-            x curtidas
-          </Text>
-
-          <View style={{ flexDirection: "row", width: "90%" }}>
-            <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-              <Ionicons name="thumbs-up" size={25} color={"#000"}></Ionicons>
-              <Text style={{ fontSize: 12, paddingLeft: 4 }}>Curtir</Text>
-            </Pressable>
-
-            <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-              <Ionicons
-                name="chatbubble-ellipses"
-                size={25}
-                color={"#000"}
-              ></Ionicons>
-              <Text style={{ fontSize: 12, paddingLeft: 4 }}>Comentar</Text>
-            </Pressable>
-
-            <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-              <Ionicons name="share" size={25} color={"#000"}></Ionicons>
-              <Text style={{ fontSize: 12, paddingLeft: 4 }}>Compartilhar</Text>
-            </Pressable>
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+        ))}
+      </ScrollView>
+    </View>
   );
 }
 
