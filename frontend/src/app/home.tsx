@@ -24,20 +24,25 @@ export default function Home() {
       nome: string;
       sobrenome: string;
       data: string;
-      curtidas: [];
-      comentarios: [];
+      curtidas: any[];
+      comentarios: any[];
     }[]
   >([]);
 
   async function publicarMensagem(txtMsg: string) {
     try {
-      let msgObj = {
+      const msgObj = {
         chatRoom: room,
         message: { texto: txtMsg },
         idUserMsg: dataUser?.user?.id,
-        nome: dataUser?.user?.nome,
-        sobrenome: dataUser?.user?.sobrenome,
+        nome: dataUser?.user?.nome || "",
+        sobrenome: dataUser?.user?.sobrenome || "",
+        data: "",
+        curtidas: [],
+        comentarios: [],
       };
+
+      setMensagens((prevMsgs) => [...prevMsgs, msgObj]);
 
       await fetch("http://10.0.2.2:3008/salvaMensagens", {
         method: "POST",
@@ -85,7 +90,13 @@ export default function Home() {
   return (
     <View style={{ alignItems: "center" }}>
       <View style={[styles.feedDefault, styles.feedPerfil]}>
-        <View style={styles.topFeedPerfil}>
+        <View
+          style={[
+            styles.msgInfos,
+            styles.topFeedPerfil,
+            { alignItems: "center" },
+          ]}
+        >
           <Ionicons name="person" size={40}></Ionicons>
 
           <View style={styles.topFeedInput}>
@@ -153,23 +164,43 @@ export default function Home() {
           };
 
           return (
-            <View style={[styles.feedDefault, styles.feedPubli]} key={idx}>
+            <View
+              style={[
+                styles.feedDefault,
+                styles.feedPubli,
+                { marginBottom: 30 },
+              ]}
+              key={idx}
+            >
               <View style={styles.topFeedPerfil}>
-                <Ionicons
-                  name="person"
-                  size={40}
-                  style={{ marginVertical: 5 }}
-                ></Ionicons>
+                <View style={styles.msgInfos}>
+                  <Ionicons
+                    name="person"
+                    size={40}
+                    style={{ marginVertical: 5 }}
+                  ></Ionicons>
 
-                <View style={{ width: "80%" }}>
-                  <Text style={{ fontSize: 22, fontWeight: "600" }}>
-                    {msg.nome} {msg.sobrenome}
-                  </Text>
+                  <View style={{ width: "80%" }}>
+                    <Text style={{ fontSize: 22, fontWeight: "600" }}>
+                      {msg.nome} {msg.sobrenome}
+                    </Text>
 
-                  <View style={{ flexDirection: "row" }}>
-                    <Text style={styles.textoPequeno}>{msg.data}</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={styles.textoPequeno}>{msg.data}</Text>
+                    </View>
                   </View>
                 </View>
+
+                <Text
+                  style={{
+                    marginTop: 8,
+                    fontSize: 18,
+                    width: "95%",
+                    marginHorizontal: "auto",
+                  }}
+                >
+                  {msg.message.texto}
+                </Text>
               </View>
 
               <View style={styles.bottomFeedPerfil}>
@@ -227,9 +258,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  topFeedPerfil: {
+  msgInfos: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+
+  topFeedPerfil: {
     borderBottomWidth: 1,
     paddingBottom: 15,
   },
