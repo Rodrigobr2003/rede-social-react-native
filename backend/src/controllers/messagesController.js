@@ -7,6 +7,10 @@ exports.salvaMensagens = async (req, res) => {
 
   req.body.message.tempo = momento;
 
+  req.body.message.nome = req.body.nome;
+
+  req.body.message.sobrenome = req.body.sobrenome;
+
   if (req.body.message.texto === "") return;
 
   const idUser = req.session.user.id;

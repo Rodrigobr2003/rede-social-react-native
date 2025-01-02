@@ -21,6 +21,8 @@ const MensagemSchema = new mongoose.Schema({
       ],
       tempo: { type: String, required: false, default: "" },
       image: { type: String, required: false, default: "" },
+      nome: { type: String, required: false, default: "" },
+      sobrenome: { type: String, required: false, default: "" },
     },
   ],
 });
@@ -46,6 +48,8 @@ class Mensagem {
                 texto: this.body.texto,
                 idUser: idUser,
                 tempo: this.body.tempo,
+                nome: this.body.nome || "",
+                sobrenome: this.body.sobrenome || "",
               },
             ],
           },
@@ -60,6 +64,8 @@ class Mensagem {
             texto: this.body.texto,
             idUser: idUser,
             tempo: this.body.tempo,
+            nome: this.body.nome || "",
+            sobrenome: this.body.sobrenome || "",
           },
         ],
       });
@@ -73,7 +79,13 @@ class Mensagem {
       chatRoom: this.body,
     }).exec();
 
-    const mensagens = searchRoom.mensagem;
+    let mensagens = undefined;
+
+    if (searchRoom) {
+      mensagens = searchRoom.mensagem;
+    } else {
+      mensagens = [];
+    }
 
     return mensagens;
   }

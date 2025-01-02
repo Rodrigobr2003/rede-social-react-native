@@ -21,6 +21,11 @@ export default function Home() {
       chatRoom: string;
       message: { texto: string };
       idUserMsg: string | undefined;
+      nome: string;
+      sobrenome: string;
+      data: string;
+      curtidas: [];
+      comentarios: [];
     }[]
   >([]);
 
@@ -30,6 +35,8 @@ export default function Home() {
         chatRoom: room,
         message: { texto: txtMsg },
         idUserMsg: dataUser?.user?.id,
+        nome: dataUser?.user?.nome,
+        sobrenome: dataUser?.user?.sobrenome,
       };
 
       await fetch("http://10.0.2.2:3008/salvaMensagens", {
@@ -60,7 +67,12 @@ export default function Home() {
     const mensagensFormatadas = mensagensCarregadas.map((mensagem: any) => ({
       chatRoom: room, // Adicionando o chatRoom manualmente
       message: { texto: mensagem.texto },
+      data: mensagem.tempo,
+      nome: mensagem.nome,
+      sobrenome: mensagem.sobrenome,
       idUserMsg: mensagem.idUser,
+      curtidas: mensagem.curtidas,
+      comentarios: mensagem.comentarios,
     }));
 
     setMensagens(mensagensFormatadas);
@@ -68,7 +80,7 @@ export default function Home() {
 
   useEffect(() => {
     carregaMensagem();
-  });
+  }, []);
 
   return (
     <View style={{ alignItems: "center" }}>
@@ -128,66 +140,80 @@ export default function Home() {
       </View>
 
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        {mensagens.map((msg, idx) => (
-          <View style={[styles.feedDefault, styles.feedPubli]} key={idx}>
-            <View style={styles.topFeedPerfil}>
-              <Ionicons
-                name="person"
-                size={40}
-                style={{ marginVertical: 5 }}
-              ></Ionicons>
+        {mensagens.map((msg, idx) => {
+          const numCurtidas = () => {
+            if (!msg || msg.curtidas.length == 0) {
+              return "0 curtidas";
+            }
+            if (msg.curtidas.length == 1) {
+              return "1 curtida";
+            } else {
+              return `${msg.curtidas.length} curtidas`;
+            }
+          };
 
-              <View style={{ width: "80%" }}>
-                <Text style={{ fontSize: 22, fontWeight: "600" }}>
-                  Nome do usuário
+          return (
+            <View style={[styles.feedDefault, styles.feedPubli]} key={idx}>
+              <View style={styles.topFeedPerfil}>
+                <Ionicons
+                  name="person"
+                  size={40}
+                  style={{ marginVertical: 5 }}
+                ></Ionicons>
+
+                <View style={{ width: "80%" }}>
+                  <Text style={{ fontSize: 22, fontWeight: "600" }}>
+                    {msg.nome} {msg.sobrenome}
+                  </Text>
+
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={styles.textoPequeno}>{msg.data}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.bottomFeedPerfil}>
+                <Text
+                  style={[
+                    styles.textoPequeno,
+                    { marginRight: "auto", marginLeft: 20 },
+                  ]}
+                >
+                  {numCurtidas()}
                 </Text>
 
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.textoPequeno}>dd/mm</Text>
-                  <Text style={styles.textoPequeno}>hh:hh</Text>
+                <View style={{ flexDirection: "row", width: "90%" }}>
+                  <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                    <Ionicons
+                      name="thumbs-up"
+                      size={25}
+                      color={"#000"}
+                    ></Ionicons>
+                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>Curtir</Text>
+                  </Pressable>
+
+                  <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                    <Ionicons
+                      name="chatbubble-ellipses"
+                      size={25}
+                      color={"#000"}
+                    ></Ionicons>
+                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                      Comentar
+                    </Text>
+                  </Pressable>
+
+                  <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                    <Ionicons name="share" size={25} color={"#000"}></Ionicons>
+                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                      Compartilhar
+                    </Text>
+                  </Pressable>
                 </View>
               </View>
             </View>
-
-            <View style={styles.bottomFeedPerfil}>
-              <Text
-                style={[
-                  styles.textoPequeno,
-                  { marginRight: "auto", marginLeft: 20 },
-                ]}
-              >
-                x curtidas
-              </Text>
-
-              <View style={{ flexDirection: "row", width: "90%" }}>
-                <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                  <Ionicons
-                    name="thumbs-up"
-                    size={25}
-                    color={"#000"}
-                  ></Ionicons>
-                  <Text style={{ fontSize: 12, paddingLeft: 4 }}>Curtir</Text>
-                </Pressable>
-
-                <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                  <Ionicons
-                    name="chatbubble-ellipses"
-                    size={25}
-                    color={"#000"}
-                  ></Ionicons>
-                  <Text style={{ fontSize: 12, paddingLeft: 4 }}>Comentar</Text>
-                </Pressable>
-
-                <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                  <Ionicons name="share" size={25} color={"#000"}></Ionicons>
-                  <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                    Compartilhar
-                  </Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        ))}
+          );
+        })}
       </ScrollView>
     </View>
   );
