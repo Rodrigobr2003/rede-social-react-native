@@ -7,11 +7,37 @@ import {
   Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "./includes/UserProvider";
 
 export default function Home() {
-  const data = useContext(UserContext); //DADOS DO USER
+  const dataUser = useContext(UserContext); //DADOS DO USER
+  const [dispSend, setDispSend] = useState(false);
+  const [txtMsg, setTxtMsg] = useState("");
+  const room = "feed:1729232020";
+
+  async function publicarMensagem(txtMsg: string) {
+    try {
+      let msgObj = {
+        chatRoom: room,
+        message: { texto: txtMsg },
+        idUserMsg: dataUser?.user?.id,
+      };
+
+      console.log(msgObj);
+
+      await fetch("http://10.0.2.2:3008/salvaMensagens", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(msgObj),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <ScrollView contentContainerStyle={{ alignItems: "center" }}>
@@ -19,10 +45,37 @@ export default function Home() {
         <View style={styles.topFeedPerfil}>
           <Ionicons name="person" size={40}></Ionicons>
 
-          <TextInput
-            placeholder="Publique algo..."
-            style={styles.topFeedInput}
-          ></TextInput>
+          <View style={styles.topFeedInput}>
+            <TextInput
+              placeholder="Publique algo..."
+              value={txtMsg}
+              style={{
+                height: 50,
+                width: "85%",
+                right: 5,
+              }}
+              onPressIn={() => {
+                setDispSend(true);
+              }}
+              onChangeText={(txt) => {
+                setTxtMsg(txt);
+              }}
+            ></TextInput>
+
+            <Ionicons
+              name="send"
+              size={24}
+              style={[
+                { marginLeft: "auto" },
+                dispSend ? { display: "flex" } : { display: "none" },
+              ]}
+              onPress={() => {
+                publicarMensagem(txtMsg);
+                setDispSend(false);
+                setTxtMsg("");
+              }}
+            ></Ionicons>
+          </View>
         </View>
 
         <View style={styles.bottomFeedPerfil}>
@@ -140,6 +193,9 @@ const styles = StyleSheet.create({
     color: "#000",
     padding: 10,
     fontSize: 15,
+    height: 50,
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   btnAnexo: {
