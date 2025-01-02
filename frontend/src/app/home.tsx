@@ -117,6 +117,37 @@ export default function Home() {
     setMensagens(mensagensFormatadas);
   }
 
+  async function descurtirMensagem(idMsg: any) {
+    const response = await fetch("http://10.0.2.2:3008/descurtirMensagem", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ idMsg: idMsg, idUser: dataUser?.user?.id }),
+    });
+
+    const mensagensCarregadas = await response.json();
+
+    console.log(mensagensCarregadas.mensagem[0].curtidas);
+
+    const mensagensFormatadas = mensagensCarregadas.mensagem.map(
+      (mensagem: any) => ({
+        chatRoom: room,
+        message: { texto: mensagem.texto },
+        data: mensagem.tempo,
+        nome: mensagem.nome,
+        sobrenome: mensagem.sobrenome,
+        idUserMsg: mensagem.idUser,
+        curtidas: mensagem.curtidas,
+        comentarios: mensagem.comentarios,
+        idMsg: mensagem._id,
+      })
+    );
+
+    setMensagens(mensagensFormatadas);
+  }
+
   useEffect(() => {
     carregaMensagem();
   }, []);
@@ -200,21 +231,37 @@ export default function Home() {
               if (isCurtido) {
                 return (
                   <>
-                    <Ionicons name="thumbs-up" size={25} color={"#000"} />
-                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                      Curtido
-                    </Text>
+                    <Pressable
+                      style={[styles.btnAnexo, styles.btnInteracoes]}
+                      onPress={() => {
+                        descurtirMensagem(msg.idMsg);
+                      }}
+                    >
+                      <Ionicons name="thumbs-up" size={25} color={"#000"} />
+                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                        Curtido
+                      </Text>
+                    </Pressable>
                   </>
                 );
               } else {
                 return (
                   <>
-                    <Ionicons
-                      name="thumbs-up-outline"
-                      size={25}
-                      color={"#000"}
-                    />
-                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>Curtir</Text>
+                    <Pressable
+                      style={[styles.btnAnexo, styles.btnInteracoes]}
+                      onPress={() => {
+                        curtirMensagem(msg.idMsg);
+                      }}
+                    >
+                      <Ionicons
+                        name="thumbs-up-outline"
+                        size={25}
+                        color={"#000"}
+                      />
+                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                        Curtir
+                      </Text>
+                    </Pressable>
                   </>
                 );
               }
@@ -282,14 +329,7 @@ export default function Home() {
                   </Text>
 
                   <View style={{ flexDirection: "row", width: "90%" }}>
-                    <Pressable
-                      style={[styles.btnAnexo, styles.btnInteracoes]}
-                      onPress={() => {
-                        curtirMensagem(msg.idMsg);
-                      }}
-                    >
-                      {foiCurtido()}
-                    </Pressable>
+                    {foiCurtido()}
 
                     <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
                       <Ionicons

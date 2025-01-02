@@ -25,5 +25,6 @@ routes.put("/removerAmigo", UserController.removerAmigo);
 routes.post("/salvaMensagens", MessagesController.salvaMensagens);
 routes.get("/carregaMensagens/:room", MessagesController.carregaMensagens);
 routes.put("/curtirMensagem", MessagesController.curtirMensagem);
+routes.put("/descurtirMensagem", MessagesController.descurtirMensagem);
 
 module.exports = routes;

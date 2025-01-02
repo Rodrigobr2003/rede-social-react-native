@@ -108,6 +108,27 @@ class Mensagem {
 
     return curtida;
   }
+
+  async descutirMensagem() {
+    const curtida = await MensagemModel.findOneAndUpdate(
+      {
+        chatRoom: "feed:1729232020",
+        "mensagem._id": this.body.idMsg,
+      },
+      {
+        $pull: {
+          "mensagem.$.curtidas": {
+            idUser: this.body.idUser,
+          },
+        },
+      },
+      { new: true }
+    ).exec();
+
+    console.log(curtida);
+
+    return curtida;
+  }
 }
 
 module.exports = Mensagem;

@@ -37,3 +37,9 @@ exports.curtirMensagem = async (req, res) => {
 
   res.send(await mensagem.curtirMensagem());
 };
+
+exports.descurtirMensagem = async (req, res) => {
+  const mensagem = new Mensagem(req.body);
+
+  res.send(await mensagem.descutirMensagem());
+};
