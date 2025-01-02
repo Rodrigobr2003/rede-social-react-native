@@ -5,6 +5,8 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
@@ -150,102 +152,116 @@ export default function Home() {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        {mensagens.map((msg, idx) => {
-          const numCurtidas = () => {
-            if (!msg || msg.curtidas.length == 0) {
-              return "0 curtidas";
-            }
-            if (msg.curtidas.length == 1) {
-              return "1 curtida";
-            } else {
-              return `${msg.curtidas.length} curtidas`;
-            }
-          };
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          contentContainerStyle={{ alignItems: "center", flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {mensagens.map((msg, idx) => {
+            const numCurtidas = () => {
+              if (!msg || msg.curtidas.length == 0) {
+                return "0 curtidas";
+              }
+              if (msg.curtidas.length == 1) {
+                return "1 curtida";
+              } else {
+                return `${msg.curtidas.length} curtidas`;
+              }
+            };
 
-          return (
-            <View
-              style={[
-                styles.feedDefault,
-                styles.feedPubli,
-                { marginBottom: 30 },
-              ]}
-              key={idx}
-            >
-              <View style={styles.topFeedPerfil}>
-                <View style={styles.msgInfos}>
-                  <Ionicons
-                    name="person"
-                    size={40}
-                    style={{ marginVertical: 5 }}
-                  ></Ionicons>
+            return (
+              <View
+                style={[
+                  styles.feedDefault,
+                  styles.feedPubli,
+                  { marginBottom: 20, marginTop: 20 },
+                ]}
+                key={idx}
+              >
+                <View style={styles.topFeedPerfil}>
+                  <View style={styles.msgInfos}>
+                    <Ionicons
+                      name="person"
+                      size={40}
+                      style={{ marginVertical: 5 }}
+                    ></Ionicons>
 
-                  <View style={{ width: "80%" }}>
-                    <Text style={{ fontSize: 22, fontWeight: "600" }}>
-                      {msg.nome} {msg.sobrenome}
-                    </Text>
+                    <View style={{ width: "80%" }}>
+                      <Text style={{ fontSize: 22, fontWeight: "600" }}>
+                        {msg.nome} {msg.sobrenome}
+                      </Text>
 
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={styles.textoPequeno}>{msg.data}</Text>
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={styles.textoPequeno}>{msg.data}</Text>
+                      </View>
                     </View>
                   </View>
+
+                  <Text
+                    style={{
+                      marginTop: 8,
+                      fontSize: 18,
+                      width: "95%",
+                      marginHorizontal: "auto",
+                    }}
+                  >
+                    {msg.message.texto}
+                  </Text>
                 </View>
 
-                <Text
-                  style={{
-                    marginTop: 8,
-                    fontSize: 18,
-                    width: "95%",
-                    marginHorizontal: "auto",
-                  }}
-                >
-                  {msg.message.texto}
-                </Text>
-              </View>
+                <View style={styles.bottomFeedPerfil}>
+                  <Text
+                    style={[
+                      styles.textoPequeno,
+                      { marginRight: "auto", marginLeft: 20 },
+                    ]}
+                  >
+                    {numCurtidas()}
+                  </Text>
 
-              <View style={styles.bottomFeedPerfil}>
-                <Text
-                  style={[
-                    styles.textoPequeno,
-                    { marginRight: "auto", marginLeft: 20 },
-                  ]}
-                >
-                  {numCurtidas()}
-                </Text>
+                  <View style={{ flexDirection: "row", width: "90%" }}>
+                    <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                      <Ionicons
+                        name="thumbs-up"
+                        size={25}
+                        color={"#000"}
+                      ></Ionicons>
+                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                        Curtir
+                      </Text>
+                    </Pressable>
 
-                <View style={{ flexDirection: "row", width: "90%" }}>
-                  <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                    <Ionicons
-                      name="thumbs-up"
-                      size={25}
-                      color={"#000"}
-                    ></Ionicons>
-                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>Curtir</Text>
-                  </Pressable>
+                    <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                      <Ionicons
+                        name="chatbubble-ellipses"
+                        size={25}
+                        color={"#000"}
+                      ></Ionicons>
+                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                        Comentar
+                      </Text>
+                    </Pressable>
 
-                  <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                    <Ionicons
-                      name="chatbubble-ellipses"
-                      size={25}
-                      color={"#000"}
-                    ></Ionicons>
-                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                      Comentar
-                    </Text>
-                  </Pressable>
-
-                  <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                    <Ionicons name="share" size={25} color={"#000"}></Ionicons>
-                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                      Compartilhar
-                    </Text>
-                  </Pressable>
+                    <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                      <Ionicons
+                        name="share"
+                        size={25}
+                        color={"#000"}
+                      ></Ionicons>
+                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                        Compartilhar
+                      </Text>
+                    </Pressable>
+                  </View>
                 </View>
               </View>
-            </View>
-          );
-        })}
-      </ScrollView>
+            );
+          })}
+          <View style={{ height: 120 }} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
