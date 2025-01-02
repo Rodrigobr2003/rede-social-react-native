@@ -89,6 +89,25 @@ class Mensagem {
 
     return mensagens;
   }
+
+  async curtirMensagem() {
+    const curtida = await MensagemModel.findOneAndUpdate(
+      {
+        chatRoom: "feed:1729232020",
+        "mensagem._id": this.body.idMsg,
+      },
+      {
+        $addToSet: {
+          "mensagem.$.curtidas": {
+            idUser: this.body.idUser,
+          },
+        },
+      },
+      { new: true }
+    ).exec();
+
+    return curtida;
+  }
 }
 
 module.exports = Mensagem;

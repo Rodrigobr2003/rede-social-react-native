@@ -31,3 +31,9 @@ exports.carregaMensagens = async (req, res) => {
 
   res.send(response);
 };
+
+exports.curtirMensagem = async (req, res) => {
+  const mensagem = new Mensagem(req.body);
+
+  res.send(await mensagem.curtirMensagem());
+};

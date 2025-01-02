@@ -11,6 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./includes/UserProvider";
+import React from "react";
 
 export default function Home() {
   const dataUser = useContext(UserContext); //DADOS DO USER
@@ -28,6 +29,7 @@ export default function Home() {
       data: string;
       curtidas: any[];
       comentarios: any[];
+      idMsg?: string;
     }[]
   >([]);
 
@@ -80,7 +82,37 @@ export default function Home() {
       idUserMsg: mensagem.idUser,
       curtidas: mensagem.curtidas,
       comentarios: mensagem.comentarios,
+      idMsg: mensagem._id,
     }));
+
+    setMensagens(mensagensFormatadas);
+  }
+
+  async function curtirMensagem(idMsg: any) {
+    const response = await fetch("http://10.0.2.2:3008/curtirMensagem", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ idMsg: idMsg, idUser: dataUser?.user?.id }),
+    });
+
+    const mensagensCarregadas = await response.json();
+
+    const mensagensFormatadas = mensagensCarregadas.mensagem.map(
+      (mensagem: any) => ({
+        chatRoom: room,
+        message: { texto: mensagem.texto },
+        data: mensagem.tempo,
+        nome: mensagem.nome,
+        sobrenome: mensagem.sobrenome,
+        idUserMsg: mensagem.idUser,
+        curtidas: mensagem.curtidas,
+        comentarios: mensagem.comentarios,
+        idMsg: mensagem._id,
+      })
+    );
 
     setMensagens(mensagensFormatadas);
   }
@@ -160,6 +192,34 @@ export default function Home() {
           showsVerticalScrollIndicator={false}
         >
           {mensagens.map((msg, idx) => {
+            const foiCurtido = () => {
+              const isCurtido = msg.curtidas.some(
+                (curtida) => curtida.idUser === dataUser?.user?.id
+              );
+
+              if (isCurtido) {
+                return (
+                  <>
+                    <Ionicons name="thumbs-up" size={25} color={"#000"} />
+                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                      Curtido
+                    </Text>
+                  </>
+                );
+              } else {
+                return (
+                  <>
+                    <Ionicons
+                      name="thumbs-up-outline"
+                      size={25}
+                      color={"#000"}
+                    />
+                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>Curtir</Text>
+                  </>
+                );
+              }
+            };
+
             const numCurtidas = () => {
               if (!msg || msg.curtidas.length == 0) {
                 return "0 curtidas";
@@ -222,20 +282,18 @@ export default function Home() {
                   </Text>
 
                   <View style={{ flexDirection: "row", width: "90%" }}>
-                    <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                      <Ionicons
-                        name="thumbs-up"
-                        size={25}
-                        color={"#000"}
-                      ></Ionicons>
-                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                        Curtir
-                      </Text>
+                    <Pressable
+                      style={[styles.btnAnexo, styles.btnInteracoes]}
+                      onPress={() => {
+                        curtirMensagem(msg.idMsg);
+                      }}
+                    >
+                      {foiCurtido()}
                     </Pressable>
 
                     <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
                       <Ionicons
-                        name="chatbubble-ellipses"
+                        name="chatbubble-ellipses-outline"
                         size={25}
                         color={"#000"}
                       ></Ionicons>
