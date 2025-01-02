@@ -30,6 +30,12 @@ export default function Home() {
       curtidas: any[];
       comentarios: any[];
       idMsg?: string;
+      isShared?: {
+        nome: string | undefined;
+        sobrenome: string | undefined;
+        texto: string | undefined;
+        data: string | undefined;
+      };
     }[]
   >([]);
 
@@ -83,6 +89,12 @@ export default function Home() {
       curtidas: mensagem.curtidas,
       comentarios: mensagem.comentarios,
       idMsg: mensagem._id,
+      isShared: {
+        nome: mensagem.isShared.nome,
+        sobrenome: mensagem.isShared.sobrenome,
+        texto: mensagem.isShared.texto,
+        data: mensagem.isShared.data,
+      },
     }));
 
     setMensagens(mensagensFormatadas);
@@ -146,6 +158,49 @@ export default function Home() {
     );
 
     setMensagens(mensagensFormatadas);
+  }
+
+  async function compartilhar(
+    nome: any,
+    sobrenome: any,
+    texto: any,
+    data: any
+  ) {
+    const msgObj = {
+      chatRoom: room,
+      message: { texto: txtMsg },
+      idUserMsg: dataUser?.user?.id,
+      nome: dataUser?.user?.nome || "",
+      sobrenome: dataUser?.user?.sobrenome || "",
+      data: "",
+      curtidas: [],
+      comentarios: [],
+      isShared: {
+        nome: nome,
+        sobrenome: sobrenome,
+        texto: texto,
+        data: data,
+      },
+    };
+
+    setMensagens((prevMsgs) => [...prevMsgs, msgObj]);
+
+    await fetch("http://10.0.2.2:3008/compartilharMensagem", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        room: room,
+        user: {
+          nome: dataUser?.user?.nome,
+          sobrenome: dataUser?.user?.sobrenome,
+          idUser: dataUser?.user?.id,
+        },
+        perfil: { nome: nome, sobrenome: sobrenome, texto: texto, data: data },
+      }),
+    });
   }
 
   useEffect(() => {
@@ -223,6 +278,68 @@ export default function Home() {
           showsVerticalScrollIndicator={false}
         >
           {mensagens.map((msg, idx) => {
+            let compDisp = null;
+
+            const isShared = () => {
+              if (msg.message.texto == "") {
+                compDisp = false;
+
+                return (
+                  <View style={[styles.sharedPost]}>
+                    <View
+                      style={[
+                        styles.msgInfos,
+                        { width: "85%", marginHorizontal: "auto" },
+                      ]}
+                    >
+                      <Ionicons
+                        name="person"
+                        size={28}
+                        style={{ marginVertical: 5 }}
+                      ></Ionicons>
+
+                      <View style={{ width: "80%" }}>
+                        <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                          {msg.isShared.nome} {msg.isShared.sobrenome}
+                        </Text>
+
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={styles.textoPequeno}>
+                            {msg.isShared.data}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        width: "80%",
+                        marginHorizontal: "auto",
+                      }}
+                    >
+                      {msg.isShared.texto}
+                    </Text>
+                  </View>
+                );
+              } else {
+                compDisp = true;
+
+                return (
+                  <Text
+                    style={{
+                      marginTop: 8,
+                      fontSize: 18,
+                      width: "95%",
+                      marginHorizontal: "auto",
+                    }}
+                  >
+                    {msg.message.texto}
+                  </Text>
+                );
+              }
+            };
+
             const foiCurtido = () => {
               const isCurtido = msg.curtidas.some(
                 (curtida) => curtida.idUser === dataUser?.user?.id
@@ -306,16 +423,7 @@ export default function Home() {
                     </View>
                   </View>
 
-                  <Text
-                    style={{
-                      marginTop: 8,
-                      fontSize: 18,
-                      width: "95%",
-                      marginHorizontal: "auto",
-                    }}
-                  >
-                    {msg.message.texto}
-                  </Text>
+                  {isShared()}
                 </View>
 
                 <View style={styles.bottomFeedPerfil}>
@@ -342,7 +450,21 @@ export default function Home() {
                       </Text>
                     </Pressable>
 
-                    <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
+                    <Pressable
+                      style={[
+                        styles.btnAnexo,
+                        styles.btnInteracoes,
+                        compDisp ? { display: "flex" } : { display: "none" },
+                      ]}
+                      onPress={() => {
+                        compartilhar(
+                          msg.nome,
+                          msg.sobrenome,
+                          msg.message.texto,
+                          msg.data
+                        );
+                      }}
+                    >
                       <Ionicons
                         name="share"
                         size={25}
@@ -429,6 +551,13 @@ const styles = StyleSheet.create({
   btnInteracoes: {
     width: "30%",
     marginHorizontal: 2,
+  },
+
+  sharedPost: {
+    backgroundColor: "#b0b0b0",
+    borderRadius: 10,
+    paddingVertical: 10,
+    marginTop: 7,
   },
 
   //#endregion

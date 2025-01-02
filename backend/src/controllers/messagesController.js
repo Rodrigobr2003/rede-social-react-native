@@ -43,3 +43,13 @@ exports.descurtirMensagem = async (req, res) => {
 
   res.send(await mensagem.descutirMensagem());
 };
+
+exports.compartilharMensagem = async (req, res) => {
+  const momento = moment().format("DD/MM HH:mm");
+
+  req.body.user.tempo = momento;
+
+  const mensagem = new Mensagem(req.body);
+
+  await mensagem.compartilhar();
+};

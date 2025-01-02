@@ -4,7 +4,7 @@ const MensagemSchema = new mongoose.Schema({
   chatRoom: { type: String, required: true },
   mensagem: [
     {
-      texto: { type: String, required: true, default: "" },
+      texto: { type: String, required: false, default: "" },
       idUser: { type: String, required: false, default: "" },
       curtidas: [
         {
@@ -23,6 +23,11 @@ const MensagemSchema = new mongoose.Schema({
       image: { type: String, required: false, default: "" },
       nome: { type: String, required: false, default: "" },
       sobrenome: { type: String, required: false, default: "" },
+      isShared: {
+        type: { nome: String, sobrenome: String, texto: String, data: String },
+        required: false,
+        default: {},
+      },
     },
   ],
 });
@@ -128,6 +133,42 @@ class Mensagem {
     console.log(curtida);
 
     return curtida;
+  }
+
+  async compartilhar() {
+    let searchRoom = await MensagemModel.findOne({
+      chatRoom: this.body.room,
+    }).exec();
+    let comp = null;
+
+    if (searchRoom) {
+      comp = await MensagemModel.findOneAndUpdate(
+        {
+          chatRoom: this.body.room,
+        },
+        {
+          $addToSet: {
+            mensagem: [
+              {
+                idUser: this.body.user.idUser,
+                tempo: this.body.user.tempo,
+                nome: this.body.user.nome || "",
+                sobrenome: this.body.user.sobrenome || "",
+                isShared: {
+                  nome: this.body.perfil.nome,
+                  sobrenome: this.body.perfil.sobrenome,
+                  texto: this.body.perfil.texto,
+                  data: this.body.perfil.data,
+                },
+              },
+            ],
+          },
+        },
+        { new: true }
+      );
+    } else {
+      return;
+    }
   }
 }
 

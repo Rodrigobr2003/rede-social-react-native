@@ -26,5 +26,6 @@ routes.post("/salvaMensagens", MessagesController.salvaMensagens);
 routes.get("/carregaMensagens/:room", MessagesController.carregaMensagens);
 routes.put("/curtirMensagem", MessagesController.curtirMensagem);
 routes.put("/descurtirMensagem", MessagesController.descurtirMensagem);
+routes.post("/compartilharMensagem", MessagesController.compartilharMensagem);
 
 module.exports = routes;
