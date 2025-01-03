@@ -53,3 +53,15 @@ exports.compartilharMensagem = async (req, res) => {
 
   await mensagem.compartilhar();
 };
+
+exports.comentar = async (req, res) => {
+  const momento = moment().format("DD/MM HH:mm");
+
+  req.body.user.tempo = momento;
+
+  if (req.body.user.texto === "") return;
+
+  const mensagem = new Mensagem(req.body);
+
+  res.send(await mensagem.comentar());
+};

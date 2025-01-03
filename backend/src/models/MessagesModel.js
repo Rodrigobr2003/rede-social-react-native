@@ -15,6 +15,9 @@ const MensagemSchema = new mongoose.Schema({
       comentarios: [
         {
           idUser: { type: String, required: false, default: "" },
+          nome: { type: String, required: false, default: "" },
+          sobrenome: { type: String, required: false, default: "" },
+          data: { type: String, required: false, default: "" },
           comment: { type: String, required: false, default: "" },
           _id: false,
         },
@@ -169,6 +172,29 @@ class Mensagem {
     } else {
       return;
     }
+  }
+
+  async comentar() {
+    let comment = await MensagemModel.findOneAndUpdate(
+      {
+        chatRoom: "feed:1729232020",
+        "mensagem._id": this.body.idMsg,
+      },
+      {
+        $addToSet: {
+          "mensagem.$.comentarios": {
+            idUser: this.body.user.idUser,
+            nome: this.body.user.nome,
+            sobrenome: this.body.user.sobrenome,
+            comment: this.body.user.texto,
+            data: this.body.user.tempo,
+          },
+        },
+      },
+      { new: true }
+    ).exec();
+
+    return comment;
   }
 }
 

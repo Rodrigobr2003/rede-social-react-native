@@ -13,10 +13,14 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./includes/UserProvider";
 import React from "react";
 
+import moment from "moment";
+
 export default function Home() {
   const dataUser = useContext(UserContext); //DADOS DO USER
   const [dispSend, setDispSend] = useState(false);
+  const [dispCom, setDispCom] = useState(false);
   const [txtMsg, setTxtMsg] = useState("");
+  const [txtCom, setTxtCom] = useState("");
   const room = "feed:1729232020";
 
   const [mensagens, setMensagens] = useState<
@@ -210,6 +214,46 @@ export default function Home() {
     });
   }
 
+  async function comentar(msg: any) {
+    const response = await fetch("http://10.0.2.2:3008/comentar", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        idMsg: msg.idMsg,
+        user: {
+          idUser: dataUser?.user?.id,
+          nome: dataUser?.user?.nome,
+          sobrenome: dataUser?.user?.sobrenome,
+          texto: txtCom,
+        },
+      }),
+    });
+
+    const dadosCom = await response.json();
+
+    const mensagensFormatadas = dadosCom.mensagem.map((mensagem: any) => ({
+      chatRoom: room,
+      message: { texto: mensagem.texto },
+      data: mensagem.tempo,
+      nome: mensagem.nome,
+      sobrenome: mensagem.sobrenome,
+      idUserMsg: mensagem.idUser,
+      curtidas: mensagem.curtidas,
+      comentarios: mensagem.comentarios,
+      isShared: {
+        nome: msg.isShared.nome || "",
+        sobrenome: msg.isShared.sobrenome || "",
+        texto: msg.isShared.texto || "",
+        data: msg.isShared.data || "",
+      },
+    }));
+
+    setMensagens(mensagensFormatadas);
+  }
+
   useEffect(() => {
     carregaMensagem();
   }, []);
@@ -281,6 +325,7 @@ export default function Home() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView
+          nestedScrollEnabled={true}
           contentContainerStyle={{ alignItems: "center", flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
         >
@@ -391,6 +436,46 @@ export default function Home() {
               }
             };
 
+            const comAberto = () => {
+              if (!dispCom) {
+                return (
+                  <Pressable
+                    style={[styles.btnAnexo, styles.btnInteracoes]}
+                    onPress={() => {
+                      setDispCom(true);
+                    }}
+                  >
+                    <Ionicons
+                      name="chatbubble-ellipses-outline"
+                      size={25}
+                      color={"#000"}
+                    ></Ionicons>
+                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                      Comentar
+                    </Text>
+                  </Pressable>
+                );
+              } else {
+                return (
+                  <Pressable
+                    style={[styles.btnAnexo, styles.btnInteracoes]}
+                    onPress={() => {
+                      setDispCom(false);
+                    }}
+                  >
+                    <Ionicons
+                      name="chatbubble-ellipses"
+                      size={25}
+                      color={"#000"}
+                    ></Ionicons>
+                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                      Comentar
+                    </Text>
+                  </Pressable>
+                );
+              }
+            };
+
             const numCurtidas = () => {
               if (!msg || msg.curtidas.length == 0) {
                 return "0 curtidas";
@@ -446,16 +531,7 @@ export default function Home() {
                   <View style={{ flexDirection: "row", width: "90%" }}>
                     {foiCurtido()}
 
-                    <Pressable style={[styles.btnAnexo, styles.btnInteracoes]}>
-                      <Ionicons
-                        name="chatbubble-ellipses-outline"
-                        size={25}
-                        color={"#000"}
-                      ></Ionicons>
-                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                        Comentar
-                      </Text>
-                    </Pressable>
+                    {comAberto()}
 
                     <Pressable
                       style={[
@@ -481,6 +557,123 @@ export default function Home() {
                         Compartilhar
                       </Text>
                     </Pressable>
+                  </View>
+
+                  <View
+                    style={[
+                      styles.comentarios,
+                      { flex: 1 },
+                      dispCom ? { display: "flex" } : { display: "none" },
+                    ]}
+                  >
+                    <KeyboardAvoidingView
+                      behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    >
+                      <ScrollView
+                        nestedScrollEnabled={true}
+                        contentContainerStyle={{ flexGrow: 1 }}
+                        style={[{ maxHeight: "85%" }]}
+                      >
+                        {msg.comentarios.map((comentario, idx) => {
+                          return (
+                            <View
+                              key={idx}
+                              style={{
+                                marginHorizontal: "auto",
+                                marginVertical: 10,
+                                width: "90%",
+                              }}
+                            >
+                              <View style={{ flexDirection: "row" }}>
+                                <Ionicons
+                                  name="person"
+                                  size={28}
+                                  style={{
+                                    marginVertical: 5,
+                                    marginHorizontal: 10,
+                                  }}
+                                ></Ionicons>
+
+                                <View style={{ width: "80%" }}>
+                                  <Text
+                                    style={{ fontSize: 18, fontWeight: "600" }}
+                                  >
+                                    {comentario.nome} {comentario.sobrenome}
+                                  </Text>
+
+                                  <View style={{ flexDirection: "row" }}>
+                                    <Text style={styles.textoPequeno}>
+                                      {comentario.data}
+                                    </Text>
+                                  </View>
+                                </View>
+                              </View>
+                              <Text
+                                style={{
+                                  fontSize: 18,
+                                  width: "80%",
+                                  marginHorizontal: "auto",
+                                }}
+                              >
+                                {comentario.comment}
+                              </Text>
+                            </View>
+                          );
+                        })}
+                      </ScrollView>
+                    </KeyboardAvoidingView>
+
+                    <View
+                      style={{
+                        bottom: 0,
+                        position: "absolute",
+                        width: "100%",
+                      }}
+                    >
+                      <View
+                        style={[
+                          styles.topFeedInput,
+                          {
+                            width: "90%",
+                            marginHorizontal: "auto",
+                            marginBottom: 10,
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="Comente algo..."
+                          value={txtCom}
+                          style={{
+                            height: 50,
+                            width: "90%",
+                            right: 8,
+                            marginHorizontal: "auto",
+                          }}
+                          onPressIn={() => {
+                            setDispSend(true);
+                          }}
+                          onChangeText={(txt) => {
+                            setTxtCom(txt);
+                          }}
+                        ></TextInput>
+
+                        <Ionicons
+                          name="send"
+                          size={24}
+                          style={[
+                            { marginLeft: "auto" },
+                            dispSend
+                              ? { display: "flex" }
+                              : { display: "none" },
+                          ]}
+                          onPress={() => {
+                            comentar(msg);
+                            setDispSend(false);
+                            setTxtCom("");
+                          }}
+                        ></Ionicons>
+                      </View>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -565,6 +758,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     marginTop: 7,
+  },
+
+  comentarios: {
+    width: "100%",
+    height: 250,
+    backgroundColor: "#d1cfcf",
+    borderRadius: 10,
   },
 
   //#endregion
