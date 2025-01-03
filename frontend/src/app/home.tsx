@@ -100,18 +100,17 @@ export default function Home() {
     setMensagens(mensagensFormatadas);
   }
 
-  async function curtirMensagem(idMsg: any) {
+  async function curtirMensagem(msg: any) {
     const response = await fetch("http://10.0.2.2:3008/curtirMensagem", {
       method: "PUT",
       mode: "cors",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ idMsg: idMsg, idUser: dataUser?.user?.id }),
+      body: JSON.stringify({ idMsg: msg.idMsg, idUser: dataUser?.user?.id }),
     });
 
     const mensagensCarregadas = await response.json();
-
     const mensagensFormatadas = mensagensCarregadas.mensagem.map(
       (mensagem: any) => ({
         chatRoom: room,
@@ -123,25 +122,28 @@ export default function Home() {
         curtidas: mensagem.curtidas,
         comentarios: mensagem.comentarios,
         idMsg: mensagem._id,
+        isShared: {
+          nome: msg.isShared.nome || "",
+          sobrenome: msg.isShared.sobrenome || "",
+          texto: msg.isShared.texto || "",
+          data: msg.isShared.data || "",
+        },
       })
     );
-
     setMensagens(mensagensFormatadas);
   }
 
-  async function descurtirMensagem(idMsg: any) {
+  async function descurtirMensagem(msg: any) {
     const response = await fetch("http://10.0.2.2:3008/descurtirMensagem", {
       method: "PUT",
       mode: "cors",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ idMsg: idMsg, idUser: dataUser?.user?.id }),
+      body: JSON.stringify({ idMsg: msg.idMsg, idUser: dataUser?.user?.id }),
     });
 
     const mensagensCarregadas = await response.json();
-
-    console.log(mensagensCarregadas.mensagem[0].curtidas);
 
     const mensagensFormatadas = mensagensCarregadas.mensagem.map(
       (mensagem: any) => ({
@@ -153,7 +155,12 @@ export default function Home() {
         idUserMsg: mensagem.idUser,
         curtidas: mensagem.curtidas,
         comentarios: mensagem.comentarios,
-        idMsg: mensagem._id,
+        isShared: {
+          nome: msg.isShared.nome || "",
+          sobrenome: msg.isShared.sobrenome || "",
+          texto: msg.isShared.texto || "",
+          data: msg.isShared.data || "",
+        },
       })
     );
 
@@ -300,12 +307,12 @@ export default function Home() {
 
                       <View style={{ width: "80%" }}>
                         <Text style={{ fontSize: 18, fontWeight: "600" }}>
-                          {msg.isShared.nome} {msg.isShared.sobrenome}
+                          {msg.isShared?.nome} {msg.isShared?.sobrenome}
                         </Text>
 
                         <View style={{ flexDirection: "row" }}>
                           <Text style={styles.textoPequeno}>
-                            {msg.isShared.data}
+                            {msg.isShared?.data}
                           </Text>
                         </View>
                       </View>
@@ -318,7 +325,7 @@ export default function Home() {
                         marginHorizontal: "auto",
                       }}
                     >
-                      {msg.isShared.texto}
+                      {msg.isShared?.texto}
                     </Text>
                   </View>
                 );
@@ -351,7 +358,7 @@ export default function Home() {
                     <Pressable
                       style={[styles.btnAnexo, styles.btnInteracoes]}
                       onPress={() => {
-                        descurtirMensagem(msg.idMsg);
+                        descurtirMensagem(msg);
                       }}
                     >
                       <Ionicons name="thumbs-up" size={25} color={"#000"} />
@@ -367,7 +374,7 @@ export default function Home() {
                     <Pressable
                       style={[styles.btnAnexo, styles.btnInteracoes]}
                       onPress={() => {
-                        curtirMensagem(msg.idMsg);
+                        curtirMensagem(msg);
                       }}
                     >
                       <Ionicons
