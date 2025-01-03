@@ -100,15 +100,6 @@ class User {
     return user;
   }
 
-  async enviarPedidoAmizade() {
-    return await UserModel.findOneAndUpdate(
-      {
-        _id: this.body.perfil.id,
-      },
-      { notificacoes: [this.body.user] }
-    );
-  }
-
   async negarNotificacao() {
     try {
       const user = await UserModel.findOneAndUpdate(
@@ -173,6 +164,25 @@ class User {
     );
 
     return user;
+  }
+
+  async enviarNotificacao() {
+    return await UserModel.findOneAndUpdate(
+      {
+        _id: this.body.idPerfil,
+      },
+      {
+        $addToSet: {
+          notificacoes: {
+            id: this.body.idUserMsg,
+            tipo: this.body.tipo,
+            nome: this.body.message.nome,
+            sobrenome: this.body.message.sobrenome,
+          },
+        },
+      },
+      { new: true }
+    );
   }
 }
 

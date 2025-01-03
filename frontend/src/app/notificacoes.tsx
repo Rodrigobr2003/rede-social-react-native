@@ -99,6 +99,8 @@ export default function Notificacoes() {
     user?.fetchUserData();
   }
 
+  const tipoNotificacao = () => {};
+
   return (
     <View style={{ alignItems: "center", height: "90%" }}>
       <View style={styles.feedDefault}>
@@ -111,14 +113,14 @@ export default function Notificacoes() {
         >
           {notificacoes}
 
-          {/* <Pressable style={styles.btnNotificacao}>
+          <Pressable style={styles.btnNotificacao}>
             <Ionicons
               name="person"
               size={40}
               style={{ marginVertical: 5, marginHorizontal: 10 }}
             ></Ionicons>
             <View style={{ flexDirection: "row", width: "80%" }}>
-              <Text style={{ fontSize: 17 }}>Nome te enviou mensagem!</Text>
+              <Text style={{ fontSize: 17 }}>Nome te enviou uma mensagem!</Text>
 
               <Ionicons
                 name="close"
@@ -126,7 +128,41 @@ export default function Notificacoes() {
                 style={{ marginLeft: 10 }}
               ></Ionicons>
             </View>
-          </Pressable> */}
+          </Pressable>
+
+          <Pressable style={styles.btnNotificacao}>
+            <Ionicons
+              name="person"
+              size={40}
+              style={{ marginVertical: 5, marginHorizontal: 10 }}
+            ></Ionicons>
+            <View style={{ flexDirection: "row", width: "80%" }}>
+              <Text style={{ fontSize: 17 }}>Nome comentou em seu post!</Text>
+
+              <Ionicons
+                name="close"
+                size={25}
+                style={{ marginLeft: 10 }}
+              ></Ionicons>
+            </View>
+          </Pressable>
+
+          <Pressable style={styles.btnNotificacao}>
+            <Ionicons
+              name="person"
+              size={40}
+              style={{ marginVertical: 5, marginHorizontal: 10 }}
+            ></Ionicons>
+            <View style={{ flexDirection: "row", width: "80%" }}>
+              <Text style={{ fontSize: 17 }}>Nome compartilhou seu post!</Text>
+
+              <Ionicons
+                name="close"
+                size={25}
+                style={{ marginLeft: 10 }}
+              ></Ionicons>
+            </View>
+          </Pressable>
         </ScrollView>
       </View>
     </View>

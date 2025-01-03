@@ -111,7 +111,17 @@ export default function Home() {
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ idMsg: msg.idMsg, idUser: dataUser?.user?.id }),
+      body: JSON.stringify({
+        idMsg: msg.idMsg,
+        idUser: dataUser?.user?.id,
+        tipo: 5,
+        message: {
+          nome: dataUser?.user?.nome,
+          sobrenome: dataUser?.user?.sobrenome,
+        },
+        idUserMsg: dataUser?.user?.id,
+        idPerfil: msg.idUserMsg,
+      }),
     });
 
     const mensagensCarregadas = await response.json();
@@ -175,7 +185,8 @@ export default function Home() {
     nome: any,
     sobrenome: any,
     texto: any,
-    data: any
+    data: any,
+    msg: any
   ) {
     const msgObj = {
       chatRoom: room,
@@ -210,6 +221,13 @@ export default function Home() {
           idUser: dataUser?.user?.id,
         },
         perfil: { nome: nome, sobrenome: sobrenome, texto: texto, data: data },
+        tipo: 4,
+        message: {
+          nome: dataUser?.user?.nome,
+          sobrenome: dataUser?.user?.sobrenome,
+        },
+        idUserMsg: dataUser?.user?.id,
+        idPerfil: msg.idUserMsg,
       }),
     });
   }
@@ -229,6 +247,13 @@ export default function Home() {
           sobrenome: dataUser?.user?.sobrenome,
           texto: txtCom,
         },
+        tipo: 3,
+        message: {
+          nome: dataUser?.user?.nome,
+          sobrenome: dataUser?.user?.sobrenome,
+        },
+        idUserMsg: dataUser?.user?.id,
+        idPerfil: msg.idUserMsg,
       }),
     });
 
@@ -544,7 +569,8 @@ export default function Home() {
                           msg.nome,
                           msg.sobrenome,
                           msg.message.texto,
-                          msg.data
+                          msg.data,
+                          msg
                         );
                       }}
                     >

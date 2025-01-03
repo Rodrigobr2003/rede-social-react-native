@@ -45,12 +45,13 @@ export default function PerfilProcurado() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        perfil: { id: data._id },
-        user: {
-          id: dataUser?.user?.id,
+        tipo: 1,
+        message: {
           nome: dataUser?.user?.nome,
           sobrenome: dataUser?.user?.sobrenome,
         },
+        idUserMsg: dataUser?.user?.id,
+        idPerfil: data._id,
       }),
     });
   }

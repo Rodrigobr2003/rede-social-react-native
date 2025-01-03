@@ -86,8 +86,14 @@ export default function ChatProfile() {
     try {
       let msgObj = {
         chatRoom: room,
-        message: { texto: txtMsg },
+        tipo: 2,
+        message: {
+          texto: txtMsg,
+          nome: dataUser?.user?.nome,
+          sobrenome: dataUser?.user?.sobrenome,
+        },
         idUserMsg: dataUser?.user?.id,
+        idPerfil: data._id,
       };
 
       setMensagens((prevMensagens) => [...prevMensagens, msgObj]);
