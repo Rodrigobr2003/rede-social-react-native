@@ -69,6 +69,10 @@ exports.comentar = async (req, res) => {
 
 async function enviarNotf(req) {
   try {
+    if (req.body.idUser === req.body.idUserMsg) {
+      return;
+    }
+
     const user = new User(req.body);
 
     user.enviarNotificacao();
