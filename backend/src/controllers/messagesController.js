@@ -12,7 +12,7 @@ exports.salvaMensagens = async (req, res) => {
 
   const idUser = req.session.user.id;
 
-  const mensagem = new Mensagem(req.body.message);
+  const mensagem = new Mensagem(req.body);
 
   await mensagem.registrarMensagem(req.body.chatRoom, idUser);
 
@@ -69,8 +69,6 @@ exports.comentar = async (req, res) => {
 
 async function enviarNotf(req) {
   try {
-    console.log(req.body);
-
     const user = new User(req.body);
 
     user.enviarNotificacao();

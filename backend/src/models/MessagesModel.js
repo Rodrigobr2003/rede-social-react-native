@@ -53,9 +53,9 @@ class Mensagem {
           $addToSet: {
             mensagem: [
               {
-                texto: this.body.texto,
+                texto: this.body.message.texto,
                 idUser: idUser,
-                tempo: this.body.tempo,
+                tempo: this.body.message.tempo,
                 nome: this.body.nome || "",
                 sobrenome: this.body.sobrenome || "",
               },
@@ -69,9 +69,9 @@ class Mensagem {
         chatRoom: room,
         mensagem: [
           {
-            texto: this.body.texto,
+            texto: this.body.message.texto,
             idUser: idUser,
-            tempo: this.body.tempo,
+            tempo: this.body.message.tempo,
             nome: this.body.nome || "",
             sobrenome: this.body.sobrenome || "",
           },
@@ -132,8 +132,6 @@ class Mensagem {
       },
       { new: true }
     ).exec();
-
-    console.log(curtida);
 
     return curtida;
   }
