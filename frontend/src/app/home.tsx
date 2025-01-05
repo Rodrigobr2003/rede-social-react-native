@@ -44,6 +44,8 @@ export default function Home() {
   >([]);
 
   async function publicarMensagem(txtMsg: string) {
+    const momento = moment().format("DD/MM HH:mm");
+
     try {
       const msgObj = {
         chatRoom: room,
@@ -51,7 +53,7 @@ export default function Home() {
         idUserMsg: dataUser?.user?.id,
         nome: dataUser?.user?.nome || "",
         sobrenome: dataUser?.user?.sobrenome || "",
-        data: "",
+        data: momento,
         curtidas: [],
         comentarios: [],
       };
@@ -188,13 +190,15 @@ export default function Home() {
     data: any,
     msg: any
   ) {
+    const momento = moment().format("DD/MM HH:mm");
+
     const msgObj = {
       chatRoom: room,
       message: { texto: txtMsg },
       idUserMsg: dataUser?.user?.id,
       nome: dataUser?.user?.nome || "",
       sobrenome: dataUser?.user?.sobrenome || "",
-      data: "",
+      data: momento,
       curtidas: [],
       comentarios: [],
       isShared: {
