@@ -42,7 +42,7 @@ export default function TelaPesquisa() {
           key={index}
           style={styles.profileSec}
           onTouchStart={() => {
-            navegarPerfilProcurado(element.nome, element.sobrenome);
+            navegarPerfilProcurado(element.item.nome, element.item.sobrenome);
           }}
         >
           <Ionicons
@@ -51,7 +51,7 @@ export default function TelaPesquisa() {
             style={{ width: "20%", paddingHorizontal: 10 }}
           />
           <Text style={styles.nomeUser}>
-            {element.nome + " " + element.sobrenome}
+            {element.item.nome + " " + element.item.sobrenome}
           </Text>
           <Ionicons
             name="ellipsis-horizontal"

@@ -1,3 +1,4 @@
+const Fuse = require("fuse.js");
 const User = require("../models/UserModel");
 
 exports.cadastrarUsuario = async (req, res) => {
@@ -61,11 +62,18 @@ exports.pesquisarPerfil = async (req, res) => {
   try {
     const txtInput = req.params.nomepesquisado;
 
-    //ALTERAR TRATAMENTO TXT NA PESQUISA!!!!
-
     const user = new User(req.body);
 
-    const pesquisa = await user.pesquisarPerfil(txtInput);
+    const usuarios = await user.pesquisarPerfil(txtInput);
+
+    const options = {
+      keys: ["nome"],
+      threshold: 0.3,
+    };
+
+    const fuse = new Fuse(usuarios, options);
+
+    const pesquisa = fuse.search(txtInput);
 
     res.send(pesquisa);
   } catch (error) {
