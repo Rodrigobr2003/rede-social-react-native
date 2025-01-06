@@ -34,8 +34,19 @@ export default function ModalCadastro({
   });
 
   const cadastrarUsuario = async (formData: any) => {
+    setVisibleModCad(false);
+
+    reset({
+      nome: "",
+      sobrenome: "",
+      email: "",
+      senha: "",
+      data: "",
+      genero: "",
+    });
+
     try {
-      const request = await fetch("http://10.0.2.2:3008/registrar", {
+      await fetch("http://10.0.2.2:3008/registrar", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -43,8 +54,6 @@ export default function ModalCadastro({
         },
         body: JSON.stringify(formData),
       });
-
-      await request.json();
     } catch (error) {
       console.log("Erro ao enviar dados para cadastro: ", error);
     }
@@ -203,17 +212,9 @@ export default function ModalCadastro({
 
           <Pressable
             style={styles.cadBtn}
-            onPress={() => {
-              return setVisibleModCad(false);
-            }}
+            onPress={handleSubmit(cadastrarUsuario)}
           >
-            <Text
-              style={{ textAlign: "center", fontSize: 18 }}
-              onPress={() => {
-                handleSubmit(cadastrarUsuario);
-                setVisibleModCad(false);
-              }}
-            >
+            <Text style={{ textAlign: "center", fontSize: 18 }}>
               Cadastre-se
             </Text>
           </Pressable>
