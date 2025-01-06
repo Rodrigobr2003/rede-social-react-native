@@ -27,6 +27,10 @@ export default function Header({ display }: { display: any }) {
 
   async function pesquisarPerfil(perfilPesq: string) {
     try {
+      if (perfilPesq == "") {
+        return setSearchResults([]);
+      }
+
       const response = await fetch(
         `http://10.0.2.2:3008/pesquisarPerfil/${perfilPesq}`,
         {
