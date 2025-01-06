@@ -40,6 +40,16 @@ class User {
 
       const user = await UserModel.findOne({ email: this.body.email });
 
+      if (user == null) {
+        this.errors.push("Usuário não existe");
+        return;
+      }
+
+      if (!bcrypt.compareSync(this.body.senha, user.senha)) {
+        this.errors.push("Senha incorreta");
+        return;
+      }
+
       const userSec = {
         id: user._id,
         nome: user.nome,
@@ -52,16 +62,6 @@ class User {
       };
 
       req.session.user = userSec;
-
-      if (user == null) {
-        this.errors.push("Usuário não existe");
-        return;
-      }
-
-      if (!bcrypt.compareSync(this.body.senha, user.senha)) {
-        this.errors.push("Senha incorreta");
-        return;
-      }
     } catch (error) {
       console.log("Erro ao logar usuário: " + error);
     }
