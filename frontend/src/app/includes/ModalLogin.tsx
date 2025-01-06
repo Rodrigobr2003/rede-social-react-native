@@ -29,6 +29,7 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(loginSchema),
@@ -46,7 +47,6 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
       });
 
       const data = await response.json();
-      console.log("Resposta do servidor:", data);
 
       if (response.ok) {
         if (fetchUserData) {
@@ -56,6 +56,18 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
         router.navigate("/home");
       } else {
         console.log("Erro no login: ", data.message);
+
+        if (data.message[0].includes("Senha")) {
+          setError("senha", {
+            type: "manual",
+            message: data.message,
+          });
+        } else {
+          setError("email", {
+            type: "manual",
+            message: data.message,
+          });
+        }
       }
     } catch (error) {
       console.log("Erro ao enviar dados para login: " + error);

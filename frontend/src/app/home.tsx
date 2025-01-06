@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
   feedPerfil: {
     marginTop: 30,
     marginBottom: 40,
-    width: 300,
+    width: 350,
   },
 
   topFeedInput: {

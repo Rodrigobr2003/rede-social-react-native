@@ -12,10 +12,24 @@ import {
   ScrollView,
 } from "react-native";
 import { UserContext } from "./includes/UserProvider";
+import React from "react";
 
 export default function PerfilProcurado() {
   const route = useRoute();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<
+    {
+      __v: 0;
+      _id: string;
+      amigos: [];
+      data: string;
+      descricao: string;
+      email: string;
+      genero: string;
+      nome: string;
+      notificacoes: [];
+      sobrenome: string;
+    }[]
+  >([]);
   const dataUser = useContext(UserContext);
 
   useEffect(() => {
@@ -35,6 +49,44 @@ export default function PerfilProcurado() {
     } else {
       return `${data.amigos.length} amigos`;
     }
+  };
+
+  const amigo = () => {
+    return (
+      <>
+        {data?.amigos.map((obj: any) => {
+          if (obj.id === dataUser?.user?.id) {
+            return (
+              <Pressable
+                key={obj.id}
+                style={styles.btnInteract}
+                onPress={adicionarAmigo}
+              >
+                <Ionicons
+                  style={{ textAlign: "center", color: "#fff" }}
+                  name="person-remove"
+                  size={23}
+                />
+              </Pressable>
+            );
+          } else {
+            return (
+              <Pressable
+                key={obj.id}
+                style={styles.btnInteract}
+                onPress={adicionarAmigo}
+              >
+                <Ionicons
+                  style={{ textAlign: "center", color: "#fff" }}
+                  name="person-add"
+                  size={23}
+                />
+              </Pressable>
+            );
+          }
+        })}
+      </>
+    );
   };
 
   async function adicionarAmigo() {
@@ -109,13 +161,7 @@ export default function PerfilProcurado() {
               </View>
 
               <View style={styles.interact}>
-                <Pressable style={styles.btnInteract} onPress={adicionarAmigo}>
-                  <Ionicons
-                    style={{ textAlign: "center", color: "#fff" }}
-                    name="person-add"
-                    size={23}
-                  ></Ionicons>
-                </Pressable>
+                {amigo()}
 
                 <Pressable
                   style={styles.btnInteract}
