@@ -194,6 +194,15 @@ class Mensagem {
 
     return comment;
   }
+
+  async excluirPubli() {
+    const message = await MensagemModel.findOneAndUpdate(
+      { chatRoom: this.body.room },
+      { $pull: { mensagem: { _id: this.body.idMensagem } } },
+      { new: true }
+    );
+    return message;
+  }
 }
 
 module.exports = Mensagem;

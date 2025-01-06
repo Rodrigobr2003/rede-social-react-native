@@ -80,3 +80,13 @@ async function enviarNotf(req) {
     console.log("Erro ao enviar notificação: ", error);
   }
 }
+
+exports.excluirPubli = async (req, res) => {
+  try {
+    const mensagem = new Mensagem(req.body);
+
+    res.send(await mensagem.excluirPubli());
+  } catch (error) {
+    console.log("Erro ao excluir publicação: ", error);
+  }
+};

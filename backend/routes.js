@@ -28,5 +28,6 @@ routes.put("/curtirMensagem", MessagesController.curtirMensagem);
 routes.put("/descurtirMensagem", MessagesController.descurtirMensagem);
 routes.post("/compartilharMensagem", MessagesController.compartilharMensagem);
 routes.put("/comentar", MessagesController.comentar);
+routes.put("/excluirPubli", MessagesController.excluirPubli);
 
 module.exports = routes;

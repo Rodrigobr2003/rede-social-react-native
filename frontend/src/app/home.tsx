@@ -283,6 +283,43 @@ export default function Home() {
     setMensagens(mensagensFormatadas);
   }
 
+  async function excluirPubli(idMsg: any) {
+    const response = await fetch("http://10.0.2.2:3008/excluirPubli", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        room: room,
+        idMensagem: idMsg,
+      }),
+    });
+
+    const mensagensCarregadas = await response.json();
+    const mensagensFormatadas = mensagensCarregadas.mensagem.map(
+      (mensagem: any) => ({
+        chatRoom: room,
+        message: { texto: mensagem.texto },
+        data: mensagem.tempo,
+        nome: mensagem.nome,
+        sobrenome: mensagem.sobrenome,
+        idUserMsg: mensagem.idUser,
+        curtidas: mensagem.curtidas,
+        comentarios: mensagem.comentarios,
+        idMsg: mensagem._id,
+        isShared: {
+          nome: "",
+          sobrenome: "",
+          texto: "",
+          data: "",
+        },
+      })
+    );
+
+    setMensagens(mensagensFormatadas);
+  }
+
   useEffect(() => {
     carregaMensagem();
   }, []);
@@ -421,6 +458,23 @@ export default function Home() {
               }
             };
 
+            const isYourPost = () => {
+              if (msg.idUserMsg === dataUser?.user?.id) {
+                return (
+                  <Ionicons
+                    name="trash"
+                    size={25}
+                    style={{
+                      marginRight: 30,
+                    }}
+                    onPress={() => {
+                      excluirPubli(msg.idMsg);
+                    }}
+                  ></Ionicons>
+                );
+              }
+            };
+
             const foiCurtido = () => {
               const isCurtido = msg.curtidas.some(
                 (curtida) => curtida.idUser === dataUser?.user?.id
@@ -533,7 +587,13 @@ export default function Home() {
                       style={{ marginVertical: 5 }}
                     ></Ionicons>
 
-                    <View style={{ width: "80%" }}>
+                    <View
+                      style={
+                        msg.idUserMsg == dataUser?.user?.id
+                          ? { width: "70%", marginLeft: 10 }
+                          : { width: "80%" }
+                      }
+                    >
                       <Text style={{ fontSize: 22, fontWeight: "600" }}>
                         {msg.nome} {msg.sobrenome}
                       </Text>
@@ -542,6 +602,8 @@ export default function Home() {
                         <Text style={styles.textoPequeno}>{msg.data}</Text>
                       </View>
                     </View>
+
+                    {isYourPost()}
                   </View>
 
                   {isShared()}
