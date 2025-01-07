@@ -52,6 +52,10 @@ export default function PerfilProcurado() {
   };
 
   const amigo = () => {
+    while (data.length == 0) {
+      return;
+    }
+
     return (
       <>
         {data?.amigos.map((obj: any) => {
