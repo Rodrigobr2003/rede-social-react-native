@@ -135,6 +135,8 @@ export default function Notificacoes() {
 
     const dado = await response.json();
     setData(dado);
+
+    user?.setUser(dado);
     user?.fetchUserData();
   }
 

@@ -43,12 +43,9 @@ export function UserProvider({ children }: UserProviderProps) {
 
       const data = await response.json();
 
-      if (user != null) {
-        return setUser(user);
-      }
-
       if (data) {
-        return setUser(data);
+        setUser(data);
+        console.log("user:", user);
       } else {
         return fetchUserData();
       }
