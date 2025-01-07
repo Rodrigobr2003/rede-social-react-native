@@ -15,6 +15,7 @@ interface UserContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   fetchUserData: () => Promise<void>;
+  setUserNull: () => Promise<void>;
 }
 
 export const UserContext = createContext<UserContextType | null>(null);
@@ -27,6 +28,8 @@ export function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
   async function fetchUserData() {
+    console.log("userprov:", user);
+
     try {
       const response = await fetch("http://10.0.2.2:3008/getUserData", {
         method: "GET",
@@ -42,6 +45,10 @@ export function UserProvider({ children }: UserProviderProps) {
 
       const data = await response.json();
 
+      if (user != null) {
+        return setUser(user);
+      }
+
       if (data) {
         return setUser(data);
       } else {
@@ -52,8 +59,12 @@ export function UserProvider({ children }: UserProviderProps) {
     }
   }
 
+  function setUserNull() {
+    setUser(null);
+  }
+
   return (
-    <UserContext.Provider value={{ user, setUser, fetchUserData }}>
+    <UserContext.Provider value={{ user, setUser, fetchUserData, setUserNull }}>
       {children}
     </UserContext.Provider>
   );

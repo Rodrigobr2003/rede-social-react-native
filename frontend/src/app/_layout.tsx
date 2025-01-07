@@ -25,11 +25,10 @@ export default function Layout() {
   return (
     <>
       <SearchProvider>
-        <Header
-          display={headerVisible ? styles.visibleHeader : styles.hiddenHeader}
-        ></Header>
-
         <UserProvider>
+          <Header
+            display={headerVisible ? styles.visibleHeader : styles.hiddenHeader}
+          ></Header>
           <Stack>
             <Stack.Screen
               name="index"

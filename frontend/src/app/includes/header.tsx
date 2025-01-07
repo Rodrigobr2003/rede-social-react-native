@@ -5,9 +5,11 @@ import { useContext, useState } from "react";
 import TelaPesquisa from "@/telaPesquisa";
 import React from "react";
 import { SearchContext } from "./SearchProvider";
+import { UserContext } from "./UserProvider";
 
 export default function Header({ display }: { display: any }) {
   const searchContext = useContext(SearchContext);
+  const dataUser = useContext(UserContext);
   if (!searchContext) {
     throw new Error("SearchContext = null");
   }
@@ -62,6 +64,9 @@ export default function Header({ display }: { display: any }) {
       });
 
       if (response.ok) {
+        dataUser?.setUser(null);
+        dataUser?.setUserNull();
+
         router.navigate("/");
         closeNav();
       }
