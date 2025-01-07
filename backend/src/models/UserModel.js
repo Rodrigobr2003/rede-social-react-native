@@ -192,6 +192,18 @@ class User {
       { new: true }
     );
   }
+
+  async salvarDescricao() {
+    const user = await UserModel.findByIdAndUpdate(
+      this.body.id,
+      {
+        descricao: this.body.desc,
+      },
+      { senha: 0 }
+    );
+
+    return user;
+  }
 }
 
 module.exports = User;

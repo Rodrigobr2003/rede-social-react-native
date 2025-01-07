@@ -168,3 +168,9 @@ exports.removerAmigo = async (req, res) => {
 
   res.send(newUser);
 };
+
+exports.salvarDescricao = async (req, res) => {
+  const user = new User(req.body);
+
+  res.send(await user.salvarDescricao());
+};

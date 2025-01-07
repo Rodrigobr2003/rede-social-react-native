@@ -20,6 +20,7 @@ routes.post("/enviarNotificacao", UserController.enviarNotificacao);
 routes.put("/negarNotificacao", UserController.negarNotificacao);
 routes.put("/aceitarNotificacao", UserController.aceitarNotificacao);
 routes.put("/removerAmigo", UserController.removerAmigo);
+routes.put("/salvarDesc", UserController.salvarDescricao);
 
 //Rotas mensagens
 routes.post("/salvaMensagens", MessagesController.salvaMensagens);

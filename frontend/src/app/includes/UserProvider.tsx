@@ -6,7 +6,7 @@ interface User {
   sobrenome: string;
   email: string;
   genero: string;
-  descicao: string;
+  descricao: string;
   amigos: Object[];
   notificacoes: Object[];
 }

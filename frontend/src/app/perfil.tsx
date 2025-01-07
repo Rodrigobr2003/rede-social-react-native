@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
+import { useContext, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -14,25 +14,76 @@ import { UserContext } from "./includes/UserProvider";
 export default function Perfil() {
   const data = useContext(UserContext); //DADOS DO USER
 
+  const [user, setUser] = useState(data?.user);
+
+  const [dispConfirm, setDispConfirm] = useState(false);
+  const [desc, setDesc] = useState(user?.descricao);
+  const textInputRef = useRef(null);
+
   let descricao = null;
 
-  if ((data?.user?.descicao || "").length <= 0) {
+  if ((user?.descricao ?? "").length <= 0) {
     descricao = (
       <TextInput
+        ref={textInputRef}
         placeholder="Adicionar descrição"
         placeholderTextColor={"#000"}
-        style={{ fontSize: 15 }}
+        style={{
+          fontSize: 15,
+          width: "85%",
+          marginHorizontal: 10,
+        }}
+        onFocus={() => {
+          setDispConfirm(true);
+        }}
+        onBlur={() => setDispConfirm(false)}
+        onChangeText={(txt) => {
+          setDesc(txt);
+        }}
       ></TextInput>
     );
   } else {
     descricao = (
       <TextInput
-        placeholder={data?.user?.descicao}
+        ref={textInputRef}
+        placeholder={user?.descricao}
+        value={desc}
         placeholderTextColor={"#000"}
-        style={{ fontSize: 15 }}
+        style={{
+          fontSize: 15,
+          width: "85%",
+          marginHorizontal: 10,
+        }}
+        onFocus={() => {
+          setDispConfirm(true);
+        }}
+        onBlur={() => setDispConfirm(false)}
+        onChangeText={(txt) => {
+          setDesc(txt);
+        }}
       ></TextInput>
     );
   }
+
+  const salvarDesc = async () => {
+    const response = await fetch("http://10.0.2.2:3008/salvarDesc", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ id: user?.id, desc: desc }),
+    });
+
+    const dados = await response.json();
+
+    setUser(dados);
+    data?.setUser(dados);
+    data?.fetchUserData();
+
+    setDispConfirm(false);
+    textInputRef.current.blur();
+  };
 
   return (
     <View style={styles.feedDefault}>
@@ -68,7 +119,7 @@ export default function Perfil() {
                   styles.userText,
                 ]}
               >
-                {data?.user?.nome} {data?.user?.sobrenome}
+                {user?.nome} {user?.sobrenome}
               </Text>
 
               <Text
@@ -79,13 +130,22 @@ export default function Perfil() {
                   styles.userText,
                 ]}
               >
-                {data?.user?.amigos.length} amigos
+                {user?.amigos.length} amigos
               </Text>
 
               <View style={styles.desc}>
                 <Ionicons name="pencil" size={20}></Ionicons>
 
                 {descricao}
+
+                <Ionicons
+                  name="send"
+                  size={20}
+                  style={
+                    dispConfirm ? { display: "flex" } : { display: "none" }
+                  }
+                  onPress={salvarDesc}
+                ></Ionicons>
               </View>
             </View>
           </View>
