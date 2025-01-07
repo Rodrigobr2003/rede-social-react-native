@@ -160,7 +160,7 @@ export default function PerfilProcurado() {
                     width: "65%",
                   }}
                 >
-                  Descrição do perfil...
+                  {data?.descricao}
                 </Text>
               </View>
 
