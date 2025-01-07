@@ -67,6 +67,8 @@ export default function Header({ display }: { display: any }) {
         dataUser?.setUser(null);
         dataUser?.setUserNull();
 
+        setSearchResults([]);
+
         router.navigate("/");
         closeNav();
       }
