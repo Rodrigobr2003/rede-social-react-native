@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { UserContext } from "./includes/UserProvider";
+import { router } from "expo-router";
 
 export default function Amigos() {
   const user = useContext(UserContext);
@@ -30,6 +31,31 @@ export default function Amigos() {
     user?.fetchUserData();
   }
 
+  async function navegarPerfilProcurado(nome: string, sobrenome: string) {
+    try {
+      const response = await fetch(
+        `http://10.0.2.2:3008/pesquisarPerfil/${nome}/${sobrenome}`,
+        {
+          method: "GET",
+          mode: "cors",
+        }
+      );
+
+      const dado = await response.json();
+
+      if (data?.user?.id === dado._id) {
+        router.navigate("/perfil");
+      } else {
+        router.push({
+          pathname: "/perfilProcurado",
+          params: { data: JSON.stringify(dado) },
+        });
+      }
+    } catch (error) {
+      console.log("Erro ao enviar dados para buscar perfil : " + error);
+    }
+  }
+
   if ((data?.user?.amigos || "").length <= 0) {
     amigos = (
       <Text style={{ fontSize: 17, marginTop: 10 }}>
@@ -40,14 +66,25 @@ export default function Amigos() {
     data?.user?.amigos.forEach((amigo: any) => {
       amigos = (
         <Pressable style={styles.btnAmigo}>
-          <Ionicons
-            name="person"
-            size={40}
-            style={{ marginVertical: 5, marginHorizontal: 15 }}
-          ></Ionicons>
-          <Text style={{ fontSize: 17 }}>
-            {amigo.nome} {amigo.sobrenome}
-          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: "85%",
+            }}
+            onTouchStart={() => {
+              navegarPerfilProcurado(amigo.nome, amigo.sobrenome);
+            }}
+          >
+            <Ionicons
+              name="person"
+              size={40}
+              style={{ marginVertical: 5, marginHorizontal: 15 }}
+            ></Ionicons>
+            <Text style={{ fontSize: 17 }}>
+              {amigo.nome} {amigo.sobrenome}
+            </Text>
+          </View>
 
           <Ionicons
             name="trash-outline"
