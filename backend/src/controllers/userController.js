@@ -67,8 +67,8 @@ exports.pesquisarPerfil = async (req, res) => {
     const usuarios = await user.pesquisarPerfil(txtInput);
 
     const options = {
-      keys: ["nome"],
-      threshold: 0.3,
+      keys: ["nome", "sobrenome"],
+      threshold: 0.5,
     };
 
     const fuse = new Fuse(usuarios, options);

@@ -88,9 +88,14 @@ class User {
   }
 
   async pesquisarPerfil(txtInput) {
-    const user = UserModel.find(
-      { nome: { $regex: new RegExp(`^${txtInput}`, "i") } },
-      { senha: 0 }
+    const user = await UserModel.find(
+      {
+        $or: [
+          { nome: { $regex: new RegExp(`^${txtInput}`, "i") } },
+          { sobrenome: { $regex: new RegExp(`^${txtInput}`, "i") } },
+        ],
+      },
+      { senha: 0 } // Exclui o campo senha do resultado
     ).limit(50);
     return user;
   }
