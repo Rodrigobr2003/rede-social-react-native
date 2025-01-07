@@ -85,6 +85,8 @@ export default function PerfilProcurado() {
                 />
               </Pressable>
             );
+          } else {
+            return null;
           }
         })}
       </>
