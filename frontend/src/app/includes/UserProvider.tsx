@@ -28,8 +28,6 @@ export function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
   async function fetchUserData() {
-    console.log("userprov:", user);
-
     try {
       const response = await fetch("http://10.0.2.2:3008/getUserData", {
         method: "GET",
@@ -59,8 +57,9 @@ export function UserProvider({ children }: UserProviderProps) {
     }
   }
 
-  function setUserNull() {
+  async function setUserNull() {
     setUser(null);
+    return Promise.resolve();
   }
 
   return (
