@@ -56,24 +56,22 @@ export default function PerfilProcurado() {
       return;
     }
 
+    if (data.amigos.length == 0) {
+      return (
+        <Pressable style={styles.btnInteract} onPress={adicionarAmigo}>
+          <Ionicons
+            style={{ textAlign: "center", color: "#fff" }}
+            name="person-add"
+            size={23}
+          />
+        </Pressable>
+      );
+    }
+
     return (
       <>
         {data?.amigos.map((obj: any) => {
-          if (obj.id === dataUser?.user?.id) {
-            return (
-              <Pressable
-                key={obj.id}
-                style={styles.btnInteract}
-                onPress={adicionarAmigo}
-              >
-                <Ionicons
-                  style={{ textAlign: "center", color: "#fff" }}
-                  name="person-remove"
-                  size={23}
-                />
-              </Pressable>
-            );
-          } else {
+          if (obj.id !== dataUser?.user?.id) {
             return (
               <Pressable
                 key={obj.id}

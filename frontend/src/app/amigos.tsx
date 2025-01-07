@@ -25,6 +25,8 @@ export default function Amigos() {
 
     const dados = await response.json();
     setData(dados);
+
+    user?.setUser(dados);
     user?.fetchUserData();
   }
 
