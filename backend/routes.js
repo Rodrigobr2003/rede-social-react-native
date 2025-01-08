@@ -4,6 +4,8 @@ const routes = express.Router();
 //Requires
 const UserController = require("./src/controllers/userController");
 const MessagesController = require("./src/controllers/messagesController");
+const PicturesController = require("./src/controllers/pictureController");
+const upload = require("./src/config/multer");
 
 //Rotas Usuário
 routes.get("/");
@@ -30,5 +32,8 @@ routes.put("/descurtirMensagem", MessagesController.descurtirMensagem);
 routes.post("/compartilharMensagem", MessagesController.compartilharMensagem);
 routes.put("/comentar", MessagesController.comentar);
 routes.put("/excluirPubli", MessagesController.excluirPubli);
+
+//Rotas fotos
+routes.post("/salvarImagem", upload.single("file"), PicturesController.create);
 
 module.exports = routes;
