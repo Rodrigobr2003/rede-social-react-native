@@ -7,6 +7,7 @@ const MongoStore = require("connect-mongo");
 const express = require("express");
 const session = require("express-session");
 const socketio = require("socket.io");
+const bodyParser = require("body-parser");
 
 const app = express();
 const server = http.createServer(app);
@@ -70,6 +71,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(sessionOptions);
+app.use(bodyParser.json({ limit: "10mb" }));
 app.use(routes);
 
 app.post("/registrar", (req, res) => {

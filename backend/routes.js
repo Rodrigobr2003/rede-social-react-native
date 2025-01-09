@@ -5,7 +5,6 @@ const routes = express.Router();
 const UserController = require("./src/controllers/userController");
 const MessagesController = require("./src/controllers/messagesController");
 const PicturesController = require("./src/controllers/pictureController");
-const upload = require("./src/config/multer");
 
 //Rotas Usuário
 routes.get("/");
@@ -34,6 +33,6 @@ routes.put("/comentar", MessagesController.comentar);
 routes.put("/excluirPubli", MessagesController.excluirPubli);
 
 //Rotas fotos
-routes.post("/salvarImagem", upload.single("file"), PicturesController.create);
+routes.post("/salvarImagem", PicturesController.create);
 
 module.exports = routes;

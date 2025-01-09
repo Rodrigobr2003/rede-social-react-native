@@ -8,13 +8,18 @@ import {
   Text,
   TextInput,
   ScrollView,
+  Alert,
 } from "react-native";
+import { Platform } from "react-native";
 import { UserContext } from "./includes/UserProvider";
+
+import * as ImagePicker from "expo-image-picker";
 
 export default function Perfil() {
   const data = useContext(UserContext); //DADOS DO USER
 
   const [user, setUser] = useState(data?.user);
+  const [image, setImage] = useState("");
 
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
@@ -85,6 +90,82 @@ export default function Perfil() {
     textInputRef.current.blur();
   };
 
+  const uploadImage = async () => {
+    try {
+      let result = {};
+
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      Alert.alert(
+        "Confirmação",
+        "Você deseja adicionar esta foto como foto de perfil?",
+        [
+          {
+            text: "Não",
+            style: "cancel",
+          },
+          {
+            text: "Sim",
+            onPress: () => salvarFoto(),
+          },
+        ],
+        { cancelable: true }
+      );
+
+      async function salvarFoto() {
+        const uri = result.assets[0].uri;
+
+        try {
+          const response = await fetch(uri);
+          const blob = await response.blob();
+
+          const reader = new FileReader();
+
+          const base64 = await new Promise((resolve, reject) => {
+            reader.onload = () => {
+              resolve(reader.result?.toString());
+            };
+            reader.onerror = (error) => {
+              reject(error);
+            };
+            reader.readAsDataURL(blob);
+          });
+
+          setImage(base64 as string);
+
+          await fetch("http://10.0.2.2:3008/salvarImagem", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "access-control-allow-origin": "*",
+            },
+            body: JSON.stringify({
+              idUser: data?.user?.id,
+              base64: image,
+              type: 1,
+            }),
+          });
+
+          reader.onerror = (error) => {
+            console.log("Erro:", error);
+          };
+
+          reader.readAsDataURL(blob);
+        } catch (error) {
+          console.log("Erro ao carregar imagem:", error);
+        }
+      }
+    } catch (error) {
+      console.log("Erro imagem no front: ", error);
+    }
+  };
+
   return (
     <View style={styles.feedDefault}>
       <View style={styles.topFeedPerfil}>
@@ -100,13 +181,23 @@ export default function Perfil() {
             </Text>
           </Pressable>
 
-          <Ionicons
-            name="person"
-            size={60}
-            style={styles.profilePic}
-          ></Ionicons>
+          <View style={styles.container}>
+            <Image
+              style={styles.profilePic}
+              source={
+                image && typeof image === "string" && image.length > 0
+                  ? { uri: image }
+                  : require("../../assets/images/default-avatar.png")
+              }
+            />
+          </View>
 
-          <Ionicons name="camera" size={25} style={styles.changePic}></Ionicons>
+          <Ionicons
+            name="camera"
+            size={25}
+            style={styles.changePic}
+            onPress={uploadImage}
+          ></Ionicons>
 
           <View>
             <View style={styles.userInfo}>
@@ -243,15 +334,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   profilePic: {
     position: "absolute",
     backgroundColor: "#fff",
-    width: "25%",
     padding: 15,
     borderRadius: 180,
-    textAlign: "center",
-    bottom: -30,
-    left: 40,
+    bottom: 0,
+    left: 45,
+    width: 100,
+    height: 100,
+    resizeMode: "cover",
   },
 
   changePic: {
