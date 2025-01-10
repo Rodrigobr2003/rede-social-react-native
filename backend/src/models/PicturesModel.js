@@ -50,6 +50,16 @@ class Pictures {
       );
     }
   }
+
+  async getUserPhotos(req) {
+    const userPhotos = await PicturesModel.findOne({
+      idUser: this.body.user.id,
+    });
+
+    if (!userPhotos) req.session.user.userPhotos = {};
+
+    return (req.session.user.userPhotos = userPhotos);
+  }
 }
 
 module.exports = Pictures;

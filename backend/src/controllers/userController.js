@@ -1,5 +1,6 @@
 const Fuse = require("fuse.js");
 const User = require("../models/UserModel");
+const Picture = require("../models/PicturesModel");
 
 exports.cadastrarUsuario = async (req, res) => {
   try {
@@ -20,6 +21,10 @@ exports.login = async (req, res) => {
     if (user.errors.length > 0) {
       return res.status(400).json({ message: user.errors });
     }
+
+    const picture = new Picture(req.session);
+
+    await picture.getUserPhotos(req);
 
     return res.status(200).json({ message: "Login realizado com sucesso" });
   } catch (error) {
