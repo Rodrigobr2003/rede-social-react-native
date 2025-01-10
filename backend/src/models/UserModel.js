@@ -11,7 +11,23 @@ const userSchema = new mongoose.Schema({
   descricao: { type: String, required: false, default: "" },
   amigos: { type: Array, required: false, default: [] },
   notificacoes: { type: Array, required: false, default: [] },
+  picturesConfig: {
+    profilePicture: {
+      image: { type: String, required: false, default: "" },
+    },
+    bgPicture: {
+      image: { type: String, required: false, default: "" },
+    },
+    pictures: [
+      {
+        image: { type: String, required: false },
+      },
+    ],
+  },
 });
+//tipo 1 -> profpic
+//tipo 2 -> genpics
+//tipo 3 -> bgpic
 
 const UserModel = mongoose.model("Usuario", userSchema);
 
@@ -59,6 +75,7 @@ class User {
         descricao: user.descricao,
         amigos: user.amigos,
         notificacoes: user.notificacoes,
+        picturesConfig: user.picturesConfig,
       };
 
       req.session.user = userSec;
@@ -203,6 +220,44 @@ class User {
     );
 
     return user;
+  }
+
+  async salvarImagem() {
+    let images = null;
+
+    if (this.body.type == 1) {
+      images = await UserModel.findOneAndUpdate(
+        { _id: this.body.idUser },
+        {
+          $set: {
+            "picturesConfig.profilePicture.image": this.body.base64,
+          },
+        },
+        { new: true }
+      );
+    } else if (this.body.type == 2) {
+      images = await UserModel.findOneAndUpdate(
+        { _id: this.body.idUser },
+        {
+          $addToSet: {
+            "picturesConfig.profilePicture.pictures": this.body.base64,
+          },
+        },
+        { new: true }
+      );
+    } else if (this.body.type == 3) {
+      images = await UserModel.findOneAndUpdate(
+        { _id: this.body.idUser },
+        {
+          $set: {
+            "picturesConfig.profilePicture.bgPicture": this.body.base64,
+          },
+        },
+        { new: true }
+      );
+    }
+
+    return images;
   }
 }
 

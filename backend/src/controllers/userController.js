@@ -1,6 +1,5 @@
 const Fuse = require("fuse.js");
 const User = require("../models/UserModel");
-const Picture = require("../models/PicturesModel");
 
 exports.cadastrarUsuario = async (req, res) => {
   try {
@@ -21,10 +20,6 @@ exports.login = async (req, res) => {
     if (user.errors.length > 0) {
       return res.status(400).json({ message: user.errors });
     }
-
-    const picture = new Picture(req.session);
-
-    await picture.getUserPhotos(req);
 
     return res.status(200).json({ message: "Login realizado com sucesso" });
   } catch (error) {
@@ -54,6 +49,7 @@ exports.getUserData = (req, res) => {
         descricao: req.session.user.descricao,
         amigos: req.session.user.amigos,
         notificacoes: req.session.user.notificacoes,
+        PicturesConfig: req.session.user.picturesConfig,
       };
     }
 
@@ -178,4 +174,14 @@ exports.salvarDescricao = async (req, res) => {
   const user = new User(req.body);
 
   res.send(await user.salvarDescricao());
+};
+
+exports.create = async (req, res) => {
+  try {
+    const imagem = new User(req.body);
+
+    res.send(await imagem.salvarImagem());
+  } catch (error) {
+    console.log("Erro ao salvar imagem: ", error);
+  }
 };

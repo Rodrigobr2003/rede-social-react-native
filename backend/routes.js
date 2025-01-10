@@ -4,7 +4,6 @@ const routes = express.Router();
 //Requires
 const UserController = require("./src/controllers/userController");
 const MessagesController = require("./src/controllers/messagesController");
-const PicturesController = require("./src/controllers/pictureController");
 
 //Rotas Usuário
 routes.get("/");
@@ -33,6 +32,6 @@ routes.put("/comentar", MessagesController.comentar);
 routes.put("/excluirPubli", MessagesController.excluirPubli);
 
 //Rotas fotos
-routes.post("/salvarImagem", PicturesController.create);
+routes.put("/salvarImagem", UserController.create);
 
 module.exports = routes;

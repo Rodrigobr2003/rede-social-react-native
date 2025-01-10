@@ -9,6 +9,19 @@ interface User {
   descricao: string;
   amigos: Object[];
   notificacoes: Object[];
+  PicturesConfig: {
+    profilePicture: {
+      image: String;
+    };
+    bgPicture: {
+      image: String;
+    };
+    pictures: [
+      {
+        image: String;
+      }
+    ];
+  };
 }
 
 interface UserContextType {

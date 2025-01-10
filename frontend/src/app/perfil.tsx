@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,7 +10,6 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { Platform } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 
 import * as ImagePicker from "expo-image-picker";
@@ -18,12 +17,15 @@ import * as ImagePicker from "expo-image-picker";
 export default function Perfil() {
   const data = useContext(UserContext); //DADOS DO USER
 
-  const [user, setUser] = useState(data?.user);
+  const [user, setUser] = useState(null);
   const [image, setImage] = useState("");
 
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
   const textInputRef = useRef(null);
+  useEffect(() => {
+    setUser(data?.user);
+  }, [data]);
 
   let descricao = null;
 
@@ -112,13 +114,13 @@ export default function Perfil() {
           },
           {
             text: "Sim",
-            onPress: () => salvarFoto(),
+            onPress: () => salvarFoto(1),
           },
         ],
         { cancelable: true }
       );
 
-      async function salvarFoto() {
+      async function salvarFoto(typePhoto: number) {
         const uri = result.assets[0].uri;
 
         try {
@@ -139,8 +141,8 @@ export default function Perfil() {
 
           setImage(base64 as string);
 
-          await fetch("http://10.0.2.2:3008/salvarImagem", {
-            method: "POST",
+          const respImage = await fetch("http://10.0.2.2:3008/salvarImagem", {
+            method: "PUT",
             headers: {
               "content-type": "application/json",
               "access-control-allow-origin": "*",
@@ -148,9 +150,45 @@ export default function Perfil() {
             body: JSON.stringify({
               idUser: data?.user?.id,
               base64: image,
-              type: 1,
+              type: typePhoto,
             }),
           });
+
+          const dados = await respImage.json();
+
+          if (typePhoto == 1) {
+            setUser((prevUser) => {
+              if (!prevUser) return null;
+
+              return {
+                ...prevUser,
+                PicturesConfig: {
+                  profilePicture: dados.picturesConfig.profilePicture,
+                },
+              };
+            });
+
+            data?.setUser((prevUser) => {
+              if (!prevUser) return null;
+
+              return {
+                ...prevUser,
+                PicturesConfig: {
+                  profilePicture: {
+                    image: String,
+                  },
+                },
+              };
+            });
+
+            data?.fetchUserData();
+          }
+
+          if (typePhoto == 2) {
+          }
+
+          if (typePhoto == 3) {
+          }
 
           reader.onerror = (error) => {
             console.log("Erro:", error);
@@ -185,8 +223,8 @@ export default function Perfil() {
             <Image
               style={styles.profilePic}
               source={
-                image && typeof image === "string" && image.length > 0
-                  ? { uri: image }
+                user?.PicturesConfig.profilePicture.image
+                  ? { uri: user?.PicturesConfig.profilePicture.image }
                   : require("../../assets/images/default-avatar.png")
               }
             />
