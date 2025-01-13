@@ -71,7 +71,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(sessionOptions);
-app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.json({ limit: "16mb" }));
+app.use(bodyParser.urlencoded({ limit: "16mb", extended: true }));
 app.use(routes);
 
 app.post("/registrar", (req, res) => {
