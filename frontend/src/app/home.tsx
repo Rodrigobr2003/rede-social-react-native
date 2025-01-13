@@ -17,6 +17,7 @@ import React from "react";
 
 import * as ImagePicker from "expo-image-picker";
 import moment from "moment";
+import ModalSentimento from "./includes/ModalSentimentos";
 
 export default function Home() {
   const dataUser = useContext(UserContext); //DADOS DO USER
@@ -25,6 +26,7 @@ export default function Home() {
   const [txtMsg, setTxtMsg] = useState("");
   const [txtCom, setTxtCom] = useState("");
   const [image, setImage] = useState("");
+  const [visibleModSen, setVisibleModSen] = useState(false);
   const room = "feed:1729232020";
 
   const [mensagens, setMensagens] = useState<
@@ -434,6 +436,11 @@ export default function Home() {
 
   return (
     <View style={{ alignItems: "center" }}>
+      <ModalSentimento
+        visibleModSen={visibleModSen}
+        setVisibleModSen={setVisibleModSen}
+      ></ModalSentimento>
+
       <View style={[styles.feedDefault, styles.feedPerfil]}>
         <View
           style={[
@@ -478,7 +485,14 @@ export default function Home() {
         </View>
 
         <View style={styles.bottomFeedPerfil}>
-          <Pressable style={styles.btnAnexo}>
+          <Pressable
+            style={styles.btnAnexo}
+            onPress={() => {
+              alert(
+                "Por conta de limitações no banco de dados, é impossível carregar um vídeo..."
+              );
+            }}
+          >
             <Ionicons name="camera" size={40} color={"#D70040"}></Ionicons>
             <Text style={{ fontSize: 25, paddingLeft: 10 }}>Vídeo</Text>
           </Pressable>
@@ -488,7 +502,10 @@ export default function Home() {
             <Text style={{ fontSize: 25, paddingLeft: 10 }}>Foto</Text>
           </Pressable>
 
-          <Pressable style={styles.btnAnexo}>
+          <Pressable
+            style={styles.btnAnexo}
+            onPress={() => setVisibleModSen(true)}
+          >
             <Ionicons name="happy" size={40} color={"#E7DA41"}></Ionicons>
             <Text style={{ fontSize: 25, paddingLeft: 10 }}>Sentimento</Text>
           </Pressable>
