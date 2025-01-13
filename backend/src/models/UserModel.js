@@ -18,11 +18,7 @@ const userSchema = new mongoose.Schema({
     bgPicture: {
       image: { type: String, required: false, default: "" },
     },
-    pictures: [
-      {
-        image: { type: String, required: false },
-      },
-    ],
+    pictures: [{ type: String, required: false }],
   },
 });
 //tipo 1 -> profpic
@@ -235,7 +231,7 @@ class User {
             "picturesConfig.profilePicture.image": this.body.base64,
           },
         },
-        { new: true }
+        { new: true, projection: { senha: 0 } }
       );
     } else if (this.body.type == 2) {
       images = await UserModel.findOneAndUpdate(
@@ -245,7 +241,7 @@ class User {
             "picturesConfig.pictures": this.body.base64,
           },
         },
-        { new: true }
+        { new: true, projection: { senha: 0 } }
       );
     } else if (this.body.type == 3) {
       images = await UserModel.findOneAndUpdate(
@@ -255,7 +251,7 @@ class User {
             "picturesConfig.bgPicture.image": this.body.base64,
           },
         },
-        { new: true }
+        { new: true, projection: { senha: 0 } }
       );
     }
 

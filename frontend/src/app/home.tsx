@@ -7,12 +7,15 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Alert,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./includes/UserProvider";
 import React from "react";
 
+import * as ImagePicker from "expo-image-picker";
 import moment from "moment";
 
 export default function Home() {
@@ -21,6 +24,7 @@ export default function Home() {
   const [dispCom, setDispCom] = useState(false);
   const [txtMsg, setTxtMsg] = useState("");
   const [txtCom, setTxtCom] = useState("");
+  const [image, setImage] = useState("");
   const room = "feed:1729232020";
 
   const [mensagens, setMensagens] = useState<
@@ -324,6 +328,90 @@ export default function Home() {
     carregaMensagem();
   }, []);
 
+  const uploadImage = async () => {
+    try {
+      let result = {};
+
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      Alert.alert(
+        "Confirmação",
+        "Você deseja adicionar esta foto como foto de perfil?",
+        [
+          {
+            text: "Não",
+            style: "cancel",
+          },
+          {
+            text: "Sim",
+            onPress: () => salvarFoto(),
+          },
+        ],
+        { cancelable: true }
+      );
+
+      if (!result) return;
+
+      async function salvarFoto() {
+        const uri = result.assets[0].uri;
+
+        try {
+          const response = await fetch(uri);
+          const blob = await response.blob();
+
+          const reader = new FileReader();
+
+          const base64 = await new Promise((resolve, reject) => {
+            reader.onload = () => {
+              resolve(reader.result?.toString());
+            };
+            reader.onerror = (error) => {
+              reject(error);
+            };
+            reader.readAsDataURL(blob);
+          });
+
+          setImage(base64 as string);
+
+          const respImage = await fetch("http://10.0.2.2:3008/salvarImagem", {
+            method: "PUT",
+            headers: {
+              "content-type": "application/json",
+              "access-control-allow-origin": "*",
+            },
+            body: JSON.stringify({
+              idUser: dataUser?.user?.id,
+              base64: image,
+              type: 2,
+            }),
+          });
+
+          const dados = await respImage.json();
+
+          const fotoAtual = dados.picturesConfig.pictures.length - 1;
+
+          publicarMensagem(dados.picturesConfig.pictures[fotoAtual]);
+
+          reader.onerror = (error) => {
+            console.log("Erro:", error);
+          };
+
+          reader.readAsDataURL(blob);
+        } catch (error) {
+          console.log("Erro ao carregar imagem:", error);
+        }
+      }
+    } catch (error) {
+      console.log("Erro imagem no front: ", error);
+    }
+  };
+
   return (
     <View style={{ alignItems: "center" }}>
       <View style={[styles.feedDefault, styles.feedPerfil]}>
@@ -375,7 +463,7 @@ export default function Home() {
             <Text style={{ fontSize: 25, paddingLeft: 10 }}>Vídeo</Text>
           </Pressable>
 
-          <Pressable style={styles.btnAnexo}>
+          <Pressable style={styles.btnAnexo} onPress={() => uploadImage()}>
             <Ionicons name="images" size={40} color={"#2e8b57"}></Ionicons>
             <Text style={{ fontSize: 25, paddingLeft: 10 }}>Foto</Text>
           </Pressable>
@@ -399,6 +487,8 @@ export default function Home() {
             let compDisp = null;
 
             const isShared = () => {
+              if (msg.message.texto == undefined) return;
+
               if (msg.message.texto == "") {
                 compDisp = false;
 
@@ -440,7 +530,7 @@ export default function Home() {
                     </Text>
                   </View>
                 );
-              } else {
+              } else if (msg.message.texto.length <= 5000) {
                 compDisp = true;
 
                 return (
@@ -454,6 +544,15 @@ export default function Home() {
                   >
                     {msg.message.texto}
                   </Text>
+                );
+              } else {
+                compDisp = true;
+
+                return (
+                  <Image
+                    source={{ uri: msg.message.texto }}
+                    style={{ width: "100%", height: 300, marginTop: 7 }}
+                  ></Image>
                 );
               }
             };
