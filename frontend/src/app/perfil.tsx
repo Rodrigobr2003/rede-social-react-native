@@ -23,6 +23,7 @@ export default function Perfil() {
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
   const textInputRef = useRef(null);
+
   useEffect(() => {
     setUser(data?.user);
   }, [data]);
@@ -92,7 +93,7 @@ export default function Perfil() {
     textInputRef.current.blur();
   };
 
-  const uploadImage = async () => {
+  const uploadImage = async (typePhoto: number) => {
     try {
       let result = {};
 
@@ -114,13 +115,13 @@ export default function Perfil() {
           },
           {
             text: "Sim",
-            onPress: () => salvarFoto(1),
+            onPress: () => salvarFoto(),
           },
         ],
         { cancelable: true }
       );
 
-      async function salvarFoto(typePhoto: number) {
+      async function salvarFoto() {
         const uri = result.assets[0].uri;
 
         try {
@@ -210,10 +211,19 @@ export default function Perfil() {
         <View style={{ height: "60%" }}>
           <Image
             style={styles.bgTopImage}
-            source={require("../../assets/images/default-image.png")}
+            source={
+              user?.PicturesConfig.profilePicture.image
+                ? { uri: user?.PicturesConfig.bgPicture.image }
+                : require("../../assets/images/default-avatar.png")
+            }
           ></Image>
 
-          <Pressable style={styles.editBtn}>
+          <Pressable
+            style={styles.editBtn}
+            onPress={() => {
+              uploadImage(3);
+            }}
+          >
             <Text style={{ textAlign: "center", color: "#fff", fontSize: 17 }}>
               Editar Foto
             </Text>
@@ -234,7 +244,9 @@ export default function Perfil() {
             name="camera"
             size={25}
             style={styles.changePic}
-            onPress={uploadImage}
+            onPress={() => {
+              uploadImage(1);
+            }}
           ></Ionicons>
 
           <View>

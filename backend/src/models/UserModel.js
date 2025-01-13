@@ -225,6 +225,8 @@ class User {
   async salvarImagem() {
     let images = null;
 
+    if (this.body.base64 == "") return;
+
     if (this.body.type == 1) {
       images = await UserModel.findOneAndUpdate(
         { _id: this.body.idUser },
@@ -240,7 +242,7 @@ class User {
         { _id: this.body.idUser },
         {
           $addToSet: {
-            "picturesConfig.profilePicture.pictures": this.body.base64,
+            "picturesConfig.pictures": this.body.base64,
           },
         },
         { new: true }
@@ -250,7 +252,7 @@ class User {
         { _id: this.body.idUser },
         {
           $set: {
-            "picturesConfig.profilePicture.bgPicture": this.body.base64,
+            "picturesConfig.bgPicture.image": this.body.base64,
           },
         },
         { new: true }
