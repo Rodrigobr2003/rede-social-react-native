@@ -47,6 +47,26 @@ export default function Home() {
     }[]
   >([]);
 
+  const imagemPerfil = (
+    <Image
+      source={
+        dataUser?.user?.PicturesConfig?.profilePicture?.image
+          ? {
+              uri: dataUser.user.PicturesConfig.profilePicture.image,
+            }
+          : require("../../assets/images/default-avatar.png")
+      }
+      style={styles.profilePic}
+    ></Image>
+  );
+
+  const imagemOutros = (
+    <Image
+      source={require("../../assets/images/default-avatar.png")}
+      style={styles.profilePic}
+    ></Image>
+  );
+
   async function publicarMensagem(txtMsg: string) {
     const momento = moment().format("DD/MM HH:mm");
 
@@ -422,7 +442,7 @@ export default function Home() {
             { alignItems: "center" },
           ]}
         >
-          <Ionicons name="person" size={40}></Ionicons>
+          {imagemPerfil}
 
           <View style={styles.topFeedInput}>
             <TextInput
@@ -680,11 +700,7 @@ export default function Home() {
               >
                 <View style={styles.topFeedPerfil}>
                   <View style={styles.msgInfos}>
-                    <Ionicons
-                      name="person"
-                      size={40}
-                      style={{ marginVertical: 5 }}
-                    ></Ionicons>
+                    {isYourPost() ? imagemPerfil : imagemOutros}
 
                     <View
                       style={
@@ -924,6 +940,12 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: "row",
     alignItems: "center",
+  },
+
+  profilePic: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
   },
 
   btnAnexo: {
