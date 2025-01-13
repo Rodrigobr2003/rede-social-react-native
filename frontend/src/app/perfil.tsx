@@ -207,6 +207,43 @@ export default function Perfil() {
     }
   };
 
+  const exibirFotos = () => {
+    if (!data?.user?.PicturesConfig?.pictures) return null;
+
+    const groupedPhotos = data.user.PicturesConfig.pictures.reduce(
+      (result, foto, index) => {
+        if (index % 3 === 0) result.push([]);
+        result[result.length - 1].push(foto);
+        return result;
+      },
+      []
+    );
+
+    return groupedPhotos.map((group, groupIndex) => (
+      <View key={groupIndex} style={styles.row}>
+        {group.map((foto, index) => {
+          return (
+            <TouchableWithoutFeedback
+              key={index}
+              onPress={() => {
+                setVisibleModPho(true);
+              }}
+            >
+              <Image
+                style={styles.imgPosted}
+                source={
+                  foto
+                    ? { uri: foto }
+                    : require("../../assets/images/default-image.png")
+                }
+              />
+            </TouchableWithoutFeedback>
+          );
+        })}
+      </View>
+    ));
+  };
+
   return (
     <View style={styles.feedDefault}>
       <ModalPhoto
@@ -301,110 +338,7 @@ export default function Perfil() {
       </View>
 
       <ScrollView contentContainerStyle={styles.bottomFeedPerfil}>
-        <View style={styles.row}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setVisibleModPho(true);
-            }}
-          >
-            <Image
-              style={styles.imgPosted}
-              source={require("../../assets/images/default-image.png")}
-            />
-          </TouchableWithoutFeedback>
-        </View>
+        {exibirFotos()}
       </ScrollView>
     </View>
   );
