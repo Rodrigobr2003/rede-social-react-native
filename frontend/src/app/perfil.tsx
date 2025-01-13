@@ -9,20 +9,22 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 
 import * as ImagePicker from "expo-image-picker";
+import ModalPhoto from "./includes/ModalPhoto";
 
 export default function Perfil() {
   const data = useContext(UserContext); //DADOS DO USER
 
   const [user, setUser] = useState(null);
   const [image, setImage] = useState("");
-
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
   const textInputRef = useRef(null);
+  const [visibleModPho, setVisibleModPho] = useState(false);
 
   useEffect(() => {
     setUser(data?.user);
@@ -207,6 +209,11 @@ export default function Perfil() {
 
   return (
     <View style={styles.feedDefault}>
+      <ModalPhoto
+        visibleModPho={visibleModPho}
+        setVisibleModPho={setVisibleModPho}
+      ></ModalPhoto>
+
       <View style={styles.topFeedPerfil}>
         <View style={{ height: "60%" }}>
           <Image
@@ -295,54 +302,108 @@ export default function Perfil() {
 
       <ScrollView contentContainerStyle={styles.bottomFeedPerfil}>
         <View style={styles.row}>
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
 
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
 
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
         </View>
 
         <View style={styles.row}>
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
 
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
 
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
         </View>
 
         <View style={styles.row}>
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
 
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
 
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setVisibleModPho(true);
+            }}
+          >
+            <Image
+              style={styles.imgPosted}
+              source={require("../../assets/images/default-image.png")}
+            />
+          </TouchableWithoutFeedback>
         </View>
       </ScrollView>
     </View>
