@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     width: "60%",
+    paddingLeft: 10,
   },
 
   profilePic: {
