@@ -3,13 +3,60 @@ import { useContext } from "react";
 import { Modal, View, Text, Image } from "react-native";
 import { StyleSheet } from "react-native";
 import { UserContext } from "./UserProvider";
+import React from "react";
 
 export default function ModalPhoto({
   visibleModPho,
   setVisibleModPho,
   photo,
+  idUser,
+  nomeUser,
+  sobrenomeUser,
+  photoUser,
 }: any) {
   const data = useContext(UserContext);
+
+  const dadosExibicao = () => {
+    if (idUser == data?.user?.id) {
+      return (
+        <>
+          <Image
+            source={
+              data?.user?.PicturesConfig.profilePicture.image
+                ? {
+                    uri: data?.user?.PicturesConfig.profilePicture.image,
+                  }
+                : require("../../../assets/images/default-avatar.png")
+            }
+            style={styles.profilePic}
+          ></Image>
+
+          <Text style={{ paddingLeft: 5, width: "80%", fontSize: 17 }}>
+            {data?.user?.nome} {data?.user?.sobrenome}
+          </Text>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Image
+            source={
+              photoUser
+                ? {
+                    uri: photoUser,
+                  }
+                : require("../../../assets/images/default-avatar.png")
+            }
+            style={styles.profilePic}
+          ></Image>
+
+          <Text style={{ paddingLeft: 5, width: "75%", fontSize: 17 }}>
+            {nomeUser} {sobrenomeUser}
+          </Text>
+        </>
+      );
+    }
+  };
 
   return (
     <View>
@@ -24,11 +71,7 @@ export default function ModalPhoto({
               marginBottom: 10,
             }}
           >
-            <Ionicons name="person" size={36}></Ionicons>
-
-            <Text style={{ paddingLeft: 5, width: "80%", fontSize: 17 }}>
-              {data?.user?.nome} {data?.user?.sobrenome}
-            </Text>
+            {dadosExibicao()}
 
             <Ionicons
               name="close"
@@ -59,5 +102,10 @@ const styles = StyleSheet.create({
     height: 400,
     borderBottomWidth: 1,
     marginBottom: 30,
+  },
+  profilePic: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
   },
 });

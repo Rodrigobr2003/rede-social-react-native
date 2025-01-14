@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 import React from "react";
+import ModalPhoto from "./includes/ModalPhoto";
 
 export default function PerfilProcurado() {
   const route = useRoute();
@@ -164,14 +165,23 @@ export default function PerfilProcurado() {
 
   return (
     <View style={styles.feedDefault}>
+      <ModalPhoto
+        visibleModPho={visibleModPho}
+        setVisibleModPho={setVisibleModPho}
+        photo={photoSelec}
+        idUser={data?._id}
+        nomeUser={data?.nome}
+        sobrenomeUser={data?.sobrenome}
+        photoUser={data?.picturesConfig?.profilePicture.image}
+      ></ModalPhoto>
       <View style={styles.topFeedPerfil}>
         <View style={{ height: "60%" }}>
           <Image
             style={styles.bgTopImage}
             source={
-              data?.picturesConfig.profilePicture.image
-                ? { uri: data?.picturesConfig.bgPicture.image }
-                : require("../../assets/images/default-avatar.png")
+              data?.picturesConfig?.profilePicture.image
+                ? { uri: data.picturesConfig.bgPicture.image }
+                : require("../../assets/images/default-image.png")
             }
           ></Image>
 
@@ -179,7 +189,7 @@ export default function PerfilProcurado() {
             <Image
               style={styles.profilePic}
               source={
-                data?.picturesConfig.profilePicture.image
+                data?.picturesConfig?.profilePicture.image
                   ? { uri: data?.picturesConfig.profilePicture.image }
                   : require("../../assets/images/default-avatar.png")
               }
