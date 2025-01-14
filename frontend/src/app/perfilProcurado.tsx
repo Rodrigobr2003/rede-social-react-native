@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   ScrollView,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 import React from "react";
@@ -28,8 +29,19 @@ export default function PerfilProcurado() {
       nome: string;
       notificacoes: [];
       sobrenome: string;
+      PicturesConfig: {
+        profilePicture: {
+          image: string;
+        };
+        bgPicture: {
+          image: string;
+        };
+        pictures: string[];
+      };
     }[]
   >([]);
+  const [photoSelec, setPhotoSelec] = useState("");
+  const [visibleModPho, setVisibleModPho] = useState(false);
   const dataUser = useContext(UserContext);
 
   useEffect(() => {
@@ -112,20 +124,67 @@ export default function PerfilProcurado() {
     });
   }
 
+  const exibirFotos = () => {
+    if (!data?.picturesConfig?.pictures) return null;
+
+    const groupedPhotos = data.picturesConfig.pictures.reduce(
+      (result, foto, index) => {
+        if (index % 3 === 0) result.push([]);
+        result[result.length - 1].push(foto);
+        return result;
+      },
+      []
+    );
+
+    return groupedPhotos.map((group, groupIndex) => (
+      <View key={groupIndex} style={styles.row}>
+        {group.map((foto, index) => {
+          return (
+            <TouchableWithoutFeedback
+              key={index}
+              onPress={() => {
+                setPhotoSelec(foto);
+                setVisibleModPho(true);
+              }}
+            >
+              <Image
+                style={styles.imgPosted}
+                source={
+                  foto
+                    ? { uri: foto }
+                    : require("../../assets/images/default-image.png")
+                }
+              />
+            </TouchableWithoutFeedback>
+          );
+        })}
+      </View>
+    ));
+  };
+
   return (
     <View style={styles.feedDefault}>
       <View style={styles.topFeedPerfil}>
         <View style={{ height: "60%" }}>
           <Image
             style={styles.bgTopImage}
-            source={require("../../assets/images/default-image.png")}
+            source={
+              data?.picturesConfig.profilePicture.image
+                ? { uri: data?.picturesConfig.bgPicture.image }
+                : require("../../assets/images/default-avatar.png")
+            }
           ></Image>
 
-          <Ionicons
-            name="person"
-            size={60}
-            style={styles.profilePic}
-          ></Ionicons>
+          <View style={styles.container}>
+            <Image
+              style={styles.profilePic}
+              source={
+                data?.picturesConfig.profilePicture.image
+                  ? { uri: data?.picturesConfig.profilePicture.image }
+                  : require("../../assets/images/default-avatar.png")
+              }
+            />
+          </View>
 
           <View>
             <View style={styles.userInfo}>
@@ -189,56 +248,7 @@ export default function PerfilProcurado() {
       </View>
 
       <ScrollView contentContainerStyle={styles.bottomFeedPerfil}>
-        <View style={styles.row}>
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-        </View>
-
-        <View style={styles.row}>
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-        </View>
-
-        <View style={styles.row}>
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-
-          <Image
-            style={styles.imgPosted}
-            source={require("../../assets/images/default-image.png")}
-          ></Image>
-        </View>
+        {exibirFotos()}
       </ScrollView>
     </View>
   );
@@ -271,12 +281,13 @@ const styles = StyleSheet.create({
   profilePic: {
     position: "absolute",
     backgroundColor: "#fff",
-    width: "25%",
     padding: 15,
     borderRadius: 180,
-    textAlign: "center",
-    bottom: -40,
-    left: 30,
+    bottom: -30,
+    left: 45,
+    width: 100,
+    height: 100,
+    resizeMode: "cover",
   },
 
   userInfo: {
@@ -331,5 +342,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     width: "31%",
     height: "100%",
+  },
+
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
