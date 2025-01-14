@@ -262,7 +262,7 @@ export default function Perfil() {
             source={
               user?.PicturesConfig.profilePicture.image
                 ? { uri: user?.PicturesConfig.bgPicture.image }
-                : require("../../assets/images/default-avatar.png")
+                : require("../../assets/images/default-image.png")
             }
           ></Image>
 
