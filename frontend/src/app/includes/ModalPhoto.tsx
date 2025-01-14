@@ -31,7 +31,7 @@ export default function ModalPhoto({
             style={styles.profilePic}
           ></Image>
 
-          <Text style={{ paddingLeft: 5, width: "80%", fontSize: 17 }}>
+          <Text style={{ paddingLeft: 5, width: "75%", fontSize: 17 }}>
             {data?.user?.nome} {data?.user?.sobrenome}
           </Text>
         </>

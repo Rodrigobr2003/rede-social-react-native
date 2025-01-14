@@ -20,7 +20,6 @@ export default function Perfil() {
   const data = useContext(UserContext); //DADOS DO USER
 
   const [user, setUser] = useState(null);
-  const [image, setImage] = useState("");
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
   const textInputRef = useRef(null);
@@ -143,8 +142,6 @@ export default function Perfil() {
             reader.readAsDataURL(blob);
           });
 
-          setImage(base64 as string);
-
           const respImage = await fetch("http://10.0.2.2:3008/salvarImagem", {
             method: "PUT",
             headers: {
@@ -252,6 +249,10 @@ export default function Perfil() {
         visibleModPho={visibleModPho}
         setVisibleModPho={setVisibleModPho}
         photo={photoSelec}
+        idUser={data?.user?.id}
+        nomeUser={data?.user?.nome}
+        sobrenomeUser={data?.user?.sobrenome}
+        photoUser={data?.user?.PicturesConfig.profilePicture.image}
       ></ModalPhoto>
 
       <View style={styles.topFeedPerfil}>
@@ -440,9 +441,10 @@ const styles = StyleSheet.create({
 
   row: {
     flexDirection: "row",
-    justifyContent: "center",
+    alignItems: "center",
     marginVertical: 2,
     height: "30%",
+    width: "100%",
   },
 
   imgPosted: {
