@@ -153,7 +153,7 @@ export default function Perfil() {
             },
             body: JSON.stringify({
               idUser: data?.user?.id,
-              base64: image,
+              base64: base64,
               type: typePhoto,
             }),
           });

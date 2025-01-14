@@ -362,6 +362,8 @@ export default function Home() {
         quality: 1,
       });
 
+      if (!result.assets || result.canceled) return;
+
       Alert.alert(
         "Confirmação",
         "Você deseja adicionar esta foto como foto de perfil?",
@@ -372,7 +374,7 @@ export default function Home() {
           },
           {
             text: "Sim",
-            onPress: () => salvarFoto(),
+            onPress: () => salvarFoto(result),
           },
         ],
         { cancelable: true }
@@ -380,7 +382,7 @@ export default function Home() {
 
       if (!result) return;
 
-      async function salvarFoto() {
+      async function salvarFoto(result: any) {
         const uri = result.assets[0].uri;
 
         try {
@@ -399,8 +401,6 @@ export default function Home() {
             reader.readAsDataURL(blob);
           });
 
-          setImage(base64 as string);
-
           const respImage = await fetch("http://10.0.2.2:3008/salvarImagem", {
             method: "PUT",
             headers: {
@@ -409,7 +409,7 @@ export default function Home() {
             },
             body: JSON.stringify({
               idUser: dataUser?.user?.id,
-              base64: image,
+              base64: base64,
               type: 2,
             }),
           });
@@ -567,7 +567,7 @@ export default function Home() {
                     </Text>
                   </View>
                 );
-              } else if (msg.message.texto.length <= 5000) {
+              } else if (msg.message.texto.length <= 2000) {
                 compDisp = true;
 
                 return (
