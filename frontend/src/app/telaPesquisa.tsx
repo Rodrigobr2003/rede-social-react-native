@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, Text } from "react-native";
+import { useContext } from "react";
+import { ScrollView, StyleSheet, View, Text, Image } from "react-native";
 import { SearchContext } from "./includes/SearchProvider";
 import { UserContext } from "./includes/UserProvider";
 
@@ -37,29 +37,36 @@ export default function TelaPesquisa() {
 
   return (
     <ScrollView style={{ backgroundColor: "#fff", borderTopWidth: 1 }}>
-      {searchResults.map((element: any, index: number) => (
-        <View
-          key={index}
-          style={styles.profileSec}
-          onTouchStart={() => {
-            navegarPerfilProcurado(element.item.nome, element.item.sobrenome);
-          }}
-        >
-          <Ionicons
-            name="person"
-            size={45}
-            style={{ width: "20%", paddingHorizontal: 10 }}
-          />
-          <Text style={styles.nomeUser}>
-            {element.item.nome + " " + element.item.sobrenome}
-          </Text>
-          <Ionicons
-            name="ellipsis-horizontal"
-            size={30}
-            style={{ width: "20%", paddingHorizontal: 20 }}
-          />
-        </View>
-      ))}
+      {searchResults.map((element: any, index: number) => {
+        return (
+          <View
+            key={index}
+            style={styles.profileSec}
+            onTouchStart={() => {
+              navegarPerfilProcurado(element.item.nome, element.item.sobrenome);
+            }}
+          >
+            <Image
+              source={
+                element?.item?.picturesConfig?.profilePicture?.image
+                  ? {
+                      uri: element?.item?.picturesConfig?.profilePicture?.image,
+                    }
+                  : require("../../assets/images/default-avatar.png")
+              }
+              style={styles.profilePic}
+            ></Image>
+            <Text style={styles.nomeUser}>
+              {element.item.nome + " " + element.item.sobrenome}
+            </Text>
+            <Ionicons
+              name="ellipsis-horizontal"
+              size={30}
+              style={{ width: "20%", paddingHorizontal: 20 }}
+            />
+          </View>
+        );
+      })}
     </ScrollView>
   );
 }
@@ -77,5 +84,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     width: "60%",
+  },
+
+  profilePic: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
   },
 });
