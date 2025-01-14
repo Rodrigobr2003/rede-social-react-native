@@ -1,8 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
 import { Modal, View, Text, Image } from "react-native";
 import { StyleSheet } from "react-native";
+import { UserContext } from "./UserProvider";
 
-export default function ModalPhoto({ visibleModPho, setVisibleModPho }: any) {
+export default function ModalPhoto({
+  visibleModPho,
+  setVisibleModPho,
+  photo,
+}: any) {
+  const data = useContext(UserContext);
+
   return (
     <View>
       <Modal animationType="fade" transparent={true} visible={visibleModPho}>
@@ -13,12 +21,13 @@ export default function ModalPhoto({ visibleModPho, setVisibleModPho }: any) {
               alignItems: "center",
               paddingBottom: 7,
               borderBottomWidth: 1,
+              marginBottom: 10,
             }}
           >
             <Ionicons name="person" size={36}></Ionicons>
 
             <Text style={{ paddingLeft: 5, width: "80%", fontSize: 17 }}>
-              Username usernick
+              {data?.user?.nome} {data?.user?.sobrenome}
             </Text>
 
             <Ionicons
@@ -28,73 +37,7 @@ export default function ModalPhoto({ visibleModPho, setVisibleModPho }: any) {
             ></Ionicons>
           </View>
 
-          <Image
-            style={styles.photo}
-            source={require("../../../assets/images/default-image.png")}
-          ></Image>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingTop: 7,
-              borderTopWidth: 1,
-              justifyContent: "center",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                width: "25%",
-                alignItems: "center",
-                marginHorizontal: 2,
-              }}
-            >
-              <Ionicons name="thumbs-up-outline" size={32} />
-
-              <Text style={{ paddingLeft: 5, width: "80%", fontSize: 17 }}>
-                Curtir
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                width: "30%",
-                alignItems: "center",
-                marginHorizontal: 2,
-              }}
-            >
-              <Ionicons
-                name="chatbubble-ellipses-outline"
-                size={25}
-                color={"#000"}
-              ></Ionicons>
-
-              <Text style={{ paddingLeft: 5, width: "80%", fontSize: 17 }}>
-                Comentar
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                width: "40%",
-                alignItems: "center",
-                marginHorizontal: 2,
-              }}
-            >
-              <Ionicons
-                name="share-outline"
-                size={25}
-                color={"#000"}
-              ></Ionicons>
-
-              <Text style={{ paddingLeft: 5, width: "80%", fontSize: 17 }}>
-                Compartilhar
-              </Text>
-            </View>
-          </View>
+          <Image style={styles.photo} source={{ uri: photo }}></Image>
         </View>
       </Modal>
     </View>
@@ -113,6 +56,8 @@ const styles = StyleSheet.create({
   },
   photo: {
     width: "100%",
+    height: 400,
     borderBottomWidth: 1,
+    marginBottom: 30,
   },
 });

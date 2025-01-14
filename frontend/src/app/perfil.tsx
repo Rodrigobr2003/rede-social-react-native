@@ -24,6 +24,7 @@ export default function Perfil() {
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
   const textInputRef = useRef(null);
+  const [photoSelec, setPhotoSelec] = useState("");
   const [visibleModPho, setVisibleModPho] = useState(false);
 
   useEffect(() => {
@@ -226,6 +227,7 @@ export default function Perfil() {
             <TouchableWithoutFeedback
               key={index}
               onPress={() => {
+                setPhotoSelec(foto);
                 setVisibleModPho(true);
               }}
             >
@@ -249,6 +251,7 @@ export default function Perfil() {
       <ModalPhoto
         visibleModPho={visibleModPho}
         setVisibleModPho={setVisibleModPho}
+        photo={photoSelec}
       ></ModalPhoto>
 
       <View style={styles.topFeedPerfil}>
