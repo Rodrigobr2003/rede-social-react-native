@@ -142,7 +142,7 @@ export default function Perfil() {
             reader.readAsDataURL(blob);
           });
 
-          const respImage = await fetch("http://10.0.2.2:3008/salvarImagem", {
+          await fetch("http://10.0.2.2:3008/salvarImagem", {
             method: "PUT",
             headers: {
               "content-type": "application/json",
@@ -155,34 +155,18 @@ export default function Perfil() {
             }),
           });
 
-          const dados = await respImage.json();
-
           if (typePhoto == 1) {
-            setUser((prevUser) => {
-              if (!prevUser) return null;
-
-              return {
-                ...prevUser,
-                PicturesConfig: {
-                  profilePicture: dados.picturesConfig.profilePicture,
-                },
-              };
-            });
-
             data?.setUser((prevUser) => {
-              if (!prevUser) return null;
+              if (!prevUser || !prevUser.PicturesConfig) return prevUser;
 
               return {
                 ...prevUser,
                 PicturesConfig: {
-                  profilePicture: {
-                    image: String,
-                  },
+                  ...prevUser.PicturesConfig,
+                  profilePicture: { image: base64 as string },
                 },
               };
             });
-
-            data?.fetchUserData();
           }
 
           if (typePhoto == 2) {
@@ -229,8 +213,8 @@ export default function Perfil() {
               <Image
                 style={styles.imgPosted}
                 source={
-                  foto.image
-                    ? { uri: foto.image }
+                  foto
+                    ? { uri: foto }
                     : require("../../assets/images/default-image.png")
                 }
               />

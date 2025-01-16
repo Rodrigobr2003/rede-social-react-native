@@ -425,7 +425,7 @@ export default function Home() {
                 ...prevUser.PicturesConfig,
                 pictures: [
                   ...prevUser.PicturesConfig.pictures,
-                  { image: base64 as string },
+                  base64 as string,
                 ],
               },
               id: prevUser.id,
