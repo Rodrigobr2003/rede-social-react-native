@@ -16,11 +16,9 @@ interface User {
     bgPicture: {
       image: String;
     };
-    pictures: [
-      {
-        image: String;
-      }
-    ];
+    pictures: {
+      image: String;
+    }[];
   };
 }
 
@@ -58,7 +56,6 @@ export function UserProvider({ children }: UserProviderProps) {
 
       if (data) {
         setUser(data);
-        console.log("user:", user);
       } else {
         return fetchUserData();
       }

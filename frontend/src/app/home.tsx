@@ -401,7 +401,7 @@ export default function Home() {
             reader.readAsDataURL(blob);
           });
 
-          const respImage = await fetch("http://10.0.2.2:3008/salvarImagem", {
+          await fetch("http://10.0.2.2:3008/salvarImagem", {
             method: "PUT",
             headers: {
               "content-type": "application/json",
@@ -414,11 +414,27 @@ export default function Home() {
             }),
           });
 
-          const dados = await respImage.json();
+          publicarMensagem(base64 as string);
 
-          const fotoAtual = dados.picturesConfig.pictures.length - 1;
+          dataUser?.setUser((prevUser) => {
+            if (!prevUser) return null;
 
-          publicarMensagem(dados.picturesConfig.pictures[fotoAtual]);
+            return {
+              ...prevUser,
+              PicturesConfig: {
+                ...prevUser.PicturesConfig,
+                pictures: [
+                  ...prevUser.PicturesConfig.pictures,
+                  { image: base64 as string },
+                ],
+              },
+              id: prevUser.id,
+              nome: prevUser.nome,
+              sobrenome: prevUser.sobrenome,
+              email: prevUser.email,
+              notificacoes: prevUser.notificacoes || [],
+            };
+          });
 
           reader.onerror = (error) => {
             console.log("Erro:", error);
@@ -567,7 +583,7 @@ export default function Home() {
                     </Text>
                   </View>
                 );
-              } else if (msg.message.texto.length <= 2000) {
+              } else if (msg.message.texto.length <= 500) {
                 compDisp = true;
 
                 return (

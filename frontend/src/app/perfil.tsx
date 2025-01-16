@@ -207,7 +207,6 @@ export default function Perfil() {
 
   const exibirFotos = () => {
     if (!data?.user?.PicturesConfig?.pictures) return null;
-
     const groupedPhotos = data.user.PicturesConfig.pictures.reduce(
       (result, foto, index) => {
         if (index % 3 === 0) result.push([]);
@@ -216,7 +215,6 @@ export default function Perfil() {
       },
       []
     );
-
     return groupedPhotos.map((group, groupIndex) => (
       <View key={groupIndex} style={styles.row}>
         {group.map((foto, index) => {
@@ -231,8 +229,8 @@ export default function Perfil() {
               <Image
                 style={styles.imgPosted}
                 source={
-                  foto
-                    ? { uri: foto }
+                  foto.image
+                    ? { uri: foto.image }
                     : require("../../assets/images/default-image.png")
                 }
               />
