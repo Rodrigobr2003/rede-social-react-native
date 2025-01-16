@@ -343,9 +343,10 @@ const styles = StyleSheet.create({
 
   row: {
     flexDirection: "row",
-    justifyContent: "center",
+    alignItems: "center",
     marginVertical: 2,
     height: "30%",
+    width: "100%",
   },
 
   imgPosted: {
