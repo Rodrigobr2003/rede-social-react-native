@@ -169,10 +169,18 @@ export default function Perfil() {
             });
           }
 
-          if (typePhoto == 2) {
-          }
-
           if (typePhoto == 3) {
+            data?.setUser((prevUser) => {
+              if (!prevUser || !prevUser.PicturesConfig) return prevUser;
+
+              return {
+                ...prevUser,
+                PicturesConfig: {
+                  ...prevUser.PicturesConfig,
+                  bgPicture: { image: base64 as string },
+                },
+              };
+            });
           }
 
           reader.onerror = (error) => {
