@@ -579,7 +579,15 @@ export default function Home() {
                         marginHorizontal: "auto",
                       }}
                     >
-                      {msg.isShared?.texto}
+                      {msg.isShared?.texto &&
+                      msg.isShared.texto.length > 200 ? (
+                        <Image
+                          source={{ uri: msg.isShared.texto }}
+                          style={{ width: "100%", height: 300, marginTop: 7 }}
+                        />
+                      ) : (
+                        <Text>{msg.isShared?.texto}</Text>
+                      )}
                     </Text>
                   </View>
                 );

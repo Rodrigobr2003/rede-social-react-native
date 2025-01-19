@@ -179,7 +179,7 @@ export default function PerfilProcurado() {
           <Image
             style={styles.bgTopImage}
             source={
-              data?.picturesConfig?.profilePicture.image
+              data?.picturesConfig?.bgPicture.image && data
                 ? { uri: data.picturesConfig.bgPicture.image }
                 : require("../../assets/images/default-image.png")
             }
@@ -189,7 +189,7 @@ export default function PerfilProcurado() {
             <Image
               style={styles.profilePic}
               source={
-                data?.picturesConfig?.profilePicture.image
+                data?.picturesConfig?.profilePicture.image && data
                   ? { uri: data?.picturesConfig.profilePicture.image }
                   : require("../../assets/images/default-avatar.png")
               }

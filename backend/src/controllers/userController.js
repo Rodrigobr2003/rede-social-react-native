@@ -123,6 +123,7 @@ exports.negarNotificacao = async (req, res) => {
     descricao: req.session.user.descricao,
     amigos: req.session.user.amigos,
     notificacoes: req.session.user.notificacoes,
+    PicturesConfig: req.session.user.picturesConfig,
   };
 
   res.send(newUser);
@@ -144,6 +145,7 @@ exports.aceitarNotificacao = async (req, res) => {
     descricao: req.session.user.descricao,
     amigos: req.session.user.amigos,
     notificacoes: req.session.user.notificacoes,
+    PicturesConfig: req.session.user.picturesConfig,
   };
 
   res.send(newUser);
@@ -165,6 +167,7 @@ exports.removerAmigo = async (req, res) => {
     descricao: req.session.user.descricao,
     amigos: req.session.user.amigos,
     notificacoes: req.session.user.notificacoes,
+    picturesConfig: req.session.user.picturesConfig,
   };
 
   res.send(newUser);
