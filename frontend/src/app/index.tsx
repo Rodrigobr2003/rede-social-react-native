@@ -10,8 +10,15 @@ import {
   useFonts,
   PressStart2P_400Regular,
 } from "@expo-google-fonts/press-start-2p";
+import { useState } from "react";
+
+import ModalCadastro from "./includes/ModalCadastro";
+import ModalLogin from "./includes/ModalLogin";
 
 export default function Index() {
+  const [visibleModCad, setVisibleModCad] = useState(false);
+  const [visibleModLog, setVisibleModLog] = useState(false);
+
   const [fonteCarregada] = useFonts({
     PressStart2P_400Regular,
   });
@@ -22,6 +29,16 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ModalCadastro
+        visibleModCad={visibleModCad}
+        setVisibleModCad={setVisibleModCad}
+      ></ModalCadastro>
+
+      <ModalLogin
+        visibleModLog={visibleModLog}
+        setVisibleModLog={setVisibleModLog}
+      ></ModalLogin>
+
       <View>
         <Text style={styles.titulo}>Conectando</Text>
         <Text style={styles.titulo}>o mundo em</Text>
@@ -41,6 +58,7 @@ export default function Index() {
 
         <TouchableHighlight
           style={[styles.button, { backgroundColor: "#2c3892" }]}
+          onPress={() => setVisibleModCad(true)}
         >
           <Text style={[styles.buttonText, { color: "#fff" }]}>
             Criar conta!
@@ -59,7 +77,10 @@ export default function Index() {
             Já tem uma conta?
           </Text>
 
-          <TouchableHighlight style={[styles.button, styles.buttonEntrar]}>
+          <TouchableHighlight
+            style={[styles.button, styles.buttonEntrar]}
+            onPress={() => setVisibleModLog(true)}
+          >
             <Text style={[styles.buttonText, { color: "#2c3892" }]}>
               Entrar
             </Text>
@@ -72,7 +93,10 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
+    backgroundColor: "#1D1D1D",
+    paddingTop: 40,
   },
 
   titulo: {
