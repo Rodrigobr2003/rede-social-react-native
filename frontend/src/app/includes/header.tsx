@@ -34,7 +34,7 @@ export default function Header({ display }: { display: any }) {
       }
 
       const response = await fetch(
-        `http://10.0.2.2:3008/pesquisarPerfil/${perfilPesq}`,
+        `http://192.168.15.10:3008/pesquisarPerfil/${perfilPesq}`,
         {
           method: "GET",
           mode: "cors",
@@ -58,7 +58,7 @@ export default function Header({ display }: { display: any }) {
     setSearchBar("");
 
     try {
-      const response = await fetch("http://10.0.2.2:3008/logout", {
+      const response = await fetch("http://192.168.15.10:3008/logout", {
         method: "POST",
         mode: "cors",
       });

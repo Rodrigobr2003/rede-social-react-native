@@ -8,26 +8,11 @@ const express = require("express");
 const session = require("express-session");
 const socketio = require("socket.io");
 const bodyParser = require("body-parser");
-const os = require("os");
 
 const app = express();
 const server = http.createServer(app);
 
 const io = socketio(server);
-
-function getLocalIP() {
-  const interfaces = os.networkInterfaces();
-  for (const iface of Object.values(interfaces)) {
-    for (const config of iface) {
-      if (config.family === "IPv4" && !config.internal) {
-        return config.address;
-      }
-    }
-  }
-  return "IP não encontrado";
-}
-
-process.env.LOCAL_IP = getLocalIP();
 
 mongoose
   .connect(process.env.CONNECTION)

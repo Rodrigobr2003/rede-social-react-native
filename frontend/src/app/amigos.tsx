@@ -12,7 +12,7 @@ export default function Amigos() {
   let amigos = null;
 
   async function removerAmigo(amigoId: any) {
-    const response = await fetch("http://10.0.2.2:3008/removerAmigo", {
+    const response = await fetch("http://192.168.15.10:3008/removerAmigo", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -34,7 +34,7 @@ export default function Amigos() {
   async function navegarPerfilProcurado(nome: string, sobrenome: string) {
     try {
       const response = await fetch(
-        `http://10.0.2.2:3008/pesquisarPerfil/${nome}/${sobrenome}`,
+        `http://192.168.15.10:3008/pesquisarPerfil/${nome}/${sobrenome}`,
         {
           method: "GET",
           mode: "cors",

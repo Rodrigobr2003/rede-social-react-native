@@ -18,15 +18,6 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
   const userContext = useContext(UserContext);
   const fetchUserData = userContext?.fetchUserData;
 
-  useEffect(() => {
-    async function obterIpPublico() {
-      const resposta = await fetch("https://api.ipify.org?format=json");
-      const dados = await resposta.json();
-    }
-
-    obterIpPublico();
-  });
-
   const loginSchema = yup.object({
     email: yup.string().email("Email inválido").required("Informe seu email"),
     senha: yup

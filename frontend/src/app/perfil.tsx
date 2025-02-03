@@ -76,7 +76,7 @@ export default function Perfil() {
   }
 
   const salvarDesc = async () => {
-    const response = await fetch("http://10.0.2.2:3008/salvarDesc", {
+    const response = await fetch("http://192.168.15.10:3008/salvarDesc", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -142,7 +142,7 @@ export default function Perfil() {
             reader.readAsDataURL(blob);
           });
 
-          await fetch("http://10.0.2.2:3008/salvarImagem", {
+          await fetch("http://192.168.15.10:3008/salvarImagem", {
             method: "PUT",
             headers: {
               "content-type": "application/json",

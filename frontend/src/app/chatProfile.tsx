@@ -63,7 +63,7 @@ export default function ChatProfile() {
 
   async function carregaMensagem() {
     const response = await fetch(
-      `http://10.0.2.2:3008/carregaMensagens/${room}`,
+      `http://192.168.15.10:3008/carregaMensagens/${room}`,
       {
         method: "GET",
         mode: "cors",
@@ -98,7 +98,7 @@ export default function ChatProfile() {
 
       setMensagens((prevMensagens) => [...prevMensagens, msgObj]);
 
-      await fetch("http://10.0.2.2:3008/salvaMensagens", {
+      await fetch("http://192.168.15.10:3008/salvaMensagens", {
         method: "POST",
         mode: "cors",
         headers: {

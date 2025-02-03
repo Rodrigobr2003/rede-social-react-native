@@ -107,7 +107,7 @@ export default function PerfilProcurado() {
   };
 
   async function adicionarAmigo() {
-    await fetch("http://10.0.2.2:3008/enviarNotificacao", {
+    await fetch("http://192.168.15.10:3008/enviarNotificacao", {
       method: "POST",
       mode: "cors",
       headers: {

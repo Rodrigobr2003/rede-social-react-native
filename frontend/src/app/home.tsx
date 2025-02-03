@@ -86,7 +86,7 @@ export default function Home() {
 
       setMensagens((prevMsgs) => [...prevMsgs, msgObj]);
 
-      await fetch("http://10.0.2.2:3008/salvaMensagens", {
+      await fetch("http://192.168.15.10:3008/salvaMensagens", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -101,7 +101,7 @@ export default function Home() {
 
   async function carregaMensagem() {
     const response = await fetch(
-      `http://10.0.2.2:3008/carregaMensagens/${room}`,
+      `http://192.168.15.10:3008/carregaMensagens/${room}`,
       {
         method: "GET",
         mode: "cors",
@@ -133,7 +133,7 @@ export default function Home() {
   }
 
   async function curtirMensagem(msg: any) {
-    const response = await fetch("http://10.0.2.2:3008/curtirMensagem", {
+    const response = await fetch("http://192.168.15.10:3008/curtirMensagem", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -176,14 +176,17 @@ export default function Home() {
   }
 
   async function descurtirMensagem(msg: any) {
-    const response = await fetch("http://10.0.2.2:3008/descurtirMensagem", {
-      method: "PUT",
-      mode: "cors",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ idMsg: msg.idMsg, idUser: dataUser?.user?.id }),
-    });
+    const response = await fetch(
+      "http://192.168.15.10:3008/descurtirMensagem",
+      {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ idMsg: msg.idMsg, idUser: dataUser?.user?.id }),
+      }
+    );
 
     const mensagensCarregadas = await response.json();
 
@@ -237,7 +240,7 @@ export default function Home() {
 
     setMensagens((prevMsgs) => [...prevMsgs, msgObj]);
 
-    await fetch("http://10.0.2.2:3008/compartilharMensagem", {
+    await fetch("http://192.168.15.10:3008/compartilharMensagem", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -263,7 +266,7 @@ export default function Home() {
   }
 
   async function comentar(msg: any) {
-    const response = await fetch("http://10.0.2.2:3008/comentar", {
+    const response = await fetch("http://192.168.15.10:3008/comentar", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -310,7 +313,7 @@ export default function Home() {
   }
 
   async function excluirPubli(idMsg: any) {
-    const response = await fetch("http://10.0.2.2:3008/excluirPubli", {
+    const response = await fetch("http://192.168.15.10:3008/excluirPubli", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -401,7 +404,7 @@ export default function Home() {
             reader.readAsDataURL(blob);
           });
 
-          await fetch("http://10.0.2.2:3008/salvarImagem", {
+          await fetch("http://192.168.15.10:3008/salvarImagem", {
             method: "PUT",
             headers: {
               "content-type": "application/json",
