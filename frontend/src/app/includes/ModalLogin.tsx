@@ -11,12 +11,21 @@ import { router } from "expo-router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "./UserProvider";
 
 export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
   const userContext = useContext(UserContext);
   const fetchUserData = userContext?.fetchUserData;
+
+  useEffect(() => {
+    async function obterIpPublico() {
+      const resposta = await fetch("https://api.ipify.org?format=json");
+      const dados = await resposta.json();
+    }
+
+    obterIpPublico();
+  });
 
   const loginSchema = yup.object({
     email: yup.string().email("Email inválido").required("Informe seu email"),
@@ -37,7 +46,7 @@ export default function ModalLogin({ visibleModLog, setVisibleModLog }: any) {
 
   const login = async (formData: any) => {
     try {
-      const response = await fetch("http://10.0.2.2:3008/login", {
+      const response = await fetch("http://192.168.15.10:3008/login", {
         method: "POST",
         mode: "cors",
         headers: {

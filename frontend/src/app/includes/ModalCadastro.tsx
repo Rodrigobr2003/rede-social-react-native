@@ -10,11 +10,23 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useEffect, useState } from "react";
 
 export default function ModalCadastro({
   visibleModCad,
   setVisibleModCad,
 }: any) {
+  const [ip, setIp] = useState("");
+
+  useEffect(() => {
+    async function getDeviceIP() {
+      const ip = await Network.getIpAddressAsync();
+      console.log("IP do dispositivo:", ip);
+    }
+
+    getDeviceIP();
+  }, []);
+
   const UserSchema = yup.object({
     nome: yup
       .string()
@@ -46,7 +58,7 @@ export default function ModalCadastro({
     });
 
     try {
-      await fetch("http://10.0.2.2:3008/registrar", {
+      await fetch(`http://${ip}:3008/registrar`, {
         method: "POST",
         mode: "cors",
         headers: {

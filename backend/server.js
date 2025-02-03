@@ -8,11 +8,26 @@ const express = require("express");
 const session = require("express-session");
 const socketio = require("socket.io");
 const bodyParser = require("body-parser");
+const os = require("os");
 
 const app = express();
 const server = http.createServer(app);
 
 const io = socketio(server);
+
+function getLocalIP() {
+  const interfaces = os.networkInterfaces();
+  for (const iface of Object.values(interfaces)) {
+    for (const config of iface) {
+      if (config.family === "IPv4" && !config.internal) {
+        return config.address;
+      }
+    }
+  }
+  return "IP não encontrado";
+}
+
+process.env.LOCAL_IP = getLocalIP();
 
 mongoose
   .connect(process.env.CONNECTION)
@@ -63,7 +78,7 @@ io.on("connection", (socket) => {
 
 app.use(
   cors({
-    origin: "http://10.0.2.2:3008", // Defina a origem do frontend
+    origin: "http://localhost:3008", // Defina a origem do frontend
     methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
     allowedHeaders: ["Content-Type", "Authorization"], // Cabeçalhos permitidos
   })
