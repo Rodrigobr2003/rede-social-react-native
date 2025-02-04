@@ -103,8 +103,8 @@ export default function Header({ display }: { display: any }) {
           style={[
             styles.input,
             currentPath == "telaPesquisa"
-              ? { width: 350, marginLeft: "auto" }
-              : { width: 300 },
+              ? { width: 300, marginLeft: "auto" }
+              : { width: 280 },
             currentPath == "perfilProcurado" ? { width: 240 } : {},
           ]}
           onFocus={() => {
@@ -121,10 +121,9 @@ export default function Header({ display }: { display: any }) {
         <Pressable
           style={[
             styles.burguerButton,
-            currentPath == "telaPesquisa"
+            currentPath == "telaPesquisa" || visibleNav
               ? { display: "none" }
               : { display: "flex" },
-            visibleNav ? { display: "none" } : { display: "flex" },
           ]}
           onPress={() => {
             closeNav();
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
     width: 300,
     backgroundColor: "#F0F2F5",
     marginVertical: 20,
-    marginHorizontal: 30,
+    marginHorizontal: "5%",
     padding: 10,
     borderRadius: 18,
     color: "#000",
