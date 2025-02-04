@@ -99,14 +99,6 @@ export default function Notificacoes() {
                   {notificacao.nome} {notificacao.sobrenome} curtiu em seu post!
                 </Text>
               )}
-
-              {notificacao.tipo !== 1 && (
-                <Ionicons
-                  name="close"
-                  size={25}
-                  style={{ marginLeft: "auto" }}
-                ></Ionicons>
-              )}
             </View>
           </Pressable>
         );

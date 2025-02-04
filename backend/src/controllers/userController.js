@@ -167,7 +167,7 @@ exports.removerAmigo = async (req, res) => {
     descricao: req.session.user.descricao,
     amigos: req.session.user.amigos,
     notificacoes: req.session.user.notificacoes,
-    picturesConfig: req.session.user.picturesConfig,
+    PicturesConfig: req.session.user.picturesConfig,
   };
 
   res.send(newUser);

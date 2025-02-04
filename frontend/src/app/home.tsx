@@ -18,6 +18,7 @@ import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import moment from "moment";
 import ModalSentimento from "./includes/ModalSentimentos";
+import { router } from "expo-router";
 
 export default function Home() {
   const dataUser = useContext(UserContext); //DADOS DO USER
@@ -362,14 +363,14 @@ export default function Home() {
         mediaTypes: "images",
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 1,
+        quality: 0.1,
       });
 
       if (!result.assets || result.canceled) return;
 
       Alert.alert(
         "Confirmação",
-        "Você deseja adicionar esta foto como foto de perfil?",
+        "Você deseja publicar esta foto?",
         [
           {
             text: "Não",
@@ -452,6 +453,31 @@ export default function Home() {
       console.log("Erro imagem no front: ", error);
     }
   };
+
+  async function navegarPerfilProcurado(nome: any, sobrenome: any) {
+    try {
+      const response = await fetch(
+        `http://192.168.15.10:3008/pesquisarPerfil/${nome}/${sobrenome}`,
+        {
+          method: "GET",
+          mode: "cors",
+        }
+      );
+
+      const dado = await response.json();
+
+      if (dataUser?.user?.id === dado._id) {
+        router.navigate("/perfil");
+      } else {
+        router.push({
+          pathname: "/perfilProcurado",
+          params: { data: JSON.stringify(dado) },
+        });
+      }
+    } catch (error) {
+      console.log("Erro ao enviar dados para buscar perfil : " + error);
+    }
+  }
 
   return (
     <View style={{ alignItems: "center" }}>
@@ -546,403 +572,419 @@ export default function Home() {
           style={[{ maxHeight: "88%" }]}
           showsVerticalScrollIndicator={false}
         >
-          {mensagens.map((msg, idx) => {
-            let compDisp = null;
+          {mensagens
+            .slice()
+            .reverse()
+            .map((msg, idx) => {
+              let compDisp = null;
 
-            const isShared = () => {
-              if (msg.message.texto == undefined) return;
+              const isShared = () => {
+                if (msg.message.texto == undefined) return;
 
-              if (msg.message.texto == "") {
-                compDisp = false;
+                if (msg.message.texto == "") {
+                  compDisp = false;
 
-                return (
-                  <View style={[styles.sharedPost]}>
-                    <View
-                      style={[
-                        styles.msgInfos,
-                        { width: "85%", marginHorizontal: "auto" },
-                      ]}
-                    >
-                      <Ionicons
-                        name="person"
-                        size={28}
-                        style={{ marginVertical: 5 }}
-                      ></Ionicons>
+                  return (
+                    <View style={[styles.sharedPost]}>
+                      <View
+                        style={[
+                          styles.msgInfos,
+                          { width: "85%", marginHorizontal: "auto" },
+                        ]}
+                      >
+                        <Ionicons
+                          name="person"
+                          size={28}
+                          style={{ marginVertical: 5 }}
+                        ></Ionicons>
 
-                      <View style={{ width: "80%" }}>
-                        <Text style={{ fontSize: 18, fontWeight: "600" }}>
-                          {msg.isShared?.nome} {msg.isShared?.sobrenome}
-                        </Text>
-
-                        <View style={{ flexDirection: "row" }}>
-                          <Text style={styles.textoPequeno}>
-                            {msg.isShared?.data}
+                        <View style={{ width: "80%" }}>
+                          <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                            {msg.isShared?.nome} {msg.isShared?.sobrenome}
                           </Text>
+
+                          <View style={{ flexDirection: "row" }}>
+                            <Text style={styles.textoPequeno}>
+                              {msg.isShared?.data}
+                            </Text>
+                          </View>
                         </View>
                       </View>
-                    </View>
 
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          width: "80%",
+                          marginHorizontal: "auto",
+                        }}
+                      >
+                        {msg.isShared?.texto &&
+                        msg.isShared.texto.length > 200 ? (
+                          <Image
+                            source={{ uri: msg.isShared.texto }}
+                            style={{ width: "100%", height: 300, marginTop: 7 }}
+                          />
+                        ) : (
+                          <Text>{msg.isShared?.texto}</Text>
+                        )}
+                      </Text>
+                    </View>
+                  );
+                } else if (msg.message.texto.length <= 500) {
+                  compDisp = true;
+
+                  return (
                     <Text
                       style={{
+                        marginTop: 8,
                         fontSize: 18,
-                        width: "80%",
+                        width: "95%",
                         marginHorizontal: "auto",
                       }}
                     >
-                      {msg.isShared?.texto &&
-                      msg.isShared.texto.length > 200 ? (
-                        <Image
-                          source={{ uri: msg.isShared.texto }}
-                          style={{ width: "100%", height: 300, marginTop: 7 }}
-                        />
-                      ) : (
-                        <Text>{msg.isShared?.texto}</Text>
-                      )}
+                      {msg.message.texto}
                     </Text>
-                  </View>
+                  );
+                } else {
+                  compDisp = true;
+
+                  return (
+                    <Image
+                      source={{ uri: msg.message.texto }}
+                      style={{ width: "100%", height: 300, marginTop: 7 }}
+                    ></Image>
+                  );
+                }
+              };
+
+              const isYourPost = () => {
+                if (msg.idUserMsg === dataUser?.user?.id) {
+                  return (
+                    <Ionicons
+                      name="trash"
+                      size={25}
+                      style={{
+                        marginRight: 30,
+                      }}
+                      onPress={() => {
+                        excluirPubli(msg.idMsg);
+                      }}
+                    ></Ionicons>
+                  );
+                }
+              };
+
+              const foiCurtido = () => {
+                const isCurtido = msg.curtidas.some(
+                  (curtida) => curtida.idUser === dataUser?.user?.id
                 );
-              } else if (msg.message.texto.length <= 500) {
-                compDisp = true;
 
-                return (
-                  <Text
-                    style={{
-                      marginTop: 8,
-                      fontSize: 18,
-                      width: "95%",
-                      marginHorizontal: "auto",
-                    }}
-                  >
-                    {msg.message.texto}
-                  </Text>
-                );
-              } else {
-                compDisp = true;
+                if (isCurtido) {
+                  return (
+                    <>
+                      <Pressable
+                        style={[styles.btnAnexo, styles.btnInteracoes]}
+                        onPress={() => {
+                          descurtirMensagem(msg);
+                        }}
+                      >
+                        <Ionicons name="thumbs-up" size={25} color={"#000"} />
+                        <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                          Curtido
+                        </Text>
+                      </Pressable>
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <Pressable
+                        style={[
+                          styles.btnAnexo,
+                          styles.btnInteracoes,
+                          { flexDirection: "column" },
+                        ]}
+                        onPress={() => {
+                          curtirMensagem(msg);
+                        }}
+                      >
+                        <View
+                          style={{ flexDirection: "row", alignItems: "center" }}
+                        >
+                          <Ionicons
+                            name="thumbs-up-outline"
+                            size={25}
+                            color={"#000"}
+                          />
+                          <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                            Curtir
+                          </Text>
+                        </View>
+                      </Pressable>
+                    </>
+                  );
+                }
+              };
 
-                return (
-                  <Image
-                    source={{ uri: msg.message.texto }}
-                    style={{ width: "100%", height: 300, marginTop: 7 }}
-                  ></Image>
-                );
-              }
-            };
-
-            const isYourPost = () => {
-              if (msg.idUserMsg === dataUser?.user?.id) {
-                return (
-                  <Ionicons
-                    name="trash"
-                    size={25}
-                    style={{
-                      marginRight: 30,
-                    }}
-                    onPress={() => {
-                      excluirPubli(msg.idMsg);
-                    }}
-                  ></Ionicons>
-                );
-              }
-            };
-
-            const foiCurtido = () => {
-              const isCurtido = msg.curtidas.some(
-                (curtida) => curtida.idUser === dataUser?.user?.id
-              );
-
-              if (isCurtido) {
-                return (
-                  <>
+              const comAberto = () => {
+                if (!dispCom) {
+                  return (
                     <Pressable
                       style={[styles.btnAnexo, styles.btnInteracoes]}
                       onPress={() => {
-                        descurtirMensagem(msg);
-                      }}
-                    >
-                      <Ionicons name="thumbs-up" size={25} color={"#000"} />
-                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                        Curtido
-                      </Text>
-                    </Pressable>
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <Pressable
-                      style={[
-                        styles.btnAnexo,
-                        styles.btnInteracoes,
-                        { flexDirection: "column" },
-                      ]}
-                      onPress={() => {
-                        curtirMensagem(msg);
-                      }}
-                    >
-                      <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                      >
-                        <Ionicons
-                          name="thumbs-up-outline"
-                          size={25}
-                          color={"#000"}
-                        />
-                        <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                          Curtir
-                        </Text>
-                      </View>
-                    </Pressable>
-                  </>
-                );
-              }
-            };
-
-            const comAberto = () => {
-              if (!dispCom) {
-                return (
-                  <Pressable
-                    style={[styles.btnAnexo, styles.btnInteracoes]}
-                    onPress={() => {
-                      setDispCom(true);
-                    }}
-                  >
-                    <Ionicons
-                      name="chatbubble-ellipses-outline"
-                      size={25}
-                      color={"#000"}
-                    ></Ionicons>
-                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                      Comentar
-                    </Text>
-                  </Pressable>
-                );
-              } else {
-                return (
-                  <Pressable
-                    style={[styles.btnAnexo, styles.btnInteracoes]}
-                    onPress={() => {
-                      setDispCom(false);
-                    }}
-                  >
-                    <Ionicons
-                      name="chatbubble-ellipses"
-                      size={25}
-                      color={"#000"}
-                    ></Ionicons>
-                    <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                      Comentar
-                    </Text>
-                  </Pressable>
-                );
-              }
-            };
-
-            const numCurtidas = () => {
-              if (!msg || msg.curtidas.length == 0) {
-                return "0 curtidas";
-              }
-              if (msg.curtidas.length == 1) {
-                return "1 curtida";
-              } else {
-                return `${msg.curtidas.length} curtidas`;
-              }
-            };
-
-            return (
-              <View
-                style={[
-                  styles.feedDefault,
-                  styles.feedPubli,
-                  { marginBottom: 20, marginTop: 20 },
-                ]}
-                key={idx}
-              >
-                <View style={styles.topFeedPerfil}>
-                  <View style={styles.msgInfos}>
-                    {isYourPost() ? imagemPerfil : imagemOutros}
-
-                    <View
-                      style={
-                        msg.idUserMsg == dataUser?.user?.id
-                          ? { width: "70%", marginLeft: 10 }
-                          : { width: "80%" }
-                      }
-                    >
-                      <Text style={{ fontSize: 22, fontWeight: "600" }}>
-                        {msg.nome} {msg.sobrenome}
-                      </Text>
-
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.textoPequeno}>{msg.data}</Text>
-                      </View>
-                    </View>
-
-                    {isYourPost()}
-                  </View>
-
-                  {isShared()}
-                  <Text style={[styles.textoPequeno, { marginTop: "2%" }]}>
-                    {numCurtidas()}
-                  </Text>
-                </View>
-
-                <View style={styles.bottomFeedPerfil}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      width: "90%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {foiCurtido()}
-
-                    {comAberto()}
-
-                    <Pressable
-                      style={[
-                        styles.btnAnexo,
-                        styles.btnInteracoes,
-                        compDisp ? { display: "flex" } : { display: "none" },
-                      ]}
-                      onPress={() => {
-                        compartilhar(
-                          msg.nome,
-                          msg.sobrenome,
-                          msg.message.texto,
-                          msg.data,
-                          msg
-                        );
+                        setDispCom(true);
                       }}
                     >
                       <Ionicons
-                        name="share"
+                        name="chatbubble-ellipses-outline"
                         size={25}
                         color={"#000"}
                       ></Ionicons>
                       <Text style={{ fontSize: 12, paddingLeft: 4 }}>
-                        Compartilhar
+                        Comentar
                       </Text>
                     </Pressable>
-                  </View>
-                </View>
+                  );
+                } else {
+                  return (
+                    <Pressable
+                      style={[styles.btnAnexo, styles.btnInteracoes]}
+                      onPress={() => {
+                        setDispCom(false);
+                      }}
+                    >
+                      <Ionicons
+                        name="chatbubble-ellipses"
+                        size={25}
+                        color={"#000"}
+                      ></Ionicons>
+                      <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                        Comentar
+                      </Text>
+                    </Pressable>
+                  );
+                }
+              };
+
+              const numCurtidas = () => {
+                if (!msg || msg.curtidas.length == 0) {
+                  return "0 curtidas";
+                }
+                if (msg.curtidas.length == 1) {
+                  return "1 curtida";
+                } else {
+                  return `${msg.curtidas.length} curtidas`;
+                }
+              };
+
+              return (
                 <View
                   style={[
-                    styles.comentarios,
-                    { flex: 1 },
-                    dispCom ? { display: "flex" } : { display: "none" },
+                    styles.feedDefault,
+                    styles.feedPubli,
+                    { marginBottom: 20, marginTop: 20 },
                   ]}
+                  key={idx}
                 >
-                  <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                  >
-                    <ScrollView
-                      nestedScrollEnabled={true}
-                      contentContainerStyle={{ flexGrow: 1 }}
-                      style={[{ maxHeight: "85%" }]}
-                    >
-                      {msg.comentarios.map((comentario, idx) => {
-                        return (
-                          <View
-                            key={idx}
-                            style={{
-                              marginHorizontal: "auto",
-                              marginVertical: 10,
-                              width: "90%",
-                            }}
-                          >
-                            <View style={{ flexDirection: "row" }}>
-                              <Ionicons
-                                name="person"
-                                size={28}
-                                style={{
-                                  marginVertical: 5,
-                                  marginHorizontal: 10,
-                                }}
-                              ></Ionicons>
+                  <View style={styles.topFeedPerfil}>
+                    <View style={styles.msgInfos}>
+                      <View
+                        onTouchStart={() => {
+                          navegarPerfilProcurado(msg.nome, msg.sobrenome);
+                        }}
+                      >
+                        {isYourPost() ? imagemPerfil : imagemOutros}
+                      </View>
 
-                              <View style={{ width: "80%" }}>
-                                <Text
-                                  style={{ fontSize: 18, fontWeight: "600" }}
-                                >
-                                  {comentario.nome} {comentario.sobrenome}
-                                </Text>
+                      <View
+                        style={
+                          msg.idUserMsg == dataUser?.user?.id
+                            ? { width: "70%", marginLeft: 10 }
+                            : { width: "80%" }
+                        }
+                      >
+                        <Text
+                          style={{ fontSize: 22, fontWeight: "600" }}
+                          onPress={() => {
+                            navegarPerfilProcurado(msg.nome, msg.sobrenome);
+                          }}
+                        >
+                          {msg.nome} {msg.sobrenome}
+                        </Text>
 
-                                <View style={{ flexDirection: "row" }}>
-                                  <Text style={styles.textoPequeno}>
-                                    {comentario.data}
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                            <Text
-                              style={{
-                                fontSize: 18,
-                                width: "80%",
-                                marginHorizontal: "auto",
-                              }}
-                            >
-                              {comentario.comment}
-                            </Text>
-                          </View>
-                        );
-                      })}
-                    </ScrollView>
-                  </KeyboardAvoidingView>
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={styles.textoPequeno}>{msg.data}</Text>
+                        </View>
+                      </View>
 
-                  <View
-                    style={{
-                      bottom: 0,
-                      position: "absolute",
-                      width: "100%",
-                    }}
-                  >
+                      {isYourPost()}
+                    </View>
+
+                    {isShared()}
+                    <Text style={[styles.textoPequeno, { marginTop: "2%" }]}>
+                      {numCurtidas()}
+                    </Text>
+                  </View>
+
+                  <View style={styles.bottomFeedPerfil}>
                     <View
-                      style={[
-                        styles.topFeedInput,
-                        {
-                          width: "90%",
-                          marginHorizontal: "auto",
-                          marginBottom: 10,
-                        },
-                      ]}
+                      style={{
+                        flexDirection: "row",
+                        width: "90%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
                     >
-                      <TextInput
-                        placeholder="Comente algo..."
-                        value={txtCom}
-                        style={{
-                          height: 50,
-                          width: "90%",
-                          right: 8,
-                          marginHorizontal: "auto",
-                        }}
-                        onPressIn={() => {
-                          setDispSend(true);
-                        }}
-                        onChangeText={(txt) => {
-                          setTxtCom(txt);
-                        }}
-                      ></TextInput>
+                      {foiCurtido()}
 
-                      <Ionicons
-                        name="send"
-                        size={24}
+                      {comAberto()}
+
+                      <Pressable
                         style={[
-                          { marginLeft: "auto" },
-                          dispSend ? { display: "flex" } : { display: "none" },
+                          styles.btnAnexo,
+                          styles.btnInteracoes,
+                          compDisp ? { display: "flex" } : { display: "none" },
                         ]}
                         onPress={() => {
-                          comentar(msg);
-                          setDispSend(false);
-                          setTxtCom("");
+                          compartilhar(
+                            msg.nome,
+                            msg.sobrenome,
+                            msg.message.texto,
+                            msg.data,
+                            msg
+                          );
                         }}
-                      ></Ionicons>
+                      >
+                        <Ionicons
+                          name="share"
+                          size={25}
+                          color={"#000"}
+                        ></Ionicons>
+                        <Text style={{ fontSize: 12, paddingLeft: 4 }}>
+                          Compartilhar
+                        </Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                  <View
+                    style={[
+                      styles.comentarios,
+                      { flex: 1 },
+                      dispCom ? { display: "flex" } : { display: "none" },
+                    ]}
+                  >
+                    <KeyboardAvoidingView
+                      behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    >
+                      <ScrollView
+                        nestedScrollEnabled={true}
+                        contentContainerStyle={{ flexGrow: 1 }}
+                        style={[{ maxHeight: "85%" }]}
+                      >
+                        {msg.comentarios.map((comentario, idx) => {
+                          return (
+                            <View
+                              key={idx}
+                              style={{
+                                marginHorizontal: "auto",
+                                marginVertical: 10,
+                                width: "90%",
+                              }}
+                            >
+                              <View style={{ flexDirection: "row" }}>
+                                <Ionicons
+                                  name="person"
+                                  size={28}
+                                  style={{
+                                    marginVertical: 5,
+                                    marginHorizontal: 10,
+                                  }}
+                                ></Ionicons>
+
+                                <View style={{ width: "80%" }}>
+                                  <Text
+                                    style={{ fontSize: 18, fontWeight: "600" }}
+                                  >
+                                    {comentario.nome} {comentario.sobrenome}
+                                  </Text>
+
+                                  <View style={{ flexDirection: "row" }}>
+                                    <Text style={styles.textoPequeno}>
+                                      {comentario.data}
+                                    </Text>
+                                  </View>
+                                </View>
+                              </View>
+                              <Text
+                                style={{
+                                  fontSize: 18,
+                                  width: "80%",
+                                  marginHorizontal: "auto",
+                                }}
+                              >
+                                {comentario.comment}
+                              </Text>
+                            </View>
+                          );
+                        })}
+                      </ScrollView>
+                    </KeyboardAvoidingView>
+
+                    <View
+                      style={{
+                        bottom: 0,
+                        position: "absolute",
+                        width: "100%",
+                      }}
+                    >
+                      <View
+                        style={[
+                          styles.topFeedInput,
+                          {
+                            width: "90%",
+                            marginHorizontal: "auto",
+                            marginBottom: 10,
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="Comente algo..."
+                          value={txtCom}
+                          style={{
+                            height: 50,
+                            width: "90%",
+                            right: 8,
+                            marginHorizontal: "auto",
+                          }}
+                          onPressIn={() => {
+                            setDispSend(true);
+                          }}
+                          onChangeText={(txt) => {
+                            setTxtCom(txt);
+                          }}
+                        ></TextInput>
+
+                        <Ionicons
+                          name="send"
+                          size={24}
+                          style={[
+                            { marginLeft: "auto" },
+                            dispSend
+                              ? { display: "flex" }
+                              : { display: "none" },
+                          ]}
+                          onPress={() => {
+                            comentar(msg);
+                            setDispSend(false);
+                            setTxtCom("");
+                          }}
+                        ></Ionicons>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
           <View style={{ height: 120 }} />
         </ScrollView>
       </KeyboardAvoidingView>

@@ -21,10 +21,10 @@ import ModalPhoto from "./includes/ModalPhoto";
 export default function Perfil() {
   const data = useContext(UserContext); //DADOS DO USER
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(data?.user);
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
-  const textInputRef = useRef(null);
+  const textInputRef = useRef<TextInput>(null);
   const [photoSelec, setPhotoSelec] = useState("");
   const [visibleModPho, setVisibleModPho] = useState(false);
 
@@ -86,15 +86,14 @@ export default function Perfil() {
       },
       body: JSON.stringify({ id: user?.id, desc: desc }),
     });
-
     const dados = await response.json();
-
-    setUser(dados);
-    data?.setUser(dados);
-    data?.fetchUserData();
-
-    setDispConfirm(false);
-    textInputRef.current.blur();
+    if (response.ok) {
+      setUser(dados);
+      data?.setUser(dados);
+      data?.fetchUserData();
+      setDispConfirm(false);
+      textInputRef.current?.blur();
+    }
   };
 
   const uploadImage = async (typePhoto: number) => {
@@ -106,7 +105,7 @@ export default function Perfil() {
         mediaTypes: "images",
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 1,
+        quality: 0.5,
       });
 
       Alert.alert(
@@ -209,14 +208,15 @@ export default function Perfil() {
       },
       []
     );
-    return groupedPhotos.map((group, groupIndex) => (
+
+    return (
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ height: "100%" }}
+        style={{ flex: 1 }}
       >
-        <View key={groupIndex} style={styles.row}>
-          {group.map((foto, index) => {
-            return (
+        {groupedPhotos.map((group, groupIndex) => (
+          <View key={groupIndex} style={styles.row}>
+            {group.map((foto, index) => (
               <TouchableWithoutFeedback
                 key={index}
                 onPress={() => {
@@ -233,11 +233,11 @@ export default function Perfil() {
                   }
                 />
               </TouchableWithoutFeedback>
-            );
-          })}
-        </View>
+            ))}
+          </View>
+        ))}
       </KeyboardAvoidingView>
-    ));
+    );
   };
 
   return (
@@ -264,7 +264,7 @@ export default function Perfil() {
               <Image
                 style={styles.bgTopImage}
                 source={
-                  user?.PicturesConfig.profilePicture.image
+                  user?.PicturesConfig.bgPicture.image
                     ? { uri: user?.PicturesConfig.bgPicture.image }
                     : require("../../assets/images/default-image.png")
                 }
@@ -339,7 +339,9 @@ export default function Perfil() {
                       style={
                         dispConfirm ? { display: "flex" } : { display: "none" }
                       }
-                      onPress={salvarDesc}
+                      onPress={() => {
+                        salvarDesc();
+                      }}
                     ></Ionicons>
                   </View>
                 </View>
@@ -347,7 +349,10 @@ export default function Perfil() {
             </View>
           </View>
 
-          <ScrollView contentContainerStyle={styles.bottomFeedPerfil}>
+          <ScrollView
+            contentContainerStyle={[styles.bottomFeedPerfil]}
+            nestedScrollEnabled={true}
+          >
             {exibirFotos()}
           </ScrollView>
         </View>
