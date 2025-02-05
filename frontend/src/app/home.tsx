@@ -23,7 +23,7 @@ import { router } from "expo-router";
 export default function Home() {
   const dataUser = useContext(UserContext); //DADOS DO USER
   const [dispSend, setDispSend] = useState(false);
-  const [dispCom, setDispCom] = useState(false);
+  const [dispCom, setDispCom] = useState(null);
   const [txtMsg, setTxtMsg] = useState("");
   const [txtCom, setTxtCom] = useState("");
   const [image, setImage] = useState("");
@@ -49,6 +49,10 @@ export default function Home() {
       };
     }[]
   >([]);
+
+  const toggleComentarios = (id: any) => {
+    setDispCom(dispCom === id ? null : id);
+  };
 
   const imagemPerfil = (
     <Image
@@ -727,13 +731,11 @@ export default function Home() {
               };
 
               const comAberto = () => {
-                if (!dispCom) {
+                if (dispCom !== msg.idMsg) {
                   return (
                     <Pressable
                       style={[styles.btnAnexo, styles.btnInteracoes]}
-                      onPress={() => {
-                        setDispCom(true);
-                      }}
+                      onPress={() => toggleComentarios(msg.idMsg)}
                     >
                       <Ionicons
                         name="chatbubble-ellipses-outline"
@@ -749,9 +751,7 @@ export default function Home() {
                   return (
                     <Pressable
                       style={[styles.btnAnexo, styles.btnInteracoes]}
-                      onPress={() => {
-                        setDispCom(false);
-                      }}
+                      onPress={() => toggleComentarios(msg.idMsg)}
                     >
                       <Ionicons
                         name="chatbubble-ellipses"
@@ -866,122 +866,127 @@ export default function Home() {
                       </Pressable>
                     </View>
                   </View>
-                  <View
-                    style={[
-                      styles.comentarios,
-                      { flex: 1 },
-                      dispCom ? { display: "flex" } : { display: "none" },
-                    ]}
-                  >
-                    <KeyboardAvoidingView
-                      behavior={Platform.OS === "ios" ? "padding" : "height"}
+                  {dispCom === msg.idMsg && (
+                    <View
+                      style={[
+                        styles.comentarios,
+                        { flex: 1 },
+                        dispCom ? { display: "flex" } : { display: "none" },
+                      ]}
                     >
-                      <ScrollView
-                        nestedScrollEnabled={true}
-                        contentContainerStyle={{ flexGrow: 1 }}
-                        style={[{ maxHeight: "85%" }]}
+                      <KeyboardAvoidingView
+                        behavior={Platform.OS === "ios" ? "padding" : "height"}
                       >
-                        {msg.comentarios.map((comentario, idx) => {
-                          return (
-                            <View
-                              key={idx}
-                              style={{
-                                marginHorizontal: "auto",
-                                marginVertical: 10,
-                                width: "90%",
-                              }}
-                            >
-                              <View style={{ flexDirection: "row" }}>
-                                <Ionicons
-                                  name="person"
-                                  size={28}
-                                  style={{
-                                    marginVertical: 5,
-                                    marginHorizontal: 10,
-                                  }}
-                                ></Ionicons>
-
-                                <View style={{ width: "80%" }}>
-                                  <Text
-                                    style={{ fontSize: 18, fontWeight: "600" }}
-                                  >
-                                    {comentario.nome} {comentario.sobrenome}
-                                  </Text>
-
-                                  <View style={{ flexDirection: "row" }}>
-                                    <Text style={styles.textoPequeno}>
-                                      {comentario.data}
-                                    </Text>
-                                  </View>
-                                </View>
-                              </View>
-                              <Text
+                        <ScrollView
+                          nestedScrollEnabled={true}
+                          contentContainerStyle={{ flexGrow: 1 }}
+                          style={[{ maxHeight: "85%" }]}
+                        >
+                          {msg.comentarios.map((comentario, idx) => {
+                            return (
+                              <View
+                                key={idx}
                                 style={{
-                                  fontSize: 18,
-                                  width: "80%",
                                   marginHorizontal: "auto",
+                                  marginVertical: 10,
+                                  width: "90%",
                                 }}
                               >
-                                {comentario.comment}
-                              </Text>
-                            </View>
-                          );
-                        })}
-                      </ScrollView>
-                    </KeyboardAvoidingView>
+                                <View style={{ flexDirection: "row" }}>
+                                  <Ionicons
+                                    name="person"
+                                    size={28}
+                                    style={{
+                                      marginVertical: 5,
+                                      marginHorizontal: 10,
+                                    }}
+                                  ></Ionicons>
 
-                    <View
-                      style={{
-                        bottom: 0,
-                        position: "absolute",
-                        width: "100%",
-                      }}
-                    >
+                                  <View style={{ width: "80%" }}>
+                                    <Text
+                                      style={{
+                                        fontSize: 18,
+                                        fontWeight: "600",
+                                      }}
+                                    >
+                                      {comentario.nome} {comentario.sobrenome}
+                                    </Text>
+
+                                    <View style={{ flexDirection: "row" }}>
+                                      <Text style={styles.textoPequeno}>
+                                        {comentario.data}
+                                      </Text>
+                                    </View>
+                                  </View>
+                                </View>
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    width: "80%",
+                                    marginHorizontal: "auto",
+                                  }}
+                                >
+                                  {comentario.comment}
+                                </Text>
+                              </View>
+                            );
+                          })}
+                        </ScrollView>
+                      </KeyboardAvoidingView>
+
                       <View
-                        style={[
-                          styles.topFeedInput,
-                          {
-                            width: "90%",
-                            marginHorizontal: "auto",
-                            marginBottom: 10,
-                          },
-                        ]}
+                        style={{
+                          bottom: 0,
+                          position: "absolute",
+                          width: "100%",
+                        }}
                       >
-                        <TextInput
-                          placeholder="Comente algo..."
-                          value={txtCom}
-                          style={{
-                            height: 50,
-                            width: "90%",
-                            right: 8,
-                            marginHorizontal: "auto",
-                          }}
-                          onPressIn={() => {
-                            setDispSend(true);
-                          }}
-                          onChangeText={(txt) => {
-                            setTxtCom(txt);
-                          }}
-                        ></TextInput>
-
-                        <Ionicons
-                          name="send"
-                          size={24}
+                        <View
                           style={[
-                            { marginLeft: "auto" },
-                            dispSend
-                              ? { display: "flex" }
-                              : { display: "none" },
+                            styles.topFeedInput,
+                            {
+                              width: "90%",
+                              marginHorizontal: "auto",
+                              marginBottom: 10,
+                            },
                           ]}
-                          onPress={() => {
-                            comentar(msg);
-                            setDispSend(false);
-                            setTxtCom("");
-                          }}
-                        ></Ionicons>
+                        >
+                          <TextInput
+                            placeholder="Comente algo..."
+                            value={txtCom}
+                            style={{
+                              height: 50,
+                              width: "90%",
+                              right: 8,
+                              marginHorizontal: "auto",
+                            }}
+                            onPressIn={() => {
+                              setDispSend(true);
+                            }}
+                            onChangeText={(txt) => {
+                              setTxtCom(txt);
+                            }}
+                          ></TextInput>
+
+                          <Ionicons
+                            name="send"
+                            size={24}
+                            style={[
+                              { marginLeft: "auto" },
+                              dispSend
+                                ? { display: "flex" }
+                                : { display: "none" },
+                            ]}
+                            onPress={() => {
+                              comentar(msg);
+                              setDispSend(false);
+                              setTxtCom("");
+                            }}
+                          ></Ionicons>
+                        </View>
                       </View>
                     </View>
-                  </View>
+                  )}
                 </View>
               );
             })}
