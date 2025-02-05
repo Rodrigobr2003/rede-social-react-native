@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableHighlight,
+  ScrollView,
 } from "react-native";
 import {
   useFonts,
@@ -29,64 +30,66 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ModalCadastro
-        visibleModCad={visibleModCad}
-        setVisibleModCad={setVisibleModCad}
-      ></ModalCadastro>
+      <ScrollView>
+        <ModalCadastro
+          visibleModCad={visibleModCad}
+          setVisibleModCad={setVisibleModCad}
+        ></ModalCadastro>
 
-      <ModalLogin
-        visibleModLog={visibleModLog}
-        setVisibleModLog={setVisibleModLog}
-      ></ModalLogin>
+        <ModalLogin
+          visibleModLog={visibleModLog}
+          setVisibleModLog={setVisibleModLog}
+        ></ModalLogin>
 
-      <View>
-        <Text style={styles.titulo}>Conectando</Text>
-        <Text style={styles.titulo}>o mundo em</Text>
-        <Text style={styles.titulo}>uma esfera de</Text>
-        <Text style={styles.titulo}>possibilidades</Text>
-      </View>
+        <View style={{ marginTop: 40 }}>
+          <Text style={styles.titulo}>Conectando</Text>
+          <Text style={styles.titulo}>o mundo em</Text>
+          <Text style={styles.titulo}>uma esfera de</Text>
+          <Text style={styles.titulo}>possibilidades</Text>
+        </View>
 
-      <View>
-        <Image
-          style={styles.imagem}
-          source={require("../../assets/images/marca.png")}
-        ></Image>
-      </View>
+        <View>
+          <Image
+            style={styles.imagem}
+            source={require("../../assets/images/marca.png")}
+          ></Image>
+        </View>
 
-      <View style={styles.interacao}>
-        <Text style={styles.subtitulo}>Inscreva-se hoje</Text>
-
-        <TouchableHighlight
-          style={[styles.button, { backgroundColor: "#2c3892" }]}
-          onPress={() => setVisibleModCad(true)}
-        >
-          <Text style={[styles.buttonText, { color: "#fff" }]}>
-            Criar conta!
-          </Text>
-        </TouchableHighlight>
-
-        <Text style={styles.politicas}>
-          Ao inscrever-se, você concorda com os
-          <Text style={styles.politicasLink}>Termos de Serviço</Text> e a
-          <Text style={styles.politicasLink}>Política de Privacidade</Text>,
-          incluindo o<Text style={styles.politicasLink}>Uso de Cookies</Text>.
-        </Text>
-
-        <View style={styles.secCadastro}>
-          <Text style={[styles.subtitulo, styles.subTitSecCad]}>
-            Já tem uma conta?
-          </Text>
+        <View style={styles.interacao}>
+          <Text style={styles.subtitulo}>Inscreva-se hoje</Text>
 
           <TouchableHighlight
-            style={[styles.button, styles.buttonEntrar]}
-            onPress={() => setVisibleModLog(true)}
+            style={[styles.button, { backgroundColor: "#2c3892" }]}
+            onPress={() => setVisibleModCad(true)}
           >
-            <Text style={[styles.buttonText, { color: "#2c3892" }]}>
-              Entrar
+            <Text style={[styles.buttonText, { color: "#fff" }]}>
+              Criar conta!
             </Text>
           </TouchableHighlight>
+
+          <Text style={styles.politicas}>
+            Ao inscrever-se, você concorda com os
+            <Text style={styles.politicasLink}>Termos de Serviço</Text> e a
+            <Text style={styles.politicasLink}>Política de Privacidade</Text>,
+            incluindo o<Text style={styles.politicasLink}>Uso de Cookies</Text>.
+          </Text>
+
+          <View style={styles.secCadastro}>
+            <Text style={[styles.subtitulo, styles.subTitSecCad]}>
+              Já tem uma conta?
+            </Text>
+
+            <TouchableHighlight
+              style={[styles.button, styles.buttonEntrar]}
+              onPress={() => setVisibleModLog(true)}
+            >
+              <Text style={[styles.buttonText, { color: "#2c3892" }]}>
+                Entrar
+              </Text>
+            </TouchableHighlight>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -96,7 +99,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "#1D1D1D",
-    paddingTop: 40,
   },
 
   titulo: {

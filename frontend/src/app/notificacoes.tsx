@@ -99,14 +99,6 @@ export default function Notificacoes() {
                   {notificacao.nome} {notificacao.sobrenome} curtiu em seu post!
                 </Text>
               )}
-
-              {notificacao.tipo !== 1 && (
-                <Ionicons
-                  name="close"
-                  size={25}
-                  style={{ marginLeft: "auto" }}
-                ></Ionicons>
-              )}
             </View>
           </Pressable>
         );
@@ -117,21 +109,24 @@ export default function Notificacoes() {
   }
 
   async function aceitarPedido(notificacao: Object) {
-    const response = await fetch("http://10.0.2.2:3008/aceitarNotificacao", {
-      method: "PUT",
-      mode: "cors",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        user: {
-          id: data?.id,
-          nome: data?.nome,
-          sobrenome: data?.sobrenome,
+    const response = await fetch(
+      "http://192.168.15.10:3008/aceitarNotificacao",
+      {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
         },
-        perfil: notificacao,
-      }),
-    });
+        body: JSON.stringify({
+          user: {
+            id: data?.id,
+            nome: data?.nome,
+            sobrenome: data?.sobrenome,
+          },
+          perfil: notificacao,
+        }),
+      }
+    );
 
     const dado = await response.json();
     setData(dado);
@@ -141,7 +136,7 @@ export default function Notificacoes() {
   }
 
   async function negarPedido(id: string) {
-    const response = await fetch("http://10.0.2.2:3008/negarNotificacao", {
+    const response = await fetch("http://192.168.15.10:3008/negarNotificacao", {
       method: "PUT",
       mode: "cors",
       headers: {

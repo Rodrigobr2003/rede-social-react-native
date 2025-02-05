@@ -10,6 +10,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useEffect, useState } from "react";
 
 export default function ModalCadastro({
   visibleModCad,
@@ -46,7 +47,7 @@ export default function ModalCadastro({
     });
 
     try {
-      await fetch("http://10.0.2.2:3008/registrar", {
+      await fetch(`http://192.168.15.10:3008/registrar`, {
         method: "POST",
         mode: "cors",
         headers: {

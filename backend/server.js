@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
 
 app.use(
   cors({
-    origin: "http://10.0.2.2:3008", // Defina a origem do frontend
+    origin: "http://localhost:3008", // Defina a origem do frontend
     methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
     allowedHeaders: ["Content-Type", "Authorization"], // Cabeçalhos permitidos
   })

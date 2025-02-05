@@ -13,7 +13,7 @@ export default function TelaPesquisa() {
   async function navegarPerfilProcurado(nome: string, sobrenome: string) {
     try {
       const response = await fetch(
-        `http://10.0.2.2:3008/pesquisarPerfil/${nome}/${sobrenome}`,
+        `http://192.168.15.10:3008/pesquisarPerfil/${nome}/${sobrenome}`,
         {
           method: "GET",
           mode: "cors",

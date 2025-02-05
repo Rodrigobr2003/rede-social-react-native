@@ -128,7 +128,7 @@ class User {
           _id: this.body.user.id,
         },
         {
-          $pull: { notificacoes: { id: this.body.perfil.id } },
+          $pull: { notificacoes: { tipo: 1, id: this.body.perfil.id } },
         },
         { new: true }
       );
@@ -188,6 +188,18 @@ class User {
   }
 
   async enviarNotificacao() {
+    const user = await UserModel.findById(this.body.idPerfil);
+
+    for (let i = 0, len = user.notificacoes.length; i < len; i++) {
+      if (
+        this.body.tipo == 1 &&
+        user.notificacoes[i].tipo == 1 &&
+        user.notificacoes[i].id == this.body.idUserMsg
+      ) {
+        return;
+      }
+    }
+
     return await UserModel.findOneAndUpdate(
       {
         _id: this.body.idPerfil,

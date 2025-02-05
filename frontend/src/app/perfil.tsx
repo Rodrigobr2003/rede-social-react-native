@@ -10,6 +10,8 @@ import {
   ScrollView,
   Alert,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { UserContext } from "./includes/UserProvider";
 
@@ -19,10 +21,10 @@ import ModalPhoto from "./includes/ModalPhoto";
 export default function Perfil() {
   const data = useContext(UserContext); //DADOS DO USER
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(data?.user);
   const [dispConfirm, setDispConfirm] = useState(false);
   const [desc, setDesc] = useState(user?.descricao);
-  const textInputRef = useRef(null);
+  const textInputRef = useRef<TextInput>(null);
   const [photoSelec, setPhotoSelec] = useState("");
   const [visibleModPho, setVisibleModPho] = useState(false);
 
@@ -40,7 +42,7 @@ export default function Perfil() {
         placeholderTextColor={"#000"}
         style={{
           fontSize: 15,
-          width: "85%",
+          width: "80%",
           marginHorizontal: 10,
         }}
         onFocus={() => {
@@ -61,7 +63,7 @@ export default function Perfil() {
         placeholderTextColor={"#000"}
         style={{
           fontSize: 15,
-          width: "85%",
+          width: "80%",
           marginHorizontal: 10,
         }}
         onFocus={() => {
@@ -76,7 +78,7 @@ export default function Perfil() {
   }
 
   const salvarDesc = async () => {
-    const response = await fetch("http://10.0.2.2:3008/salvarDesc", {
+    const response = await fetch("http://192.168.15.10:3008/salvarDesc", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -84,15 +86,14 @@ export default function Perfil() {
       },
       body: JSON.stringify({ id: user?.id, desc: desc }),
     });
-
     const dados = await response.json();
-
-    setUser(dados);
-    data?.setUser(dados);
-    data?.fetchUserData();
-
-    setDispConfirm(false);
-    textInputRef.current.blur();
+    if (response.ok) {
+      setUser(dados);
+      data?.setUser(dados);
+      data?.fetchUserData();
+      setDispConfirm(false);
+      textInputRef.current?.blur();
+    }
   };
 
   const uploadImage = async (typePhoto: number) => {
@@ -104,7 +105,7 @@ export default function Perfil() {
         mediaTypes: "images",
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 1,
+        quality: 0.5,
       });
 
       Alert.alert(
@@ -142,7 +143,7 @@ export default function Perfil() {
             reader.readAsDataURL(blob);
           });
 
-          await fetch("http://10.0.2.2:3008/salvarImagem", {
+          await fetch("http://192.168.15.10:3008/salvarImagem", {
             method: "PUT",
             headers: {
               "content-type": "application/json",
@@ -207,134 +208,156 @@ export default function Perfil() {
       },
       []
     );
-    return groupedPhotos.map((group, groupIndex) => (
-      <View key={groupIndex} style={styles.row}>
-        {group.map((foto, index) => {
-          return (
-            <TouchableWithoutFeedback
-              key={index}
-              onPress={() => {
-                setPhotoSelec(foto);
-                setVisibleModPho(true);
-              }}
-            >
-              <Image
-                style={styles.imgPosted}
-                source={
-                  foto
-                    ? { uri: foto }
-                    : require("../../assets/images/default-image.png")
-                }
-              />
-            </TouchableWithoutFeedback>
-          );
-        })}
-      </View>
-    ));
+
+    return (
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        {groupedPhotos.map((group, groupIndex) => (
+          <View key={groupIndex} style={styles.row}>
+            {group.map((foto, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => {
+                  setPhotoSelec(foto);
+                  setVisibleModPho(true);
+                }}
+              >
+                <Image
+                  style={styles.imgPosted}
+                  source={
+                    foto
+                      ? { uri: foto }
+                      : require("../../assets/images/default-image.png")
+                  }
+                />
+              </TouchableWithoutFeedback>
+            ))}
+          </View>
+        ))}
+      </KeyboardAvoidingView>
+    );
   };
 
   return (
-    <View style={styles.feedDefault}>
-      <ModalPhoto
-        visibleModPho={visibleModPho}
-        setVisibleModPho={setVisibleModPho}
-        photo={photoSelec}
-        idUser={data?.user?.id}
-        nomeUser={data?.user?.nome}
-        sobrenomeUser={data?.user?.sobrenome}
-        photoUser={data?.user?.PicturesConfig.profilePicture.image}
-      ></ModalPhoto>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        style={styles.feedDefault}
+      >
+        <View>
+          <ModalPhoto
+            visibleModPho={visibleModPho}
+            setVisibleModPho={setVisibleModPho}
+            photo={photoSelec}
+            idUser={data?.user?.id}
+            nomeUser={data?.user?.nome}
+            sobrenomeUser={data?.user?.sobrenome}
+            photoUser={data?.user?.PicturesConfig.profilePicture.image}
+          ></ModalPhoto>
 
-      <View style={styles.topFeedPerfil}>
-        <View style={{ height: "60%" }}>
-          <Image
-            style={styles.bgTopImage}
-            source={
-              user?.PicturesConfig.profilePicture.image
-                ? { uri: user?.PicturesConfig.bgPicture.image }
-                : require("../../assets/images/default-image.png")
-            }
-          ></Image>
+          <View style={styles.topFeedPerfil}>
+            <View style={{ height: "60%" }}>
+              <Image
+                style={styles.bgTopImage}
+                source={
+                  user?.PicturesConfig.bgPicture.image
+                    ? { uri: user?.PicturesConfig.bgPicture.image }
+                    : require("../../assets/images/default-image.png")
+                }
+              ></Image>
 
-          <Pressable
-            style={styles.editBtn}
-            onPress={() => {
-              uploadImage(3);
-            }}
-          >
-            <Text style={{ textAlign: "center", color: "#fff", fontSize: 17 }}>
-              Editar Foto
-            </Text>
-          </Pressable>
-
-          <View style={styles.container}>
-            <Image
-              style={styles.profilePic}
-              source={
-                user?.PicturesConfig.profilePicture.image
-                  ? { uri: user?.PicturesConfig.profilePicture.image }
-                  : require("../../assets/images/default-avatar.png")
-              }
-            />
-          </View>
-
-          <Ionicons
-            name="camera"
-            size={25}
-            style={styles.changePic}
-            onPress={() => {
-              uploadImage(1);
-            }}
-          ></Ionicons>
-
-          <View>
-            <View style={styles.userInfo}>
-              <Text
-                style={[
-                  {
-                    fontSize: 18,
-                    textAlign: "justify",
-                  },
-                  styles.userText,
-                ]}
+              <Pressable
+                style={styles.editBtn}
+                onPress={() => {
+                  uploadImage(3);
+                }}
               >
-                {user?.nome} {user?.sobrenome}
-              </Text>
+                <Text
+                  style={{ textAlign: "center", color: "#fff", fontSize: 17 }}
+                >
+                  Editar Foto
+                </Text>
+              </Pressable>
 
-              <Text
-                style={[
-                  {
-                    fontSize: 14,
-                  },
-                  styles.userText,
-                ]}
-              >
-                {user?.amigos.length} amigos
-              </Text>
-
-              <View style={styles.desc}>
-                <Ionicons name="pencil" size={20}></Ionicons>
-
-                {descricao}
-
-                <Ionicons
-                  name="send"
-                  size={20}
-                  style={
-                    dispConfirm ? { display: "flex" } : { display: "none" }
+              <View style={styles.container}>
+                <Image
+                  style={styles.profilePic}
+                  source={
+                    user?.PicturesConfig.profilePicture.image
+                      ? { uri: user?.PicturesConfig.profilePicture.image }
+                      : require("../../assets/images/default-avatar.png")
                   }
-                  onPress={salvarDesc}
-                ></Ionicons>
+                />
+              </View>
+
+              <Ionicons
+                name="camera"
+                size={25}
+                style={styles.changePic}
+                onPress={() => {
+                  uploadImage(1);
+                }}
+              ></Ionicons>
+
+              <View>
+                <View style={styles.userInfo}>
+                  <Text
+                    style={[
+                      {
+                        fontSize: 18,
+                        textAlign: "justify",
+                      },
+                      styles.userText,
+                    ]}
+                  >
+                    {user?.nome} {user?.sobrenome}
+                  </Text>
+
+                  <Text
+                    style={[
+                      {
+                        fontSize: 14,
+                      },
+                      styles.userText,
+                    ]}
+                  >
+                    {user?.amigos.length} amigos
+                  </Text>
+
+                  <View style={styles.desc}>
+                    <Ionicons name="pencil" size={20}></Ionicons>
+
+                    {descricao}
+
+                    <Ionicons
+                      name="send"
+                      size={20}
+                      style={
+                        dispConfirm ? { display: "flex" } : { display: "none" }
+                      }
+                      onPress={() => {
+                        salvarDesc();
+                      }}
+                    ></Ionicons>
+                  </View>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </View>
 
-      <ScrollView contentContainerStyle={styles.bottomFeedPerfil}>
-        {exibirFotos()}
+          <ScrollView
+            contentContainerStyle={[styles.bottomFeedPerfil]}
+            nestedScrollEnabled={true}
+          >
+            {exibirFotos()}
+          </ScrollView>
+        </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -342,17 +365,15 @@ const styles = StyleSheet.create({
   feedDefault: {
     backgroundColor: "#fff",
     borderRadius: 10,
-    alignItems: "center",
     marginTop: 30,
     width: "90%",
-    height: "85%",
+    height: "90%",
     marginHorizontal: "auto",
   },
 
   topFeedPerfil: {
-    paddingBottom: 15,
     width: "100%",
-    height: "40%",
+    height: "30%",
     position: "relative",
   },
 
@@ -431,9 +452,9 @@ const styles = StyleSheet.create({
 
   row: {
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "center",
     marginVertical: 2,
-    height: "30%",
+    height: "20%",
     width: "100%",
   },
 
