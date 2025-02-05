@@ -28,6 +28,18 @@ Antes de começar, verifique se você tem os seguintes softwares instalados:
 - [MongoDB](https://www.mongodb.com/try/download/community) para o banco de dados local (ou use uma instância na nuvem).
 - [React Native CLI](https://reactnative.dev/docs/environment-setup).
 
+### Configuração do Ambiente
+Para que o projeto funcione corretamente, é necessário criar um arquivo  ```.env``` na raiz do diretório  ```backend```, contendo as seguintes variáveis de ambiente:
+
+   ```bash
+   CONNECTION=<sua_connection_string_do_mongodb>
+   SECRETKEY=<sua_senha_secreta_para_sessoes>
+   ```
+- **CONNECTION:** Insira a connection string do seu banco de dados MongoDB.
+- **SECRETKEY:** Defina uma chave secreta para gerenciar as sessões de autenticação.
+
+  **Importante:** Nunca compartilhe suas credenciais reais publicamente.
+
 ### Etapas
 
 1. **Clone este repositório:**
