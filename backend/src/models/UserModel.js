@@ -233,14 +233,17 @@ class User {
   async salvarImagem() {
     let images = null;
 
-    if (this.body.base64 == "") return;
+    if (!this.body.imageBuffer) return;
+
+    // Convert buffer to base64 for storage
+    const base64Image = `data:image/jpeg;base64,${this.body.imageBuffer.toString('base64')}`;
 
     if (this.body.type == 1) {
       images = await UserModel.findOneAndUpdate(
         { _id: this.body.idUser },
         {
           $set: {
-            "picturesConfig.profilePicture.image": this.body.base64,
+            "picturesConfig.profilePicture.image": base64Image,
           },
         },
         { new: true, projection: { senha: 0 } }
@@ -250,7 +253,7 @@ class User {
         { _id: this.body.idUser },
         {
           $addToSet: {
-            "picturesConfig.pictures": this.body.base64,
+            "picturesConfig.pictures": base64Image,
           },
         },
         { new: true, projection: { senha: 0 } }
@@ -260,7 +263,7 @@ class User {
         { _id: this.body.idUser },
         {
           $set: {
-            "picturesConfig.bgPicture.image": this.body.base64,
+            "picturesConfig.bgPicture.image": base64Image,
           },
         },
         { new: true, projection: { senha: 0 } }

@@ -35,17 +35,17 @@ const sessionOptions = session({
 });
 
 io.on("connection", (socket) => {
-  const idSocket = socket.id;
-
-  socket.emit("enviaId", idSocket);
+  console.log("New client connected");
 
   //Join chat
   socket.on("joinChat", ({ username, room }) => {
+    console.log(`User ${username} joined room ${room}`);
     socket.join(room);
 
     //Listener de mensagens
     socket.on("chatMessage", (msg, idMsg) => {
-      io.to(room).emit("message", { msg, idMsg });
+      // Emit to all clients in the room including sender
+      io.to(room).emit("message", msg, idMsg);
     });
 
     socket.on("feedChat", (msg, id, name, tempo) => {
@@ -58,6 +58,10 @@ io.on("connection", (socket) => {
         io.to(room);
       });
     }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
   });
 });
 

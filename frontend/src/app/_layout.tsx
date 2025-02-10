@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { UserProvider } from "./includes/UserProvider";
 
@@ -26,50 +26,54 @@ export default function Layout() {
     <>
       <SearchProvider>
         <UserProvider>
-          <Header
-            display={headerVisible ? styles.visibleHeader : styles.hiddenHeader}
-          ></Header>
-          <Stack>
-            <Stack.Screen
-              name="index"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+          <SafeAreaView style={{ flex: 1, backgroundColor: "#1d1d1d" }}>
+            <Header
+              display={
+                headerVisible ? styles.visibleHeader : styles.hiddenHeader
+              }
+            ></Header>
+            <Stack>
+              <Stack.Screen
+                name="index"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
 
-            <Stack.Screen
-              name="home"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              <Stack.Screen
+                name="home"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
 
-            <Stack.Screen
-              name="telaPesquisa"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              <Stack.Screen
+                name="telaPesquisa"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
 
-            <Stack.Screen
-              name="amigos"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              <Stack.Screen
+                name="amigos"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
 
-            <Stack.Screen
-              name="notificacoes"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              <Stack.Screen
+                name="notificacoes"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
 
-            <Stack.Screen
-              name="perfil"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              <Stack.Screen
+                name="perfil"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
 
-            <Stack.Screen
-              name="perfilProcurado"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              <Stack.Screen
+                name="perfilProcurado"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
 
-            <Stack.Screen
-              name="chatProfile"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
-          </Stack>
+              <Stack.Screen
+                name="chatProfile"
+                options={{ headerShown: false }}
+              ></Stack.Screen>
+            </Stack>
+          </SafeAreaView>
         </UserProvider>
       </SearchProvider>
     </>

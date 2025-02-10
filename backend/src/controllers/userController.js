@@ -181,10 +181,19 @@ exports.salvarDescricao = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const imagem = new User(req.body);
+    // req.body is already a Buffer when using express.raw()
+    const imageBuffer = req.body;
+    
+    // Create user instance with binary data
+    const imagem = new User({
+      idUser: req.query.idUser, // Pass user ID via query params
+      type: parseInt(req.query.type), // Pass type via query params
+      imageBuffer: imageBuffer
+    });
 
     res.send(await imagem.salvarImagem());
   } catch (error) {
     console.log("Erro ao salvar imagem: ", error);
+    res.status(500).json({ error: "Erro ao salvar imagem" });
   }
 };

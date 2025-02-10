@@ -32,6 +32,6 @@ routes.put("/comentar", MessagesController.comentar);
 routes.put("/excluirPubli", MessagesController.excluirPubli);
 
 //Rotas fotos
-routes.put("/salvarImagem", UserController.create);
+routes.put("/salvarImagem", express.raw({ type: 'application/octet-stream', limit: '10mb' }), UserController.create);
 
 module.exports = routes;

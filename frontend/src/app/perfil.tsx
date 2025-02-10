@@ -131,40 +131,30 @@ export default function Perfil() {
           const response = await fetch(uri);
           const blob = await response.blob();
 
-          const reader = new FileReader();
-
-          const base64 = await new Promise((resolve, reject) => {
-            reader.onload = () => {
-              resolve(reader.result?.toString());
-            };
-            reader.onerror = (error) => {
-              reject(error);
-            };
-            reader.readAsDataURL(blob);
-          });
-
           await fetch("http://192.168.15.10:3008/salvarImagem", {
             method: "PUT",
             headers: {
-              "content-type": "application/json",
+              "content-type": "application/octet-stream",
               "access-control-allow-origin": "*",
             },
-            body: JSON.stringify({
-              idUser: data?.user?.id,
-              base64: base64,
-              type: typePhoto,
-            }),
+            body: blob,
+          });
+
+          const reader = new FileReader();
+          const base64Preview = await new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result?.toString());
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
           });
 
           if (typePhoto == 1) {
             data?.setUser((prevUser) => {
               if (!prevUser || !prevUser.PicturesConfig) return prevUser;
-
               return {
                 ...prevUser,
                 PicturesConfig: {
                   ...prevUser.PicturesConfig,
-                  profilePicture: { image: base64 as string },
+                  profilePicture: { image: base64Preview as string },
                 },
               };
             });
@@ -173,22 +163,15 @@ export default function Perfil() {
           if (typePhoto == 3) {
             data?.setUser((prevUser) => {
               if (!prevUser || !prevUser.PicturesConfig) return prevUser;
-
               return {
                 ...prevUser,
                 PicturesConfig: {
                   ...prevUser.PicturesConfig,
-                  bgPicture: { image: base64 as string },
+                  bgPicture: { image: base64Preview as string },
                 },
               };
             });
           }
-
-          reader.onerror = (error) => {
-            console.log("Erro:", error);
-          };
-
-          reader.readAsDataURL(blob);
         } catch (error) {
           console.log("Erro ao carregar imagem:", error);
         }

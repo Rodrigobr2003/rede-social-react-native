@@ -17,6 +17,8 @@ exports.salvaMensagens = async (req, res) => {
   await mensagem.registrarMensagem(req.body.chatRoom, idUser);
 
   enviarNotf(req);
+
+  return res.status(200).json({ message: "Mensagem registrada com sucesso" });
 };
 
 exports.carregaMensagens = async (req, res) => {

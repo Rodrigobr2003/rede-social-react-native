@@ -10,15 +10,15 @@ export default function ChatProfile() {
   const [chat, setChat] = useState<
     { id: number; type: string; content: any }[]
   >([]);
-  const chatRef = useRef(null);
+  const chatRef = useRef<ScrollView | null>(null);
 
   const route = useRoute();
   const [data, setData] = useState(JSON.parse(route.params?.data));
   const dataUser = useContext(UserContext);
   const [room, setRoom] = useState(criarRoom(data?._id, dataUser?.user?.id));
   const idMsg = dataUser?.user?.id;
-  //Chat
-  const socket = io();
+  // Add socket ref
+  const socketRef = useRef<any>(null);
 
   const [txtMsg, setTxtMsg] = useState("");
 
@@ -30,24 +30,40 @@ export default function ChatProfile() {
     }[]
   >([]);
 
+  // Add this function to scroll to bottom
+  const scrollToBottom = () => {
+    chatRef.current?.scrollToEnd({ animated: true });
+  };
+
   useEffect(() => {
     carregaMensagem();
 
-    //Entrar no chat
-    const username = dataUser?.user?.nome;
-    socket.emit("joinChat", { username, room }); //AQ PD DAR ERRO
-
-    socket.on("enviaId", () => {
-      socket.on("message", (msg: any, idMsg: any) => {
-        const msgObj = {
-          chatRoom: room,
-          message: { texto: msg },
-          idUserMsg: idMsg,
-        };
-
-        setMensagens((prevMensagens) => [...prevMensagens, msgObj]);
-      });
+    // Connect to socket
+    socketRef.current = io("http://192.168.15.10:3008", {
+      transports: ["websocket"],
     });
+
+    const username = dataUser?.user?.nome;
+    socketRef.current.emit("joinChat", { username, room });
+
+    // Listen for messages
+    socketRef.current.on("message", (msg: string, idMsg: string) => {
+      console.log("msg: ", msg);
+      console.log("idMsg: ", idMsg);
+      const msgObj = {
+        chatRoom: room,
+        message: { texto: msg },
+        idUserMsg: idMsg,
+      };
+      setMensagens((prevMensagens) => [...prevMensagens, msgObj]);
+      // Scroll to bottom when receiving messages
+      setTimeout(scrollToBottom, 100);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socketRef.current?.disconnect();
+    };
   }, []);
 
   //Função de criar room
@@ -83,6 +99,9 @@ export default function ChatProfile() {
   }
 
   async function enviarMensagem() {
+    console.log("txtMsg: ", txtMsg);
+    if (!txtMsg.trim()) return;
+    
     try {
       let msgObj = {
         chatRoom: room,
@@ -96,8 +115,17 @@ export default function ChatProfile() {
         idPerfil: data._id,
       };
 
-      setMensagens((prevMensagens) => [...prevMensagens, msgObj]);
+      
+      console.log("msgObj: ", msgObj);
 
+      // Emit through socket using socketRef
+      socketRef.current?.emit("chatMessage", txtMsg, idMsg);
+      
+      setTxtMsg("");
+      // Scroll to bottom after sending message
+      setTimeout(scrollToBottom, 100);
+
+      // Save to database
       await fetch("http://192.168.15.10:3008/salvaMensagens", {
         method: "POST",
         mode: "cors",
@@ -107,7 +135,6 @@ export default function ChatProfile() {
         body: JSON.stringify(msgObj),
       });
 
-      socket.emit("chatMessage", txtMsg, idMsg);
     } catch (error) {
       console.log("Erro ao enviar dados msg: ", error);
     }
@@ -132,7 +159,11 @@ export default function ChatProfile() {
         </Text>
       </View>
 
-      <ScrollView style={{ width: "100%" }} ref={chatRef}>
+      <ScrollView 
+        style={{ width: "100%" }} 
+        ref={chatRef}
+        onContentSizeChange={scrollToBottom} // Also scroll when content size changes
+      >
         {mensagens.map((msg, idx) => (
           <View
             key={idx}
@@ -169,7 +200,6 @@ export default function ChatProfile() {
           style={{ paddingRight: 10 }}
           onPress={() => {
             enviarMensagem();
-            setTxtMsg("");
           }}
         ></Ionicons>
       </View>
